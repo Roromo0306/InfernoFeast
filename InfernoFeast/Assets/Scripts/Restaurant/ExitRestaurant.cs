@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class ExitRestaurant : MonoBehaviour
 {
+    //Variables que hacen referencia a los paneles del canvas dentro del juego
     private GameObject mapPanel;
     private GameObject exitPanel;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Buscamos los objetos y los desactivamos
         mapPanel = GameObject.Find("Map");
         mapPanel.SetActive(false);
-
+        
         exitPanel = GameObject.Find("Exit Restaurant Panel");
         exitPanel.SetActive(false);
     }
@@ -25,7 +27,7 @@ public class ExitRestaurant : MonoBehaviour
 
     public void OnTriggerEnter(Collider collider)
     {
-        if(collider.tag == "Player")
+        if(collider.tag == "Player") //Si el player entra en el collider activa el panel
         {
             exitPanel.SetActive(true);
         }
