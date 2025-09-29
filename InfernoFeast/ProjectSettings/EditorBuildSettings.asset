@@ -11,4 +11,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Restaurant.unity
     guid: 24ea1cf670faf434bb504daff10e9d22
+  - enabled: 1
+    path: Assets/Scenes/Boss 1.unity
+    guid: 7734ede51f831f34dae3a242f4b85df8
+  - enabled: 1
+    path: Assets/Scenes/Farm.unity
+    guid: 86364443f99c7f84aa3d50499bbaf4bf
+  - enabled: 1
+    path: Assets/Scenes/Fishing Lake.unity
+    guid: df773c27c3d8a804f827178d601c2e0c
+  - enabled: 1
+    path: Assets/Scenes/Market.unity
+    guid: ab0b9a156cd8e6c448da5d74bdccd662
   m_configObjects: {}
