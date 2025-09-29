@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExitRestaurant : MonoBehaviour
 {
@@ -19,11 +20,6 @@ public class ExitRestaurant : MonoBehaviour
         exitPanel.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void OnTriggerEnter(Collider collider)
     {
@@ -42,5 +38,31 @@ public class ExitRestaurant : MonoBehaviour
     public void No()
     {
         exitPanel.SetActive(false);
+    }
+
+    public void Restaurant()
+    {
+        mapPanel.SetActive(false);
+        exitPanel.SetActive(false);
+    }
+
+    public void Market()
+    {
+        SceneManager.LoadScene("Market");
+    }
+
+    public void Boss1()
+    {
+        SceneManager.LoadScene("Boss 1");
+    }
+
+    public void FishingLake()
+    {
+        SceneManager.LoadScene("Fishing Lake");
+    }
+
+    public void Farm()
+    {
+        SceneManager.LoadScene("Farm");
     }
 }

@@ -204,7 +204,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 13747586}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 852509816}
+        m_TargetAssemblyTypeName: ExitRestaurant, Assembly-CSharp
+        m_MethodName: Boss1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &13747586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,7 +598,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 176865753}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 852509816}
+        m_TargetAssemblyTypeName: ExitRestaurant, Assembly-CSharp
+        m_MethodName: Farm
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &176865753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1348,7 +1372,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 583267356}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 852509816}
+        m_TargetAssemblyTypeName: ExitRestaurant, Assembly-CSharp
+        m_MethodName: FishingLake
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &583267356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1612,7 +1648,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 795439344}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 852509816}
+        m_TargetAssemblyTypeName: ExitRestaurant, Assembly-CSharp
+        m_MethodName: Market
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &795439344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3024,7 +3072,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1068264593}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 852509816}
+        m_TargetAssemblyTypeName: ExitRestaurant, Assembly-CSharp
+        m_MethodName: Restaurant
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1068264593
 MonoBehaviour:
   m_ObjectHideFlags: 0
