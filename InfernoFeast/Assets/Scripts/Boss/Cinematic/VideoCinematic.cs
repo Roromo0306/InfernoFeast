@@ -7,6 +7,8 @@ public class VideoCinematic : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
     public GameObject cinematica;
+    public DialogueBoss dialogueBoss;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -18,5 +20,15 @@ public class VideoCinematic : MonoBehaviour
     void VideoEnd(VideoPlayer vp)
     {
         cinematica.SetActive(false);
+
+        List<string> dialogo = new List<string>()
+        {
+            "Hola, bienvenido al juego.",
+            "Espero que disfrutes la aventura.",
+            "¡Vamos a comenzar!"
+        };
+
+        dialogueBoss.StartDialog(dialogo);
+        
     }
 }
