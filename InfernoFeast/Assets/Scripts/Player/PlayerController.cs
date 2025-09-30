@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
         {
             cameraTransform = Camera.main.transform;
         }
-            
+
     }
 
     void Update()
@@ -36,13 +36,26 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Movimiento en ejes globales
-        Vector3 moveDirection = new Vector3(verticalInput, 0f, horizontalInput).normalized;
+        // Movimiento relativo a la cámara
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+
+        // Mantener el movimiento en el plano XZ
+        forward.y = 0f;
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        // Combinar inputs con los ejes de la cámara
+        Vector3 moveDirection = (forward * verticalInput + right * horizontalInput).normalized;
+
+        // Aplicar velocidad
         rb.velocity = moveDirection * moveSpeed + new Vector3(0, rb.velocity.y, 0);
 
+        // Seguir al jugador con suavizado
         if (cameraTransform != null)
         {
-            // Seguir al jugador con suavizado
             Vector3 targetPosition = transform.position + cameraOffset;
             cameraTransform.position = Vector3.Lerp(
                 cameraTransform.position,
@@ -54,9 +67,6 @@ public class PlayerController : MonoBehaviour
                 cameraTransform.LookAt(transform.position);
         }
     }
-
-    
 }
 
 
-    
