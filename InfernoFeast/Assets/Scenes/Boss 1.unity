@@ -649,7 +649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &566125961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1033,7 +1033,7 @@ MonoBehaviour:
   moveSpeed: 7
   rb: {fileID: 1063936975}
   cameraTransform: {fileID: 0}
-  cameraOffset: {x: 0, y: 8, z: 16}
+  cameraOffset: {x: 0, y: 7, z: 14}
   cameraFollowSpeed: 5
   lookAtPlayer: 1
 --- !u!54 &1063936975
