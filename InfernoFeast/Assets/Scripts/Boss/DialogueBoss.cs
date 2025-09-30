@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class DialogueBoss : MonoBehaviour
@@ -10,10 +9,11 @@ public class DialogueBoss : MonoBehaviour
     public TextMeshProUGUI dialogText;
     public List<string> lines;
     public float typingSpeed = 0.05f;
+    public Timer timer;
 
     [Header("Movimiento del panel")]
-    public Vector2 visiblePosition = new Vector2(0, 0);   // posición cuando aparece
-    public Vector2 hiddenPosition = new Vector2(0, -300); // posición cuando desaparece
+    public Vector2 visiblePosition = new Vector2(0, 0);
+    public Vector2 hiddenPosition = new Vector2(0, -300);
 
     private int index = 0;
     private bool isShowing = false;
@@ -22,8 +22,6 @@ public class DialogueBoss : MonoBehaviour
     void Start()
     {
         dialogPanel.SetActive(false);
-
-        // aseguramos que empiece en la posición oculta
         RectTransform rt = dialogPanel.GetComponent<RectTransform>();
         rt.anchoredPosition = hiddenPosition;
     }
@@ -33,7 +31,7 @@ public class DialogueBoss : MonoBehaviour
         lines = newLines;
         index = 0;
         dialogPanel.SetActive(true);
-        StartCoroutine(AnimatePanel(true)); // subir panel
+        StartCoroutine(AnimatePanel(true));
         ShowLine();
     }
 
@@ -71,7 +69,7 @@ public class DialogueBoss : MonoBehaviour
         isTyping = false;
     }
 
-    void NextLine()
+    public void NextLine()
     {
         index++;
         if (index < lines.Count)
@@ -80,7 +78,18 @@ public class DialogueBoss : MonoBehaviour
         }
         else
         {
-            StartCoroutine(AnimatePanel(false)); // bajar panel
+            StartCoroutine(ClosePanelAndStartTimer());
+        }
+    }
+
+    private IEnumerator ClosePanelAndStartTimer()
+    {
+        yield return StartCoroutine(AnimatePanel(false));
+
+        // Inicia el timer después de cerrar el panel
+        if (timer != null)
+        {
+            timer.StartTimer();
         }
     }
 
@@ -92,7 +101,7 @@ public class DialogueBoss : MonoBehaviour
         Vector2 start = rt.anchoredPosition;
         Vector2 target = show ? visiblePosition : hiddenPosition;
 
-        float t = 0;
+        float t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime * 2f;
