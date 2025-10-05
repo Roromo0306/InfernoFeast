@@ -59,9 +59,7 @@ public class CanvasCajas : MonoBehaviour
             }
         }
 
-        Debug.Log(indice);
         Instantiate(tipos[indice].prefabIngrediente, EspacioInstanciado.position, EspacioInstanciado.rotation, EspacioInstanciado); //Se Instancia los ingredientes
-        indice = 0;
         CerrarUI();
     }
 

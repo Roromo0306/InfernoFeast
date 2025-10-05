@@ -6569,6 +6569,7 @@ MonoBehaviour:
   - {fileID: 495669252}
   - {fileID: 1409585730}
   canvascajas: {fileID: 1687816005}
+  tipos: []
   Imagen1: {fileID: 297525431}
   Imagen2: {fileID: 495669251}
   Imagen3: {fileID: 1409585729}
