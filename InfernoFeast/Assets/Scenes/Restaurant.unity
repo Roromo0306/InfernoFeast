@@ -739,7 +739,7 @@ GameObject:
   - component: {fileID: 62774142}
   - component: {fileID: 62774141}
   m_Layer: 0
-  m_Name: Encimera
+  m_Name: Encimera2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -754,10 +754,11 @@ Transform:
   m_GameObject: {fileID: 62774139}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.93, y: -0.592, z: 8.65}
+  m_LocalPosition: {x: 34.09, y: -0.592, z: -3.92}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 996478089}
   m_Father: {fileID: 1916354255}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &62774141
@@ -3085,8 +3086,9 @@ GameObject:
   m_Component:
   - component: {fileID: 672688994}
   - component: {fileID: 672688993}
-  - component: {fileID: 672688995}
   - component: {fileID: 672688996}
+  - component: {fileID: 672688995}
+  - component: {fileID: 672688997}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3180,6 +3182,24 @@ CapsuleCollider:
   m_Height: 2.6440253
   m_Direction: 1
   m_Center: {x: 0.0047567487, y: 0.0021750927, z: 0}
+--- !u!114 &672688997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672688992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edcd2a4c31664cf4283831ca2bbf4625, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Padre: {fileID: 1935621807}
+  Encimera1: {fileID: 1081665275}
+  Encimera2: {fileID: 62774139}
+  EncimeraPadre1: {fileID: 1568930745}
+  EncimeraPadre2: {fileID: 996478088}
+  Hold: 0
 --- !u!1 &783519132
 GameObject:
   m_ObjectHideFlags: 0
@@ -4309,6 +4329,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 672688994}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &996478088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 996478089}
+  m_Layer: 0
+  m_Name: EncimeraPadre2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &996478089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996478088}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 62774140}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1004534848
 GameObject:
   m_ObjectHideFlags: 0
@@ -5031,7 +5082,7 @@ GameObject:
   - component: {fileID: 1081665278}
   - component: {fileID: 1081665277}
   m_Layer: 0
-  m_Name: Encimera
+  m_Name: Encimera1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5046,10 +5097,11 @@ Transform:
   m_GameObject: {fileID: 1081665275}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.55, y: -0.592, z: 8.65}
+  m_LocalPosition: {x: 34.38, y: -0.592, z: 2.84}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1568930746}
   m_Father: {fileID: 1916354255}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1081665277
@@ -5968,6 +6020,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552830697}
   m_CullTransparentMesh: 1
+--- !u!1 &1568930745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1568930746}
+  m_Layer: 0
+  m_Name: EncimeraPadre1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1568930746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568930745}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.69, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1081665276}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1633555403
 GameObject:
   m_ObjectHideFlags: 0
