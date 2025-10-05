@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Mandrake
   m_EditorClassIdentifier: 
   TipoIngredientes: 8
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 5024296157523662061, guid: 824fb45ed9a5c0140b65aad9569fb971, type: 3}
   NombreIngrediente: Mandrake

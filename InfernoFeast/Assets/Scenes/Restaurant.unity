@@ -1352,8 +1352,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Ingredientes:
-  - {fileID: 11400000, guid: 8df4f91f20cdb2f479d68f7f5c36b049, type: 2}
   - {fileID: 11400000, guid: 2340dc82b59694c43bf8965bc031010d, type: 2}
+  - {fileID: 11400000, guid: 8df4f91f20cdb2f479d68f7f5c36b049, type: 2}
   - {fileID: 11400000, guid: 33a0f42b557d3c340998f60268cf886b, type: 2}
   ImagenesUI:
   - {fileID: 21300000, guid: 38f92254d9aa26e41809cf3c7e8c770f, type: 3}
@@ -1363,7 +1363,7 @@ MonoBehaviour:
   - {fileID: 297525432}
   - {fileID: 495669252}
   - {fileID: 1409585730}
-  canvaBotones: {fileID: 1687816004}
+  canvascajas: {fileID: 1687816005}
 --- !u!1 &297424135
 GameObject:
   m_ObjectHideFlags: 0
@@ -2969,7 +2969,7 @@ MonoBehaviour:
   - {fileID: 297525432}
   - {fileID: 495669252}
   - {fileID: 1409585730}
-  canvaBotones: {fileID: 1687816004}
+  canvascajas: {fileID: 1687816005}
 --- !u!1 &634944434
 GameObject:
   m_ObjectHideFlags: 0
@@ -3136,6 +3136,7 @@ Transform:
   m_Children:
   - {fileID: 991084281}
   - {fileID: 246322771}
+  - {fileID: 1935621808}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &672688995
@@ -5250,7 +5251,7 @@ MonoBehaviour:
   - {fileID: 297525432}
   - {fileID: 495669252}
   - {fileID: 1409585730}
-  canvaBotones: {fileID: 1687816004}
+  canvascajas: {fileID: 1687816005}
 --- !u!1 &1180090314
 GameObject:
   m_ObjectHideFlags: 0
@@ -6562,11 +6563,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec25b2e2dbda7014e892e51a00e20e9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cerrar: {fileID: 0}
+  EspacioInstanciado: {fileID: 1935621808}
   botones:
   - {fileID: 297525432}
   - {fileID: 495669252}
   - {fileID: 1409585730}
+  canvascajas: {fileID: 1687816005}
+  Imagen1: {fileID: 297525431}
+  Imagen2: {fileID: 495669251}
+  Imagen3: {fileID: 1409585729}
 --- !u!1 &1751775544
 GameObject:
   m_ObjectHideFlags: 0
@@ -6695,7 +6700,7 @@ MonoBehaviour:
   - {fileID: 297525432}
   - {fileID: 495669252}
   - {fileID: 1409585730}
-  canvaBotones: {fileID: 1687816004}
+  canvascajas: {fileID: 1687816005}
 --- !u!1 &1776928146
 GameObject:
   m_ObjectHideFlags: 0
@@ -7141,7 +7146,7 @@ MonoBehaviour:
   - {fileID: 297525432}
   - {fileID: 495669252}
   - {fileID: 1409585730}
-  canvaBotones: {fileID: 1687816004}
+  canvascajas: {fileID: 1687816005}
 --- !u!1 &1879869073
 GameObject:
   m_ObjectHideFlags: 0
@@ -7429,6 +7434,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932630828}
   m_CullTransparentMesh: 1
+--- !u!1 &1935621807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1935621808}
+  m_Layer: 0
+  m_Name: SujetarObjeto
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1935621808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935621807}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: -1.53}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 672688994}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1976689143
 GameObject:
   m_ObjectHideFlags: 0

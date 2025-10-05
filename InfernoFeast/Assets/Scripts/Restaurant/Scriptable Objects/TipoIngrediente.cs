@@ -7,6 +7,6 @@ using UnityEngine;
 public class TipoIngrediente : ScriptableObject
 {
     public Ingredientes TipoIngredientes;
-    public Transform prefabIngrediente;
+    public GameObject prefabIngrediente;
     public string NombreIngrediente;
 }

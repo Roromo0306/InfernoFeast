@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Coldy
   m_EditorClassIdentifier: 
   TipoIngredientes: 7
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 269696272014019066, guid: f4e9ae5e451ba3b4889f7e2726db3dc3, type: 3}
   NombreIngrediente: Coldy

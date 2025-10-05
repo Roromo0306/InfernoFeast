@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Slime
   m_EditorClassIdentifier: 
   TipoIngredientes: 2
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 1237322106065669325, guid: c7c70ecb0e85f7943ad9bbf14f308f6a, type: 3}
   NombreIngrediente: Slime

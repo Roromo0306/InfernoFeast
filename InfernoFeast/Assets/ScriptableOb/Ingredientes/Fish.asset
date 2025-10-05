@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Fish
   m_EditorClassIdentifier: 
   TipoIngredientes: 9
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 7976623220770151798, guid: 6057c3a1726d1ef41b7090a9dfbe60b9, type: 3}
   NombreIngrediente: Fish

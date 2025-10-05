@@ -10,16 +10,7 @@ public class Caja : MonoBehaviour
     public List<Sprite> ImagenesUI;
     public List<Image> Botones;
 
-    public Canvas canvaBotones;
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    public CanvasCajas canvascajas;
 
     private void OnCollisionStay(Collision collision)
     {
@@ -39,7 +30,10 @@ public class Caja : MonoBehaviour
                     Botones[i].sprite = ImagenesUI[i];
                 }
 
-                canvaBotones.gameObject.SetActive(true); //Activo el canva de los botones
+                canvascajas.SetTipos(Ingredientes);
+                canvascajas.gameObject.SetActive(true); //Activo el canva de los botones
+                Time.timeScale = 0;
+
             }
         }
     }

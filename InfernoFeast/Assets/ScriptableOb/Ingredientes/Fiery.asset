@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Fiery
   m_EditorClassIdentifier: 
   TipoIngredientes: 4
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 2582893922011509050, guid: 4e09c8d26c0e1354c9af43f3142b6bf5, type: 3}
   NombreIngrediente: Fiery

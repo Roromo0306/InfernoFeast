@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Apple
   m_EditorClassIdentifier: 
   TipoIngredientes: 5
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 1098754340161814675, guid: 6076cdc301dc73d498d78be1ea194181, type: 3}
   NombreIngrediente: Apple

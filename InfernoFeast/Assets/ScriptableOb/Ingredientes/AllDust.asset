@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AllDust
   m_EditorClassIdentifier: 
   TipoIngredientes: 3
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 8694240570605402909, guid: d3ec5df86ca4f5f4d9fecb0e5260c065, type: 3}
   NombreIngrediente: AllDust

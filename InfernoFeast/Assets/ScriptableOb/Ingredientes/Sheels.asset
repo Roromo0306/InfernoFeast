@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Sheels
   m_EditorClassIdentifier: 
   TipoIngredientes: 12
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 6895533678688030144, guid: ee4cc4450ce97444b915c3ec30017f23, type: 3}
   NombreIngrediente: Shells
