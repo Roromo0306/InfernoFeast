@@ -10,7 +10,7 @@ public class CanvasCajas : MonoBehaviour
     public List<Image> botones;
     public CanvasCajas canvascajas;
 
-    private List<TipoIngrediente> tipos; //Aqui se guardaran las listas de las cajas
+    public List<TipoIngrediente> tipos; //Aqui se guardaran las listas de las cajas
     private Button Cerrar;
 
     [Header("Botones Canvas")]
@@ -27,7 +27,6 @@ public class CanvasCajas : MonoBehaviour
     public void SetTipos(List<TipoIngrediente> tipos)
     {
         this.tipos = tipos;
-        Debug.Log("Se han pasado");
     }
 
     //Esta funcion cierra la UI y restaura todo
@@ -40,6 +39,7 @@ public class CanvasCajas : MonoBehaviour
         {
             botones[i].gameObject.SetActive(true);
         }
+
         tipos.Clear();
         Time.timeScale = 1;
     }
@@ -59,7 +59,9 @@ public class CanvasCajas : MonoBehaviour
             }
         }
 
+        Debug.Log(indice);
         Instantiate(tipos[indice].prefabIngrediente, EspacioInstanciado.position, EspacioInstanciado.rotation, EspacioInstanciado); //Se Instancia los ingredientes
+        indice = 0;
         CerrarUI();
     }
 

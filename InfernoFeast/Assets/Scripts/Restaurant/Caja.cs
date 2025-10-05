@@ -30,7 +30,7 @@ public class Caja : MonoBehaviour
                     Botones[i].sprite = ImagenesUI[i];
                 }
 
-                canvascajas.SetTipos(Ingredientes);
+                canvascajas.SetTipos(new List<TipoIngrediente>(Ingredientes)); //Pasa los ingredientes a CanvasCaja
                 canvascajas.gameObject.SetActive(true); //Activo el canva de los botones
                 Time.timeScale = 0;
 
