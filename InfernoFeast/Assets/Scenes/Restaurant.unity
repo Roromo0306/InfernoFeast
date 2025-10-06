@@ -7993,7 +7993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b10c6796a4f7440aa8b5f1a2db9914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsPerGameDay: 480
+  secondsPerGameDay: 10
   days:
   - Monday
   - Tuesday
