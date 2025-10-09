@@ -6,7 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Cocina/Ingredientes", fileName = "IngredienteNuevo")]
 public class TipoIngrediente : ScriptableObject
 {
-    public Ingredientes TipoIngredientes;
     public GameObject prefabIngrediente;
-    public string NombreIngrediente;
+    //public string NombreIngrediente;
 }

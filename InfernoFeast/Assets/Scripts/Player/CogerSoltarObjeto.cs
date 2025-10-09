@@ -49,6 +49,7 @@ public class CogerSoltarObjeto : MonoBehaviour
             Destroy(objeto); //Destruimos el original
 
             objeto = null; //Reseteamos objeto
+            PadreEncimera = null;
         }
     }
 
@@ -65,6 +66,7 @@ public class CogerSoltarObjeto : MonoBehaviour
             Destroy(objeto); //Destruimos el objeto
 
             objeto = null; //Reseteamos el objeto en caso de que haya quedado algun dato de el
+            PadreEncimera = null;
         }
         
     }
