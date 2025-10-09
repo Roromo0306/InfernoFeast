@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
 
-    [Header("Cámara")]
-    public Transform cameraTransform; // Cámara que seguirá al jugador
+    [Header("Camara")]
+    public Transform cameraTransform; // Camara que seguirá al jugador
     public Vector3 cameraOffset = new Vector3(0, 5, -7);
     public float cameraFollowSpeed = 5f;
     public bool lookAtPlayer = true;
