@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movimiento del jugador")]
     public float moveSpeed = 5f;
-    public float sprintMultiplier = 1.8f; // Cuánto más rápido corre al sprintar
+    public float sprintMultiplier = 1.8f;
     public Rigidbody rb;
 
     private float horizontalInput;
@@ -49,46 +49,47 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        ReadInput();
-        HandleSprint();
+        ReadInput();       
         UpdateStaminaUI();
     }
 
     void FixedUpdate()
     {
+        HandleSprint();
         MovePlayer();
         RotatePlayer();
         FollowCamera();
         UpdateAnimator();
     }
 
-    //  Leer inputs
+    // 🕹️ Leer inputs
     void ReadInput()
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
     }
 
-    // Gestionar sprint y stamina
+    // ⚡ Gestionar sprint y stamina
     void HandleSprint()
     {
         // Sprint solo si Shift está pulsado y hay stamina
-        isSprinting = Input.GetKey(KeyCode.LeftShift) && currentSprintTime > 0;
-
-        if (isSprinting)
+        if (currentSprintTime > 0 && Input.GetKey(KeyCode.LeftShift))
         {
+            isSprinting = true;
             currentSprintTime -= Time.deltaTime;
             if (currentSprintTime < 0) currentSprintTime = 0;
         }
         else
         {
-            // Recarga stamina si no está sprintando
+            isSprinting = false;
+
+            // Recarga stamina cuando no está sprintando
             if (currentSprintTime < sprintDuration)
                 currentSprintTime += sprintRechargeRate * Time.deltaTime;
         }
     }
 
-    // Movimiento del personaje
+    // 🚶 Movimiento del personaje
     void MovePlayer()
     {
         Vector3 forward = cameraTransform.forward;
@@ -101,12 +102,18 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (forward * verticalInput + right * horizontalInput).normalized;
 
-        float finalSpeed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
+        float finalSpeed = moveSpeed; // velocidad normal
+
+        // Solo aplicar multiplicador si puede sprintar
+        if (isSprinting)
+        {
+            finalSpeed *= sprintMultiplier;
+        }
 
         rb.velocity = moveDirection * finalSpeed + new Vector3(0, rb.velocity.y, 0);
     }
 
-    // Rotación suave del personaje
+    // 🔄 Rotación suave del personaje
     void RotatePlayer()
     {
         if (moveDirection != Vector3.zero)
@@ -116,7 +123,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Cámara siguiendo al jugador
+    // 🎥 Cámara siguiendo al jugador
     void FollowCamera()
     {
         if (cameraTransform == null) return;
@@ -132,14 +139,14 @@ public class PlayerController : MonoBehaviour
             cameraTransform.LookAt(transform.position);
     }
 
-    //Actualizar parámetros del Animator
+    // 🎬 Actualizar parámetros del Animator
     void UpdateAnimator()
     {
         animator.SetFloat("Walk", rb.velocity.magnitude);
-        animator.SetBool("isRunning", isSprinting && moveDirection.magnitude > 0);
+        animator.SetBool("isRunning", isSprinting && moveDirection.magnitude > 0.1f);
     }
 
-   //Actualizar barra de stamina
+    // 💚 Actualizar barra de stamina
     void UpdateStaminaUI()
     {
         if (staminaSlider != null)

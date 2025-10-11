@@ -3558,6 +3558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
+  sprintMultiplier: 1.8
   rb: {fileID: 672688993}
   sprintDuration: 5
   sprintRechargeRate: 1
@@ -8385,7 +8386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b10c6796a4f7440aa8b5f1a2db9914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsPerGameDay: 10
+  secondsPerGameDay: 480
   days:
   - Monday
   - Tuesday
