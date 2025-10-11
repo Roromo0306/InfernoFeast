@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Ingrediente1: {fileID: 11400000, guid: 5a39e3ebfa5d1874fb25059c337e90c0, type: 2}
   Ingrediente2: {fileID: 11400000, guid: d7f39c2bcff55584b9f06f69a2a6b96c, type: 2}
-  Resultado: {fileID: 0}
+  Resultado: {fileID: 11400000, guid: b0da61980865f634089f30279de0726e, type: 2}

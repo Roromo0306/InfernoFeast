@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_Empanadas
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: cee6313bdd75d2042ab8081b09077fc4, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: d7f39c2bcff55584b9f06f69a2a6b96c, type: 2}
+  Resultado: {fileID: 11400000, guid: 4c6561b5b2f7b1b4c932e73d1c4f5e1d, type: 2}

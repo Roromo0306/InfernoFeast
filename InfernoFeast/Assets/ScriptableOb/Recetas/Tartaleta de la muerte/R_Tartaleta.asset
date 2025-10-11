@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_Tartaleta
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: fb89c065af0743d40879d3d6bf3c06f6, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: 8dbb1e9a800e607439cd4a39bf182f00, type: 2}
+  Resultado: {fileID: 11400000, guid: 06ed0ccb2d6767340be79c81e6c9d18b, type: 2}

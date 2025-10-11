@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_RamenBocazas
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: 833234c851ebf024bb82a9e96748cdba, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: bb8840b548a189c4d821f2e56b9f18cc, type: 2}
+  Resultado: {fileID: 11400000, guid: 148877167cd2e5f419a9e1327421258e, type: 2}

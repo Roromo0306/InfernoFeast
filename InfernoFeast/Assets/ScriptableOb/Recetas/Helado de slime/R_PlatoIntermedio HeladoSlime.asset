@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_PlatoIntermedio HeladoSlime
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: 919ef788a0f5d5141b0887122f9be9f7, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: fc1d7f695ff16c544a8ee708b35efeea, type: 2}
+  Resultado: {fileID: 11400000, guid: d0b9412349cb6584a8e1e60efaed3b4f, type: 2}

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_PlatoIntermedio ExecutionFillet
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: 6bb55648848b7f148a728bd18f0cfef3, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: 52b88ed4d13a43e439828e89e83bbc08, type: 2}
+  Resultado: {fileID: 11400000, guid: cf3d23702ec4eb746b68546a8df0f8db, type: 2}

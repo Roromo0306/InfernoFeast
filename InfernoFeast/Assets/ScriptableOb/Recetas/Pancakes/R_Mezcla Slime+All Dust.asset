@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_Mezcla Slime+All Dust
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: 2340dc82b59694c43bf8965bc031010d, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: e40bbeaf05ea3a348b120ac237f74be0, type: 2}
+  Resultado: {fileID: 11400000, guid: e7b4f1d8c48546b4aab5fd2e3970f8b8, type: 2}

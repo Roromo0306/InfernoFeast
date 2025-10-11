@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_PlatoIntermedio Vieiras
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: d8efe6d1612b33d46949e473dad84b56, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: fc1d7f695ff16c544a8ee708b35efeea, type: 2}
+  Resultado: {fileID: 11400000, guid: 8c99b146d4ff597489fdc083e7254095, type: 2}

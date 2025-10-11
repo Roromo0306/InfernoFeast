@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_HambuerguesaPar
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: 6984841744638b14b91ad4fc41931b33, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: 32470bdd1164ad64ca639d715431e20e, type: 2}
+  Resultado: {fileID: 11400000, guid: 9f5656649df944743bd2a5daadecf44e, type: 2}

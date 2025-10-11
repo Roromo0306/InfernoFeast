@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_Mezcla Final
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: b0da61980865f634089f30279de0726e, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: 301f3b822577614419d7e3a355a52b27, type: 2}
+  Resultado: {fileID: 11400000, guid: 9d1f345c9fb055c45a6330293ca83dd8, type: 2}

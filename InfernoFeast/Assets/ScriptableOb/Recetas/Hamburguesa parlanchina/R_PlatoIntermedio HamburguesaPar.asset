@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_PlatoIntermedio HamburguesaPar
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 0}
-  Ingrediente2: {fileID: 0}
-  Resultado: {fileID: 0}
+  Ingrediente1: {fileID: 11400000, guid: ee8112108ae1de9408731f6e12c2aa14, type: 2}
+  Ingrediente2: {fileID: 11400000, guid: ceb05cc928e74524baf9ac0e6d5d4d8b, type: 2}
+  Resultado: {fileID: 11400000, guid: 6984841744638b14b91ad4fc41931b33, type: 2}

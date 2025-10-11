@@ -528,6 +528,7 @@ GameObject:
   - component: {fileID: 45805522}
   - component: {fileID: 45805521}
   - component: {fileID: 45805520}
+  - component: {fileID: 45805523}
   m_Layer: 0
   m_Name: Cortar
   m_TagString: Untagged
@@ -621,6 +622,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 45805518}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &45805523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45805518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f636207125b45664887e75c23dcdcb61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBar: {fileID: 0}
+  progressIncrement: 0.1
+  maxProgress: 100
+  PadrePlayer: {fileID: 0}
+  cortados: []
+  ingredientes: []
 --- !u!1 &61525150
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,6 +652,7 @@ GameObject:
   - component: {fileID: 61525154}
   - component: {fileID: 61525153}
   - component: {fileID: 61525152}
+  - component: {fileID: 61525155}
   m_Layer: 0
   m_Name: Freidora
   m_TagString: Untagged
@@ -726,6 +746,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 61525150}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &61525155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61525150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0ae047ad798954fa8ce9fb56b75a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &62774139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1632,6 +1664,7 @@ GameObject:
   - component: {fileID: 317680885}
   - component: {fileID: 317680884}
   - component: {fileID: 317680883}
+  - component: {fileID: 317680886}
   m_Layer: 0
   m_Name: Batir
   m_TagString: Untagged
@@ -1725,6 +1758,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 317680881}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &317680886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317680881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23725fbad5c38d843ac77179ff44e18a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &323837697
 GameObject:
   m_ObjectHideFlags: 0
@@ -5737,6 +5782,7 @@ GameObject:
   - component: {fileID: 1180090318}
   - component: {fileID: 1180090317}
   - component: {fileID: 1180090316}
+  - component: {fileID: 1180090319}
   m_Layer: 0
   m_Name: Horno
   m_TagString: Untagged
@@ -5830,6 +5876,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1180090314}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1180090319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180090314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72f5e4994e74d3a4298d787440387d00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1271734884
 GameObject:
   m_ObjectHideFlags: 0
@@ -7869,6 +7927,7 @@ GameObject:
   - component: {fileID: 1776928150}
   - component: {fileID: 1776928149}
   - component: {fileID: 1776928148}
+  - component: {fileID: 1776928151}
   m_Layer: 0
   m_Name: Parrilla
   m_TagString: Untagged
@@ -7962,6 +8021,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776928146}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1776928151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776928146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb40111a4e179c498557931e16dec6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1780801709
 GameObject:
   m_ObjectHideFlags: 0
