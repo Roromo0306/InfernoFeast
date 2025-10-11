@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     public float cameraFollowSpeed = 5f;
     public bool lookAtPlayer = true;
 
+    [Header("Animator")]
+    public Animator animator;
+
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
@@ -53,6 +56,8 @@ public class PlayerController : MonoBehaviour
         // Aplicar velocidad
         rb.velocity = moveDirection * moveSpeed + new Vector3(0, rb.velocity.y, 0);
 
+        animator.SetFloat("Walk", rb.velocity.magnitude);
+
         // Seguir al jugador con suavizado
         if (cameraTransform != null)
         {
@@ -65,6 +70,12 @@ public class PlayerController : MonoBehaviour
 
             if (lookAtPlayer)
                 cameraTransform.LookAt(transform.position);
+        }
+
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(-moveDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10f * Time.deltaTime);
         }
     }
 }
