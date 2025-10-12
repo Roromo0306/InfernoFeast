@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: Mezcla
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 8694240570605402909, guid: 9b4867398a8121c43b483411b92829d7, type: 3}

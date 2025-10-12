@@ -5539,6 +5539,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac95b797378ac94f9835584582129c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recetas:
+  - {fileID: 11400000, guid: 6c1ea245b23b8e545aebd0cfacf98add, type: 2}
+  - {fileID: 11400000, guid: cffd78c6ec817cd47a223cd4332af4ca, type: 2}
+  - {fileID: 11400000, guid: ebff3e86ceeb47b41a739b3e3a19d87a, type: 2}
+  - {fileID: 11400000, guid: 6b7220cea4554934d89cecb0b4ce2e46, type: 2}
+  - {fileID: 11400000, guid: fd999a0b259fab7499fe9541f22d334d, type: 2}
+  - {fileID: 11400000, guid: 93ff903eb6ebc79429e5042580e5e856, type: 2}
+  - {fileID: 11400000, guid: cc11712e0275aa34b8e623b65877b910, type: 2}
+  - {fileID: 11400000, guid: b9816eceee7e8c5428529f1fdb4d62e5, type: 2}
+  - {fileID: 11400000, guid: 9f0fdcb28e4fad84882b074ac2cc581f, type: 2}
+  - {fileID: 11400000, guid: 6d60ee08077017943ab01f9cd60550da, type: 2}
+  - {fileID: 11400000, guid: 5ce26309ac9924f4a9efab2fba9b9478, type: 2}
+  - {fileID: 11400000, guid: ebbdf8ec4dd1af147a3bd4b1ff973c47, type: 2}
+  - {fileID: 11400000, guid: 36e127009cea8754d814f83b80aeedc3, type: 2}
+  - {fileID: 11400000, guid: 1d875a8829a680e45b79538f24a035dd, type: 2}
+  - {fileID: 11400000, guid: c164fbab777e59c47992843690bcf8fe, type: 2}
+  - {fileID: 11400000, guid: 74efccc26d55342418367bd811c4d2e1, type: 2}
+  - {fileID: 11400000, guid: 84cb6c82cc1e2784093e8032274d0cfa, type: 2}
+  - {fileID: 11400000, guid: 5a6d51ae059cc5a4bb84eb0ab9423f11, type: 2}
+  - {fileID: 11400000, guid: 6cd7fe5a3ba5cce4f9cbd5eb3998f069, type: 2}
+  - {fileID: 11400000, guid: 4233fd9812749754b98798628357b14d, type: 2}
+  - {fileID: 11400000, guid: 4871eebdf28c7eb4f89933a95c557e8c, type: 2}
+  PadreEncimera: {fileID: 1568930745}
+  objeto1: {fileID: 0}
+  objeto2: {fileID: 0}
+  mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
+  TieneObjeto: 0
 --- !u!1 &1085179975
 GameObject:
   m_ObjectHideFlags: 0
