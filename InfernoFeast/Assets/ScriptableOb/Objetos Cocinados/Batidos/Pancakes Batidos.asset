@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: Pancakes Batidos
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 1814119773594975965, guid: cc3502b4906b6034085a81d1bf661968, type: 3}

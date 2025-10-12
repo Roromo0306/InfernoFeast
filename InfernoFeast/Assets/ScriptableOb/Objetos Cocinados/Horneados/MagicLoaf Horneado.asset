@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: MagicLoaf Horneado
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 7020691240451091539, guid: 76f7e9afc2a158b44ae4ccdac12b89b3, type: 3}

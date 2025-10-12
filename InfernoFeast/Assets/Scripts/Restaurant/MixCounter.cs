@@ -1,18 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MixCounter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Slider")]
+    public Slider progressBar; //Barra de progreso
+    public float progressIncrement = 0.1f; //Lo que aumenta por accion
+    public float maxProgress = 100f; //Progreso maximo
 
-    // Update is called once per frame
-    void Update()
+    public GameObject PadrePlayer;
+
+    private float currentProgress = 0f;
+    private bool isInteracting = false;
+    private int lastMouseButton = -1;
+    private int Indice;
+    private bool ObjetoEncontrado; //Con este bool detectare si se ha encontrado un nombre en el if
+
+    [Header("Listas")]
+    public List<TipoIngrediente> batidos;
+    public List<TipoIngrediente> ingredientes;
+
+    public void Batir()
     {
-        
+        ObjetoEncontrado = false;
+        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
+        string nombreHijo = HijoPadre.name.Replace("(Clone)", "").Trim(); //Esto elimina la palabra Clone y posibles espacios extras
+
+        for (int i = 0; i < ingredientes.Count; i++)
+        {
+            if (ingredientes[i].name == nombreHijo)
+            {
+                Indice = i;
+                ObjetoEncontrado = true;
+                break;
+            }
+        }
+
+        if (ObjetoEncontrado)
+        {
+            Destroy(HijoPadre);
+
+            Instantiate(batidos[Indice].prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+        }
+        else
+        {
+            Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+
+            Destroy(HijoPadre);
+        }
     }
 }

@@ -10,50 +10,89 @@ public class CogerSoltarObjeto : MonoBehaviour
     public GameObject Encimera1;
     public GameObject Encimera2;
 
-    public bool Hold;
+    public bool Hold, EncimeraSoltar, EncimeraCoger;
+
+    private GameObject EncimeraCounter;
 
     private void Update()
     {
         Hold = Padre.transform.childCount > 0; //Hold sera true si Padre tiene hijos
+
+        if(EncimeraSoltar && Input.GetKeyDown(KeyCode.E))
+        {
+            SoltarObjeto(EncimeraCounter);
+        }
+
+        if(EncimeraCoger && Input.GetKeyDown(KeyCode.E))
+        {
+            CogerObjeto(EncimeraCounter);
+        }
     }
 
-    private void OnCollisionStay(Collision collision)
+
+    private void OnCollisionEnter(Collision collision)
     {
-        if(Hold && collision.gameObject.CompareTag ("Encimera"))
+        if(Hold && collision.gameObject.CompareTag("Encimera"))
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                SoltarObjeto(collision);
-            }
+            EncimeraSoltar = true;
+            EncimeraCounter = collision.gameObject;
         }
 
         if(!Hold && collision.gameObject.CompareTag("Encimera"))
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                CogerObjeto(collision);
-            }
+            EncimeraCoger = true;
+            EncimeraCounter = collision.gameObject;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (!Hold && collision.gameObject.CompareTag("Encimera"))
+        {
+            EncimeraSoltar = false;
+            EncimeraCounter = null;
+        }
+
+        if (Hold && collision.gameObject.CompareTag("Encimera"))
+        {
+            EncimeraCoger = false;
+            EncimeraCounter = null;
         }
     }
 
     //Funcion para soltar el objeto en una encimera
-    private void SoltarObjeto(Collision collision)
+    private void SoltarObjeto(GameObject collision)
     {
         if(Padre.transform.childCount > 0) //Aunque esto ya exista en hold, con esto evitamos errores que pueden aparecer entre frames.
         {
             GameObject objeto = Padre.transform.GetChild(0).gameObject; //Obtenemos y guardamos el objeto hijo en un gameobject nuevo
             GameObject PadreEncimera = collision.transform.GetChild(0).gameObject; //Obtenemos y guardamos el padre de la encimera, donde se instanciara el nuevo 
 
-            Instantiate(objeto, PadreEncimera.transform.position, PadreEncimera.transform.rotation, PadreEncimera.transform); //Instanciamos en el nuevo lugar
+            if(PadreEncimera.transform.childCount == 0)
+            {
+                Instantiate(objeto, PadreEncimera.transform.position, PadreEncimera.transform.rotation, PadreEncimera.transform); //Instanciamos en el nuevo lugar
 
-            Destroy(objeto); //Destruimos el original
+                Destroy(objeto); //Destruimos el original
 
-            objeto = null; //Reseteamos objeto
-            PadreEncimera = null;
+                objeto = null; //Reseteamos objeto
+                PadreEncimera = null;
+            }
+            else
+            {
+                Encimera enci = collision.GetComponent<Encimera>();
+
+                enci.objeto2 = objeto.gameObject;
+
+                Destroy(objeto);
+
+                objeto = null;
+                PadreEncimera = null;
+            }
+          
         }
     }
 
-    private void CogerObjeto(Collision collision)
+    private void CogerObjeto(GameObject collision)
     {
         GameObject PadreEncimera = collision.transform.GetChild(0).gameObject; //Obtenemos y guardamos el lugar esta guardado el objeto en la encimera
         

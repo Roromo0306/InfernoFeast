@@ -41,7 +41,6 @@ public class CanvasCajas : MonoBehaviour
         }
 
         tipos.Clear();
-        Time.timeScale = 1;
     }
 
     //Con esta funcion instanciamos el ingrediente que escojamos en los botones

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: TalkativeMeat Cortada Hervida
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 7849947903808893956, guid: 86bb6a5a0ca05a14783f2a490ff13cd6, type: 3}

@@ -32,7 +32,6 @@ public class Caja : MonoBehaviour
 
                 canvascajas.SetTipos(new List<TipoIngrediente>(Ingredientes)); //Pasa los ingredientes a CanvasCaja
                 canvascajas.gameObject.SetActive(true); //Activo el canva de los botones
-                Time.timeScale = 0;
 
             }
         }

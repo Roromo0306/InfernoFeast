@@ -16,20 +16,40 @@ public class CutCounter : MonoBehaviour
     private bool isInteracting = false;
     private int lastMouseButton = -1;
     private int Indice;
+    private bool ObjetoEncontrado; //Con este bool detectare si se ha encontrado un nombre en el if
 
     [Header("Listas")]
-    public List<GameObject> cortados;
-    public List<GameObject> ingredientes;
+    public List<TipoIngrediente> cortados;
+    public List<TipoIngrediente> ingredientes;
 
-    private void cortar()
+    public void cortar()
     {
-        for(int i = 0; i < ingredientes.Count; i++)
+        ObjetoEncontrado = false;
+        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
+        string nombreHijo = HijoPadre.name.Replace("(Clone)", "").Trim(); //Esto elimina la palabra Clone y posibles espacios extras
+
+        for (int i = 0; i < ingredientes.Count; i++)
         {
-            if(ingredientes[i].name == PadrePlayer.transform.GetChild(0).name)
+            if (ingredientes[i].name == nombreHijo)
             {
                 Indice = i;
-                return;
+                ObjetoEncontrado = true;
+                break;
             }
         }
+
+        if(ObjetoEncontrado)
+        {
+            Destroy(HijoPadre);
+
+            Instantiate(cortados[Indice].prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+        }
+        else
+        {
+            Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+
+            Destroy(HijoPadre);
+        }
+
     }
 }
