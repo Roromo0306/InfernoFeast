@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
-  m_Name: Sheels
+  m_Name: MermaidHair
   m_EditorClassIdentifier: 
-  TipoIngredientes: 12
-  prefabIngrediente: {fileID: 6895533678688030144, guid: ee4cc4450ce97444b915c3ec30017f23, type: 3}
-  NombreIngrediente: Shells
+  TipoIngredientes: 6
+  prefabIngrediente: {fileID: 1814119773594975965, guid: fcdd7d9923e22774f801b04aed1ffb6a, type: 3}
+  NombreIngrediente: MermaidHair

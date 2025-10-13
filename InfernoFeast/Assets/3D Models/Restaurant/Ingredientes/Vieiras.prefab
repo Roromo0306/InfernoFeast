@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4224692174223339849}
   - component: {fileID: 4070144261899110041}
   m_Layer: 0
-  m_Name: Sheels
+  m_Name: Vieiras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

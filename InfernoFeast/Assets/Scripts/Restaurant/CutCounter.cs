@@ -16,7 +16,7 @@ public class CutCounter : MonoBehaviour
     private bool isInteracting = false;
     private int lastMouseButton = -1;
     private int Indice;
-    private bool ObjetoEncontrado; //Con este bool detectare si se ha encontrado un nombre en el if
+    private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
 
     [Header("Listas")]
     public List<TipoIngrediente> cortados;
@@ -24,9 +24,9 @@ public class CutCounter : MonoBehaviour
 
     public void cortar()
     {
-        ObjetoEncontrado = false;
-        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
+        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
 
+        //Con este for recorre la lista entera hasta que encuentra un objeto que se llama igual que el objeto que lleva el jugador. Al encontrar esto, activo el bool y guardo el indice
         for (int i = 0; i < ingredientes.Count; i++)
         {
             if (ingredientes[i].name == HijoPadre.name)
@@ -37,19 +37,22 @@ public class CutCounter : MonoBehaviour
             }
         }
 
-        if(ObjetoEncontrado)
+        //Si el bool es true pasa lo siguiente
+        if (ObjetoEncontrado)
         {
-            Destroy(HijoPadre);
+            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
 
-            GameObject nuevoObjeto = Instantiate(cortados[Indice].prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
-            nuevoObjeto.name = cortados[Indice].prefabIngrediente.name;
+            GameObject nuevoObjeto = Instantiate(cortados[Indice].prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de cortados
+            nuevoObjeto.name = cortados[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
+
+            Indice = 0;
         }
         else
         {
-            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
-            nuevoObjeto.name = HijoPadre.name;
+            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
+            nuevoObjeto.name = HijoPadre.name; //Me aseguro que el nombre sea el correcto
 
-            Destroy(HijoPadre);
+            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
         }
 
     }
