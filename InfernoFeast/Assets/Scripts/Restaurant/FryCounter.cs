@@ -26,11 +26,10 @@ public class FryCounter : MonoBehaviour
     {
         ObjetoEncontrado = false;
         GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
-        string nombreHijo = HijoPadre.name.Replace("(Clone)", "").Trim(); //Esto elimina la palabra Clone y posibles espacios extras
 
         for (int i = 0; i < ingredientes.Count; i++)
         {
-            if (ingredientes[i].name == nombreHijo)
+            if (ingredientes[i].name == HijoPadre.name)
             {
                 Indice = i;
                 ObjetoEncontrado = true;
@@ -42,11 +41,13 @@ public class FryCounter : MonoBehaviour
         {
             Destroy(HijoPadre);
 
-            Instantiate(fritos[Indice].prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+            GameObject nuevoObjeto = Instantiate(fritos[Indice].prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+            nuevoObjeto.name = fritos[Indice].prefabIngrediente.name;
         }
         else
         {
-            Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform);
+            nuevoObjeto.name = HijoPadre.name;
 
             Destroy(HijoPadre);
         }

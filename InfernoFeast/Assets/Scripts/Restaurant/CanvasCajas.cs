@@ -59,6 +59,7 @@ public class CanvasCajas : MonoBehaviour
         }
 
         Instantiate(tipos[indice].prefabIngrediente, EspacioInstanciado.position, EspacioInstanciado.rotation, EspacioInstanciado); //Se Instancia los ingredientes
+        EspacioInstanciado.transform.GetChild(0).name = EspacioInstanciado.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
         CerrarUI();
     }
 
