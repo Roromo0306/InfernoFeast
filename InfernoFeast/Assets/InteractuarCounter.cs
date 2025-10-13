@@ -6,7 +6,7 @@ public class InteractuarCounter : MonoBehaviour
 {
     public GameObject Padre;
 
-    public bool Hold, Cortar, Pelar, Hornear, Hervir, Freir, Batir;
+    public bool Hold, Cortar, Pelar, Hornear, Hervir, Freir, Batir, basura;
 
     private GameObject Counter;
     private void Update()
@@ -43,6 +43,12 @@ public class InteractuarCounter : MonoBehaviour
             {
                 MixCounter mix = Counter.GetComponent<MixCounter>();
                 mix.Batir();
+            }
+
+            if(basura && Input.GetKeyDown(KeyCode.E))
+            {
+                Basura bas = Counter.GetComponent<Basura>();
+                bas.Eliminar();
             }
         }
 
@@ -85,6 +91,12 @@ public class InteractuarCounter : MonoBehaviour
             Hervir = true;
             Counter = collision.gameObject;
         }
+
+        if(collision.gameObject.name == "Basura")
+        {
+            basura = true;
+            Counter = collision.gameObject;
+        }
     }
 
     private void OnCollisionExit(Collision collision)
@@ -122,6 +134,12 @@ public class InteractuarCounter : MonoBehaviour
         if (collision.gameObject.name == "Hervir")
         {
             Hervir = false;
+            Counter = null;
+        }
+
+        if(collision.gameObject.name == "Basura")
+        {
+            basura = false;
             Counter = null;
         }
     }
