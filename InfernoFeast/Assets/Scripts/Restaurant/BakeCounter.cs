@@ -42,7 +42,7 @@ public class BakeCounter : MonoBehaviour
         Destroy(HijoPadre);
 
 
-        corrutina = StartCoroutine(ProcesoHornear());
+        corrutina = StartCoroutine(ProcesoHornear(objetoHorno));
 
         Instanciar(objetoHorno);
     }
@@ -69,7 +69,7 @@ public class BakeCounter : MonoBehaviour
         }
     }
 
-    private IEnumerator ProcesoHornear()
+    private IEnumerator ProcesoHornear(GameObject objetoHorno)
     {
         Debug.Log("hjh");
         //Preparamos el slider
@@ -84,10 +84,13 @@ public class BakeCounter : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 //Se cancela
+                //Instanciar(objetoHorno);
             }
 
             tiempoPasado += Time.deltaTime;
             slider.value = Mathf.Clamp01(tiempoPasado/duracion); //Fija el valor
+
+            yield return null;
         }
 
         slider.gameObject.SetActive(false);
