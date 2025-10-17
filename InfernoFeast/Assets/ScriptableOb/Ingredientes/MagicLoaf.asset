@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: MagicLoaf
   m_EditorClassIdentifier: 
-  TipoIngredientes: 0
-  prefabIngrediente: {fileID: 7020691240451091539, guid: e20ba7b3e636dd841a82ba5542a1eacf, type: 3}
-  NombreIngrediente: MagicLoaf
+  prefabIngrediente: {fileID: 2951364182523375881, guid: b66ca2e93147d5b4f86629af27d1fe33, type: 3}

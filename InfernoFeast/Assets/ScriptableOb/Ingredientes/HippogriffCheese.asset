@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: HippogriffCheese
   m_EditorClassIdentifier: 
-  TipoIngredientes: 11
-  prefabIngrediente: {fileID: 4009265713386625428, guid: 152693d6bfeeeb84c8591c33d159c368, type: 3}
-  NombreIngrediente: HippogriffCheese
+  prefabIngrediente: {fileID: 2000618067766713056, guid: 8c304fea9cce5c34a9c77a9282e38c4b, type: 3}

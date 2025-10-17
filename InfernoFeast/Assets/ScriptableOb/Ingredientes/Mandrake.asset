@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: Mandrake
   m_EditorClassIdentifier: 
-  TipoIngredientes: 8
-  prefabIngrediente: {fileID: 5024296157523662061, guid: 824fb45ed9a5c0140b65aad9569fb971, type: 3}
-  NombreIngrediente: Mandrake
+  prefabIngrediente: {fileID: 2565259498555962808, guid: 91c6fff81fb5889499ba473b0c0b37b3, type: 3}

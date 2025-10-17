@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: ManEatingPlant
   m_EditorClassIdentifier: 
-  TipoIngredientes: 10
-  prefabIngrediente: {fileID: 4500019823841829392, guid: 8aff28ae097f51c49b24223ccf4cf560, type: 3}
-  NombreIngrediente: ManEatingPlant
+  prefabIngrediente: {fileID: 3552831842671158315, guid: a5fd6f58f59ffaa4bbf45a05e84da079, type: 3}

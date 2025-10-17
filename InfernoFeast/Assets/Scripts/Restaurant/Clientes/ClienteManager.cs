@@ -32,7 +32,7 @@ public class ClienteManager : MonoBehaviour
         int mesaLibre = BuscarMesaLibre();
         if (mesaLibre == -1)
         {
-            Debug.Log("No hay mesas libres, no entra más gente.");
+            //Debug.Log("No hay mesas libres, no entra más gente.");
             return;
         }
 

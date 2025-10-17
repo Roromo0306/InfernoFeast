@@ -21,6 +21,9 @@ public class BakeCounter : MonoBehaviour
 
     private Coroutine corrutina = null;
 
+    public InteractuarCounter counterInt;
+    public TipoIngrediente Quemado;
+
     //Funcion de hornear
     public void Hornear()
     {
@@ -43,8 +46,6 @@ public class BakeCounter : MonoBehaviour
 
 
         corrutina = StartCoroutine(ProcesoHornear(objetoHorno));
-
-        Instanciar(objetoHorno);
     }
 
 
@@ -69,6 +70,16 @@ public class BakeCounter : MonoBehaviour
         }
     }
 
+    private void InstanciarQuemado(GameObject HijoPadre)
+    {
+        Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
+
+        GameObject nuevoObjeto = Instantiate(Quemado.prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
+        nuevoObjeto.name = Quemado.prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
+
+        Indice = 0;
+    }
+
     private IEnumerator ProcesoHornear(GameObject objetoHorno)
     {
         Debug.Log("hjh");
@@ -81,10 +92,29 @@ public class BakeCounter : MonoBehaviour
         float tiempoPasado = 0f;
         while(tiempoPasado < duracion)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.R) && counterInt.Hornear)
             {
                 //Se cancela
-                //Instanciar(objetoHorno);
+                
+                if(slider.value >= 0 && slider.value <= 0.7f)
+                {
+                    Debug.Log(slider.value);
+                    Debug.Log("Bien");
+                    slider.gameObject.SetActive(false);
+                    slider.value = 0f;
+                    Instanciar(objetoHorno);
+                }
+
+                if (slider.value > 0.7f)
+                {
+                    Debug.Log(slider.value);
+                    Debug.Log("Quemado");
+                    slider.gameObject.SetActive(false);
+                    slider.value = 0f;
+                    InstanciarQuemado(objetoHorno);
+                }
+
+                
             }
 
             tiempoPasado += Time.deltaTime;

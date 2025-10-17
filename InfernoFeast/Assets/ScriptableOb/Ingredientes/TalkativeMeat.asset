@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: TalkativeMeat
   m_EditorClassIdentifier: 
-  TipoIngredientes: 1
-  prefabIngrediente: {fileID: 7849947903808893956, guid: 0d26b9f8089b57948a77b0fe407fd4d5, type: 3}
-  NombreIngrediente: TalkativeMeat
+  prefabIngrediente: {fileID: 2227363708607209126, guid: 6c143206fe3e3bb449c52c142533552d, type: 3}
