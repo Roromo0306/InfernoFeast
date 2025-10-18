@@ -70,7 +70,7 @@ public class CogerSoltarObjeto : MonoBehaviour
 
             if(PadreEncimera.transform.childCount == 0)
             {
-                Instantiate(objeto, PadreEncimera.transform.position, PadreEncimera.transform.rotation, PadreEncimera.transform); //Instanciamos en el nuevo lugar
+                Instantiate(objeto, PadreEncimera.transform.position, objeto.transform.rotation, PadreEncimera.transform); //Instanciamos en el nuevo lugar
                 PadreEncimera.transform.GetChild(0).name = PadreEncimera.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
 
                 Destroy(objeto); //Destruimos el original
@@ -101,7 +101,7 @@ public class CogerSoltarObjeto : MonoBehaviour
         {
             GameObject objeto = PadreEncimera.transform.GetChild(0).gameObject; //Obtenemos y guardamos el objeto que esta en la encimera
 
-            Instantiate(objeto, Padre.transform.position, Padre.transform.rotation, Padre.transform); //Instanciamos el objeto en el GameObject vacio del jugador
+            Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform); //Instanciamos el objeto en el GameObject vacio del jugador
             Padre.transform.GetChild(0).name = Padre.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
 
             Destroy(objeto); //Destruimos el objeto

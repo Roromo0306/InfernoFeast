@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: Empanadas
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 1563925001943913792, guid: 5ad0778c2ff121f4db6764f76ab89567, type: 3}

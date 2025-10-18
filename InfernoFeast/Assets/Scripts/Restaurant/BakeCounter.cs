@@ -40,7 +40,7 @@ public class BakeCounter : MonoBehaviour
             }
         }
 
-        GameObject objetoHorno = Instantiate(HijoPadre, PadreHorno.transform.position, PadreHorno.transform.rotation, PadreHorno.transform); //Instancio el objeto en el horno
+        GameObject objetoHorno = Instantiate(HijoPadre, PadreHorno.transform.position, HijoPadre.transform.rotation, PadreHorno.transform); //Instancio el objeto en el horno
         objetoHorno.name = HijoPadre.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
         Destroy(HijoPadre);
 
@@ -56,14 +56,14 @@ public class BakeCounter : MonoBehaviour
         {
             Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
 
-            GameObject nuevoObjeto = Instantiate(horneados[Indice].prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
+            GameObject nuevoObjeto = Instantiate(horneados[Indice].prefabIngrediente, PadrePlayer.transform.position, horneados[Indice].prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
             nuevoObjeto.name = horneados[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
 
             Indice = 0;
         }
         else
         {
-            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
+            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, HijoPadre.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
             nuevoObjeto.name = HijoPadre.name; //Me aseguro que el nombre sea el correcto
 
             Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
@@ -74,7 +74,7 @@ public class BakeCounter : MonoBehaviour
     {
         Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
 
-        GameObject nuevoObjeto = Instantiate(Quemado.prefabIngrediente, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
+        GameObject nuevoObjeto = Instantiate(Quemado.prefabIngrediente, PadrePlayer.transform.position, Quemado.prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
         nuevoObjeto.name = Quemado.prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
 
         Indice = 0;
@@ -82,7 +82,6 @@ public class BakeCounter : MonoBehaviour
 
     private IEnumerator ProcesoHornear(GameObject objetoHorno)
     {
-        Debug.Log("hjh");
         //Preparamos el slider
         slider.gameObject.SetActive(true);
         slider.minValue = 0f;
@@ -98,8 +97,6 @@ public class BakeCounter : MonoBehaviour
                 
                 if(slider.value >= 0 && slider.value <= 0.7f)
                 {
-                    Debug.Log(slider.value);
-                    Debug.Log("Bien");
                     slider.gameObject.SetActive(false);
                     slider.value = 0f;
                     Instanciar(objetoHorno);
@@ -107,8 +104,6 @@ public class BakeCounter : MonoBehaviour
 
                 if (slider.value > 0.7f)
                 {
-                    Debug.Log(slider.value);
-                    Debug.Log("Quemado");
                     slider.gameObject.SetActive(false);
                     slider.value = 0f;
                     InstanciarQuemado(objetoHorno);

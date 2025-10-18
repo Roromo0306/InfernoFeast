@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: PlatoIntermedio Vieiras
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 0}
+  prefabIngrediente: {fileID: 7020691240451091539, guid: 76bbb4edf390f7d47bdbe351c2bb7bb0, type: 3}

@@ -49,7 +49,7 @@ public class Encimera : MonoBehaviour
                 Destroy(objeto1);
                 Destroy(objeto2);
 
-                Instantiate(recetas[i].Resultado.prefabIngrediente, PadreEncimera.transform.position, PadreEncimera.transform.rotation, PadreEncimera.transform);
+                Instantiate(recetas[i].Resultado.prefabIngrediente, PadreEncimera.transform.position, recetas[i].Resultado.prefabIngrediente.transform.rotation, PadreEncimera.transform);
                 PadreEncimera.transform.GetChild(0).name = PadreEncimera.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
 
                 objeto1 = objeto2 = null;

@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: MermaidHair
   m_EditorClassIdentifier: 
-  TipoIngredientes: 6
-  prefabIngrediente: {fileID: 1814119773594975965, guid: fcdd7d9923e22774f801b04aed1ffb6a, type: 3}
-  NombreIngrediente: MermaidHair
+  prefabIngrediente: {fileID: 6008682090500373280, guid: 8b07e3e7efa7b89448863ce921bf74fd, type: 3}

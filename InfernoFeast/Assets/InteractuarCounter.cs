@@ -80,7 +80,7 @@ public class InteractuarCounter : MonoBehaviour
             Counter = collision.gameObject;
         }
 
-        if (collision.gameObject.name == "Freidora")
+        if (collision.gameObject.name == "Freir")
         {
             Freir = true;
             Counter = collision.gameObject;
@@ -125,7 +125,7 @@ public class InteractuarCounter : MonoBehaviour
             Counter = null;
         }
 
-        if (collision.gameObject.name == "Freidora")
+        if (collision.gameObject.name == "Freir")
         {
             Freir = false;
             Counter = null;
