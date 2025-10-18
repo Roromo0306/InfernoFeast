@@ -50,12 +50,14 @@ public class CogerSoltarObjeto : MonoBehaviour
         if (!Hold && collision.gameObject.CompareTag("Encimera"))
         {
             EncimeraSoltar = false;
+            EncimeraCoger = false;
             EncimeraCounter = null;
         }
 
         if (Hold && collision.gameObject.CompareTag("Encimera"))
         {
             EncimeraCoger = false;
+            EncimeraSoltar = false;
             EncimeraCounter = null;
         }
     }
@@ -99,6 +101,7 @@ public class CogerSoltarObjeto : MonoBehaviour
         
         if(PadreEncimera.transform.childCount > 0) //Realizamos esto para evitar errores por ejecutarse entre frames y no encontrar hijos
         {
+            Debug.Log("Cogido");
             GameObject objeto = PadreEncimera.transform.GetChild(0).gameObject; //Obtenemos y guardamos el objeto que esta en la encimera
 
             Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform); //Instanciamos el objeto en el GameObject vacio del jugador

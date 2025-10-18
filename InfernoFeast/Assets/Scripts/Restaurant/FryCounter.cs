@@ -97,8 +97,6 @@ public class FryCounter : MonoBehaviour
 
                 if (slider.value >= 0 && slider.value <= 0.7f)
                 {
-                    Debug.Log(slider.value);
-                    Debug.Log("Bien");
                     slider.gameObject.SetActive(false);
                     slider.value = 0f;
                     Instanciar(objetoFreidora);
@@ -106,8 +104,6 @@ public class FryCounter : MonoBehaviour
 
                 if (slider.value > 0.7f)
                 {
-                    Debug.Log(slider.value);
-                    Debug.Log("Quemado");
                     slider.gameObject.SetActive(false);
                     slider.value = 0f;
                     InstanciarQuemado(objetoFreidora);
