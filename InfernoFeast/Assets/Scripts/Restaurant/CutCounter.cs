@@ -46,10 +46,11 @@ public class CutCounter : MonoBehaviour
             nuevoObjeto.name = cortados[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
 
             Indice = 0;
+            ObjetoEncontrado = false;
         }
         else
         {
-            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, PadrePlayer.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
+            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, HijoPadre.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
             nuevoObjeto.name = HijoPadre.name; //Me aseguro que el nombre sea el correcto
 
             Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador

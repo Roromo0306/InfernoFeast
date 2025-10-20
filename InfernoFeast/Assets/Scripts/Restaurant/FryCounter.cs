@@ -60,6 +60,7 @@ public class FryCounter : MonoBehaviour
             nuevoObjeto.name = fritos[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
 
             Indice = 0;
+            ObjetoEncontrado = false;
         }
         else
         {
