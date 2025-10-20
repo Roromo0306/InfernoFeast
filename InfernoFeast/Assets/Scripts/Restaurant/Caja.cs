@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class Caja : MonoBehaviour
     public List<TipoIngrediente> Ingredientes;
     public List<Sprite> ImagenesUI;
     public List<Image> Botones;
+    public List<TextMeshProUGUI> textos;
 
     public CanvasCajas canvascajas;
 
@@ -28,6 +30,7 @@ public class Caja : MonoBehaviour
                 for (int i = 0; i < ImagenesUI.Count; i++)
                 {
                     Botones[i].sprite = ImagenesUI[i];
+                    textos[i].text = Ingredientes[i].name;
                 }
 
                 canvascajas.SetTipos(new List<TipoIngrediente>(Ingredientes)); //Pasa los ingredientes a CanvasCaja
