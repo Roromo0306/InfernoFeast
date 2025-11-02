@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
-  m_Name: Mezcla Panckakes Horneado
+  m_Name: PlatoIntermedio_Hamburguesa
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 1814119773594975965, guid: 29fe6fc54ee96a647bef430468a7d741, type: 3}
+  prefabIngrediente: {fileID: 4500019823841829392, guid: 479b8a403f2e2484b825a7c1bd0a8327, type: 3}

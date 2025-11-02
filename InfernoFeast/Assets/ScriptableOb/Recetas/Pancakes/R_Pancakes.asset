@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443bd4a2e2c758a429de4103373c177c, type: 3}
   m_Name: R_Pancakes
   m_EditorClassIdentifier: 
-  Ingrediente1: {fileID: 11400000, guid: 143891a5b7f0fb245a181e40d304c634, type: 2}
+  Ingrediente1: {fileID: 11400000, guid: 5aa63c33f2bc8294098fed607eff6846, type: 2}
   Ingrediente2: {fileID: 11400000, guid: 00850756ff63a8341a8f70b0a2a00d8e, type: 2}
   Resultado: {fileID: 11400000, guid: cee90447fef197549850be59e574bb0a, type: 2}
