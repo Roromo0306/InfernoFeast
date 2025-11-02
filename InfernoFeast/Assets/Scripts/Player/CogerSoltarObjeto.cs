@@ -65,19 +65,26 @@ public class CogerSoltarObjeto : MonoBehaviour
     //Funcion para soltar el objeto en una encimera
     private void SoltarObjeto(GameObject collision)
     {
-        if(Padre.transform.childCount > 0) //Aunque esto ya exista en hold, con esto evitamos errores que pueden aparecer entre frames.
+        if (Padre.transform.childCount > 0)
         {
-            GameObject objeto = Padre.transform.GetChild(0).gameObject; //Obtenemos y guardamos el objeto hijo en un gameobject nuevo
-            GameObject PadreEncimera = collision.transform.GetChild(0).gameObject; //Obtenemos y guardamos el padre de la encimera, donde se instanciara el nuevo 
+            GameObject objeto = Padre.transform.GetChild(0).gameObject;
+            GameObject PadreEncimera = collision.transform.GetChild(0).gameObject;
 
-            if(PadreEncimera.transform.childCount == 0)
+            if (PadreEncimera.transform.childCount == 0)
             {
-                Instantiate(objeto, PadreEncimera.transform.position, objeto.transform.rotation, PadreEncimera.transform); //Instanciamos en el nuevo lugar
-                PadreEncimera.transform.GetChild(0).name = PadreEncimera.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
+                GameObject newObj = Instantiate(objeto, PadreEncimera.transform.position, objeto.transform.rotation, PadreEncimera.transform);
+                newObj.name = newObj.name.Replace("(Clone)", "").Trim();
 
-                Destroy(objeto); //Destruimos el original
+                // asegurar que la fisica quede inactiva cuando está en la encimera (opcional)
+                Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
+                if (rbNew != null)
+                {
+                    rbNew.isKinematic = true;
+                    rbNew.useGravity = false;
+                }
 
-                objeto = null; //Reseteamos objeto
+                Destroy(objeto);
+                objeto = null;
                 PadreEncimera = null;
             }
             else
@@ -91,27 +98,39 @@ public class CogerSoltarObjeto : MonoBehaviour
                 objeto = null;
                 PadreEncimera = null;
             }
-          
         }
     }
 
     private void CogerObjeto(GameObject collision)
     {
-        GameObject PadreEncimera = collision.transform.GetChild(0).gameObject; //Obtenemos y guardamos el lugar esta guardado el objeto en la encimera
-        
-        if(PadreEncimera.transform.childCount > 0) //Realizamos esto para evitar errores por ejecutarse entre frames y no encontrar hijos
+        GameObject PadreEncimera = collision.transform.GetChild(0).gameObject;
+
+        if (PadreEncimera.transform.childCount > 0)
         {
             Debug.Log("Cogido");
-            GameObject objeto = PadreEncimera.transform.GetChild(0).gameObject; //Obtenemos y guardamos el objeto que esta en la encimera
+            GameObject objeto = PadreEncimera.transform.GetChild(0).gameObject;
 
-            Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform); //Instanciamos el objeto en el GameObject vacio del jugador
-            Padre.transform.GetChild(0).name = Padre.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
+            GameObject newObj = Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform);
+            newObj.name = newObj.name.Replace("(Clone)", "").Trim();
 
-            Destroy(objeto); //Destruimos el objeto
+            // IMPORTANT: dejar la rigidbody en kinematic mientras está en la mano
+            Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
+            if (rbNew != null)
+            {
+                rbNew.isKinematic = true;
+                rbNew.useGravity = false;
+                rbNew.velocity = Vector3.zero;
+                rbNew.angularVelocity = Vector3.zero;
+            }
 
-            objeto = null; //Reseteamos el objeto en caso de que haya quedado algun dato de el
+            // ajustar posición local en caso de que haga falta
+            newObj.transform.localPosition = Vector3.zero;
+            newObj.transform.localRotation = Quaternion.identity;
+
+            Destroy(objeto);
+
+            objeto = null;
             PadreEncimera = null;
         }
-        
     }
 }
