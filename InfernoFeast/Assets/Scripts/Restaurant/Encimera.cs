@@ -8,11 +8,6 @@ public class Encimera : MonoBehaviour
     public GameObject PadreEncimera, objeto1, objeto2 = null;
     public TipoIngrediente mezcla;
     public bool TieneObjeto = false, EncontradoPareja = true;
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if (PadreEncimera.transform.childCount == 1)

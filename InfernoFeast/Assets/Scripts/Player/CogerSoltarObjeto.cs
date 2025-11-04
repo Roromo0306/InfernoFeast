@@ -75,7 +75,7 @@ public class CogerSoltarObjeto : MonoBehaviour
                 GameObject newObj = Instantiate(objeto, PadreEncimera.transform.position, objeto.transform.rotation, PadreEncimera.transform);
                 newObj.name = newObj.name.Replace("(Clone)", "").Trim();
 
-                // asegurar que la fisica quede inactiva cuando está en la encimera (opcional)
+                // asegurar que la fisica quede inactiva cuando estï¿½ en la encimera (opcional)
                 Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
                 if (rbNew != null)
                 {
@@ -92,8 +92,9 @@ public class CogerSoltarObjeto : MonoBehaviour
                 Encimera enci = collision.GetComponent<Encimera>();
 
                 enci.objeto2 = objeto.gameObject;
-
-                Destroy(objeto);
+                
+                //Debug.Log("Objeto pasado a objeto2");
+                //Destroy(objeto);
 
                 objeto = null;
                 PadreEncimera = null;
@@ -113,7 +114,7 @@ public class CogerSoltarObjeto : MonoBehaviour
             GameObject newObj = Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform);
             newObj.name = newObj.name.Replace("(Clone)", "").Trim();
 
-            // IMPORTANT: dejar la rigidbody en kinematic mientras está en la mano
+            // IMPORTANT: dejar la rigidbody en kinematic mientras estï¿½ en la mano
             Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
             if (rbNew != null)
             {
@@ -123,7 +124,7 @@ public class CogerSoltarObjeto : MonoBehaviour
                 rbNew.angularVelocity = Vector3.zero;
             }
 
-            // ajustar posición local en caso de que haga falta
+            // ajustar posiciï¿½n local en caso de que haga falta
             newObj.transform.localPosition = Vector3.zero;
             newObj.transform.localRotation = Quaternion.identity;
 
