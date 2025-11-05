@@ -4287,12 +4287,17 @@ MonoBehaviour:
   cameraTransform: {fileID: 1554064265}
   powerSlider: {fileID: 1156420679}
   throwKey: 113
-  minThrowForce: 4
-  maxThrowForce: 18
+  minThrowForce: 1
+  maxThrowForce: 10
   maxChargeTime: 1.5
-  additionalUpwards: 0.12
+  throwMode: 1
+  useCameraForward: 0
+  fixedAngleDegrees: -50
+  targetDistance: 8
+  raycastMaxDistance: 100
   extraTorque: 2
-  useCameraForward: 1
+  drawDebug: 1
+  invertThrowDirection: 1
 --- !u!114 &1439954584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6168,7 +6173,7 @@ Transform:
   m_GameObject: {fileID: 2126567356}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: -1.53}
+  m_LocalPosition: {x: -0, y: 1.44, z: -1.53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
