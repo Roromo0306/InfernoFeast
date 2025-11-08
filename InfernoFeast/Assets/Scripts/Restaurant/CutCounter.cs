@@ -95,7 +95,7 @@ public class CutCounter : MonoBehaviour
         //Si el bool es true pasa lo siguiente
         if (ObjetoEncontrado)
         {
-            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
+            Destroy(HijoPadre); //Destruyo el objeto que estaba encima del counter
 
             GameObject nuevoObjeto = Instantiate(cortados[Indice].prefabIngrediente, PadrePlayer.transform.position, cortados[Indice].prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de cortados
             nuevoObjeto.name = cortados[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
@@ -108,7 +108,7 @@ public class CutCounter : MonoBehaviour
             GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, HijoPadre.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
             nuevoObjeto.name = HijoPadre.name; //Me aseguro que el nombre sea el correcto
 
-            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
+            Destroy(HijoPadre); //Destruyo el objeto que estaba encima del counter
         }
 
         interaccionAcriva = false;

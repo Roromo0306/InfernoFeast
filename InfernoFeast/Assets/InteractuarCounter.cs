@@ -42,7 +42,7 @@ public class InteractuarCounter : MonoBehaviour
             if(Batir && Input.GetKeyDown(KeyCode.E))
             {
                 MixCounter mix = Counter.GetComponent<MixCounter>();
-                mix.Batir();
+                mix.StartMixing();
             }
 
             if(basura && Input.GetKeyDown(KeyCode.E))
