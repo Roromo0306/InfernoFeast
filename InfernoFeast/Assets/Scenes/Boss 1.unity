@@ -151,15 +151,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f192655c62667e4089845951f540486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalRounds: 3
+  rounds:
+  - name: Round 1
+    duration: 30
+    groupsInScene: []
+    groupPrefabs: []
+    spawnPositionOffset: {x: 0, y: 0, z: 0}
+  - name: Round 2
+    duration: 60
+    groupsInScene: []
+    groupPrefabs: []
+    spawnPositionOffset: {x: 0, y: 0, z: 0}
+  - name: Round 3
+    duration: 120
+    groupsInScene: []
+    groupPrefabs: []
+    spawnPositionOffset: {x: 0, y: 0, z: 0}
   maxStrikes: 3
   currentStrikes: 0
   timer: {fileID: 2142904827}
   dialogueBoss: {fileID: 566125965}
   successSceneName: VictoryScene
   failSceneName: FailScene
-  roundStartLines:
-  - "Ronda {0}: prep\xE1rate"
   winLines:
   - "\xA1Enhorabuena! Has superado el reto."
   loseLines:

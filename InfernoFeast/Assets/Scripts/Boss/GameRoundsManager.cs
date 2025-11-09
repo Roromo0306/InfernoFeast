@@ -2,12 +2,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
+public class RoundConfig
+{
+    public string name = "Ronda";
+    public float duration = 60f; // duración específica de esta ronda
+    [Header("Opción A: Grupos ya en escena (referencias)")]
+    public List<ClientTableGroup> groupsInScene = new List<ClientTableGroup>();
+    [Header("Opción B: Prefabs a instanciar (si usas prefabs, déjalos vacíos en escena)")]
+    public List<GameObject> groupPrefabs = new List<GameObject>(); // prefabs de ClientTableGroup
+    [Header("Instanciación")]
+    public Vector3 spawnPositionOffset = Vector3.zero; // opcional, si quieres instanciarlos con offset relativo al manager
+}
+
 public class GameRoundsManager : MonoBehaviour
 {
     public static GameRoundsManager Instance { get; private set; }
 
     [Header("Rondas")]
-    public int totalRounds = 3; // 3 rondas (índices 0..2)
+    public List<RoundConfig> rounds = new List<RoundConfig>();
 
     [Header("Strikes")]
     public int maxStrikes = 3;
@@ -22,14 +35,16 @@ public class GameRoundsManager : MonoBehaviour
     public string failSceneName = "FailScene";
 
     [Header("Mensajes (puedes editar)")]
-    public List<string> roundStartLines = new List<string>() { "Ronda {0}: prepárate" }; // se formatea con número de ronda
     public List<string> winLines = new List<string>() { "¡Enhorabuena! Has superado el reto." };
     public List<string> loseLines = new List<string>() { "No has conseguido superar el reto. Inténtalo más tarde." };
 
-    List<ClientTableGroup> allGroups = new List<ClientTableGroup>();
+    // estado
     List<ClientTableGroup> currentRoundGroups = new List<ClientTableGroup>();
-    int currentRound = 0;
+    int currentRoundIndex = 0;
     string pendingSceneToLoad = "";
+
+    // para limpiar instancias de prefabs cuando termine la ronda/partida
+    List<GameObject> spawnedPrefabs = new List<GameObject>();
 
     void Awake()
     {
@@ -39,9 +54,6 @@ public class GameRoundsManager : MonoBehaviour
 
     void Start()
     {
-        // recolectar todos los grupos de la escena
-        allGroups = new List<ClientTableGroup>(FindObjectsOfType<ClientTableGroup>());
-
         if (timer != null)
         {
             timer.OnTimerEnd += OnRoundTimeUp;
@@ -49,10 +61,17 @@ public class GameRoundsManager : MonoBehaviour
 
         if (dialogueBoss != null)
         {
-            // Subscribimos el callback cuando el diálogo se cierra (para escenas finales)
             dialogueBoss.OnDialogClosed += OnDialogClosed;
         }
 
+        // Si no hay rondas configuradas, avisar (pero no lanzar)
+        if (rounds == null || rounds.Count == 0)
+        {
+            Debug.LogWarning("[GameRoundsManager] No hay rondas configuradas en el inspector.");
+            return;
+        }
+
+        // Iniciar la primera ronda
         StartRound(0);
     }
 
@@ -64,33 +83,67 @@ public class GameRoundsManager : MonoBehaviour
 
     void StartRound(int roundIndex)
     {
-        currentRound = roundIndex;
+        // limpiar previas spawned (por si)
+        CleanupSpawnedPrefabs();
 
-        // Filtrar los grupos de esta ronda (los que tengan roundIndex == currentRound)
+        currentRoundIndex = roundIndex;
         currentRoundGroups.Clear();
-        foreach (var g in allGroups)
+        spawnedPrefabs.Clear();
+
+        RoundConfig cfg = rounds[roundIndex];
+
+        // 1) Añadir grupos referenciados en escena (Opción A)
+        if (cfg.groupsInScene != null)
         {
-            if (g != null && g.roundIndex == currentRound && !g.served)
+            foreach (var g in cfg.groupsInScene)
             {
-                currentRoundGroups.Add(g);
-                // asegurarnos de que estén visibles/activos al iniciar
+                if (g == null) continue;
+                // asegurar que el grupo esté activo sólo si es parte de la ronda
                 if (g.client != null) g.client.SetActive(true);
                 if (g.table != null) g.table.SetActive(true);
+
+                currentRoundGroups.Add(g);
             }
         }
 
-        // Preparar diálogo de inicio de ronda.
+        // 2) Instanciar prefabs (Opción B)
+        if (cfg.groupPrefabs != null)
+        {
+            foreach (var prefab in cfg.groupPrefabs)
+            {
+                if (prefab == null) continue;
+                Vector3 pos = transform.position + cfg.spawnPositionOffset;
+                GameObject go = Instantiate(prefab, pos, Quaternion.identity);
+                spawnedPrefabs.Add(go);
+
+                ClientTableGroup g = go.GetComponent<ClientTableGroup>();
+                if (g != null)
+                {
+                    currentRoundGroups.Add(g);
+                }
+            }
+        }
+
+        // Ajustar el Timer a la duración de la ronda actual (importante)
+        if (timer != null)
+        {
+            timer.duration = cfg.duration;
+            // si quieres mantener el countdown/behavior, lo dejamos como en el Timer
+        }
+
+        // Mostrar diálogo de inicio de ronda que arranca el timer al cerrarse
         if (dialogueBoss != null)
         {
-            dialogueBoss.timer = timer; // que el diálogo inicie el timer al cerrarse
-            List<string> lines = new List<string> { string.Format("Ronda {0}. ¡A cocinar!", currentRound + 1) };
+            dialogueBoss.timer = timer;
+            List<string> lines = new List<string> { $"Ronda {roundIndex + 1}: ¡A cocinar!" };
             dialogueBoss.StartDialog(lines);
         }
         else
         {
-            // si no hay diálogo, arrancar el timer directamente
             timer?.StartTimer();
         }
+
+        Debug.Log($"[GameRoundsManager] Iniciada ronda {roundIndex + 1} con {currentRoundGroups.Count} grupos y duración {cfg.duration}s.");
     }
 
     // llamado por Plate cuando se ancla en una mesa
@@ -100,67 +153,55 @@ public class GameRoundsManager : MonoBehaviour
 
         ClientTableGroup group = anchor.group;
 
-        // si ya estaba servido, ignoramos
         if (group.served) return;
 
         bool correct = (plate.dish == group.requiredDish);
 
         if (correct)
         {
-            // marcar servido y eliminar grupo (visual)
             group.OnServed();
-            // opcional: destruir plato
             Destroy(plate.gameObject, 0.05f);
-
-            // quitar de la lista de grupos actuales
             currentRoundGroups.Remove(group);
 
-            // comprobar si quedan clientes en la ronda
             if (currentRoundGroups.Count == 0)
             {
-                // pasar a siguiente ronda (o victoria)
+                // pasar a la siguiente ronda (si existe) o victoria
                 NextRound();
             }
         }
         else
         {
-            // Plato incorrecto: lo dejamos anclado (o podrías lanzarlo de vuelta)
-            // Actualmente no damos strike por plato incorrecto, solo por no atender.
-            // Puedes añadir efectos aquí (sonido, partícula, etc.)
+            // comportamiento por plato incorrecto:
+            // actualmente no hace nada (puedes añadir penalización aquí si quieres)
         }
     }
 
     void OnRoundTimeUp()
     {
-        // por cada cliente no atendido en la ronda, sumar un strike
         int missed = currentRoundGroups.Count;
         currentStrikes += missed;
 
-        // marcar como no atendidos y desactivarlos
         foreach (var g in currentRoundGroups)
         {
-            if (g != null)
-                g.OnMissed();
+            if (g != null) g.OnMissed();
         }
 
         currentRoundGroups.Clear();
 
         if (currentStrikes >= maxStrikes)
         {
-            // perder
             LoseGame();
         }
         else
         {
-            // pasar a siguiente ronda si existe
             NextRound();
         }
     }
 
     void NextRound()
     {
-        int next = currentRound + 1;
-        if (next >= totalRounds)
+        int next = currentRoundIndex + 1;
+        if (next >= rounds.Count)
         {
             WinGame();
             return;
@@ -171,7 +212,7 @@ public class GameRoundsManager : MonoBehaviour
 
     void WinGame()
     {
-        // Diálogo de victoria y luego teleport (no queremos que DialogueBoss inicie timer)
+        timer?.StopTimer();
         if (dialogueBoss != null)
         {
             dialogueBoss.timer = null;
@@ -186,9 +227,7 @@ public class GameRoundsManager : MonoBehaviour
 
     void LoseGame()
     {
-        // Detenemos timer si está corriendo
         timer?.StopTimer();
-
         if (dialogueBoss != null)
         {
             dialogueBoss.timer = null;
@@ -201,17 +240,26 @@ public class GameRoundsManager : MonoBehaviour
         }
     }
 
-    // llamado cuando el DialogueBoss cierra el panel (tanto en casos de inicio de ronda como en finales)
     void OnDialogClosed()
     {
         if (!string.IsNullOrEmpty(pendingSceneToLoad))
         {
-            // cargar la escena pendiente (victoria / fallo)
             SceneManager.LoadScene(pendingSceneToLoad);
         }
         else
         {
-            // si no hay escena pendiente, nada que hacer: en diálogos de inicio de ronda el DialogueBoss ya habrá arrancado el timer.
+            // habitualmente el DialogueBoss ya habrá arrancado el timer para la ronda
         }
     }
+
+    void CleanupSpawnedPrefabs()
+    {
+        if (spawnedPrefabs == null) return;
+        foreach (var go in spawnedPrefabs)
+        {
+            if (go != null) Destroy(go);
+        }
+        spawnedPrefabs.Clear();
+    }
 }
+
