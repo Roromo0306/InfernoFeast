@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class DialogueBoss : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class DialogueBoss : MonoBehaviour
     private int index = 0;
     private bool isShowing = false;
     private bool isTyping = false;
+
+    // EVENTO: se invoca cuando el panel termina y se cierra (después de iniciar el timer si timer != null)
+    public Action OnDialogClosed;
 
     void Start()
     {
@@ -86,11 +90,14 @@ public class DialogueBoss : MonoBehaviour
     {
         yield return StartCoroutine(AnimatePanel(false));
 
-        // Inicia el timer después de cerrar el panel
+        // Inicia el timer después de cerrar el panel (si hay timer asignado)
         if (timer != null)
         {
             timer.StartTimer();
         }
+
+        // Notificamos al que quiera saber que el diálogo ha terminado
+        OnDialogClosed?.Invoke();
     }
 
     IEnumerator AnimatePanel(bool show)

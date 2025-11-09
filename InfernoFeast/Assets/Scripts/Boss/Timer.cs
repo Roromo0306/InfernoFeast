@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Timer : MonoBehaviour
 {
@@ -12,9 +13,12 @@ public class Timer : MonoBehaviour
     private float currentTime;
     private bool isRunning = false;
 
+    // evento que notifica que el timer ha terminado (llegó a 0 por cuenta atrás
+    // o alcanzó duration si no es cuenta atrás). Suscribirse con +=.
+    public Action OnTimerEnd;
+
     void Start()
     {
-        // Inicializa el tiempo pero no inicia el timer automáticamente
         currentTime = duration;
         UpdateUI();
     }
@@ -23,14 +27,16 @@ public class Timer : MonoBehaviour
     {
         if (!isRunning) return;
 
-        // Actualizamos el tiempo
         if (countDown)
         {
             currentTime -= Time.deltaTime;
             if (currentTime <= 0f)
             {
                 currentTime = 0f;
-                StopTimer();
+                isRunning = false;
+                UpdateUI();
+                OnTimerEnd?.Invoke();
+                return;
             }
         }
         else
@@ -39,7 +45,10 @@ public class Timer : MonoBehaviour
             if (currentTime >= duration)
             {
                 currentTime = duration;
-                StopTimer();
+                isRunning = false;
+                UpdateUI();
+                OnTimerEnd?.Invoke();
+                return;
             }
         }
 
@@ -50,7 +59,7 @@ public class Timer : MonoBehaviour
     {
         currentTime = duration; // reinicia el tiempo
         isRunning = true;
-        UpdateUI(); // asegura que se muestre inmediatamente
+        UpdateUI();
     }
 
     public void StopTimer()
