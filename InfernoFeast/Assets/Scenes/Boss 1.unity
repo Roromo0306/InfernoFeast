@@ -3668,7 +3668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d435a1f92ad1a4548bf2c812afa61b17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PadreJugador: {fileID: 0}
+  PadreJugador: {fileID: 2126567356}
 --- !u!65 &1105581629
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6282,7 +6282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1824667564
 RectTransform:
   m_ObjectHideFlags: 0
