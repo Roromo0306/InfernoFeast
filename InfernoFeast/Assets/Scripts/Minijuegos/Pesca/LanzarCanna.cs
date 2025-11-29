@@ -12,38 +12,63 @@ public class LanzarCanna : MonoBehaviour
     public float LanzamientoPower = 0f;
     public float MaxPower = 10f;
     public float RatioCarga = 5f;
-    public float DistanciaLanzamiento = 0f;
 
-    private bool Lanzar = true;
+    [Header("Anzuelo")]
+    public GameObject Anzuelo;
+
+    [Header("Variables para congelar al player")]
+    public Rigidbody PlayerRB;
+    public PlayerController playerController;
+
+    private float DistanciaLanzamiento = 0f;
+    [HideInInspector] public bool Lanzar = true;
 
     //LanzamientoPower, MaxPower, DistanciaLanzamiento
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
         if (EnArea && Lanzar)
         {
-            if (Input.GetKey(KeyCode.E) && LanzamientoPower <= MaxPower)
+            if (Input.GetKey(KeyCode.E) && LanzamientoPower <= MaxPower) //Pulsa para lanzar el anzuelo
             {
                 LanzamientoPower += RatioCarga * Time.deltaTime;
             }
 
-            if (Input.GetKeyUp(KeyCode.E))
+            if (Input.GetKeyUp(KeyCode.E)) //Lo lanza
             {
                 DistanciaLanzamiento = Mathf.Round( (LanzamientoPower / MaxPower) * 10f) / 10f;
                 LanzamientoPower = 0f;
+
+                PlayerRB.constraints = RigidbodyConstraints.FreezeAll;
+                playerController.enabled = false;
+
+                Anzuelo.SetActive(true);
+                Lanzar = false;
+            }
+        }
+
+        if(EnArea && !Lanzar)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                StartCoroutine(RecogerCana());
             }
         }
     }
 
-    private void LanzarCana()
+    IEnumerator RecogerCana()
     {
-        Debug.Log("Lanzar");
-    }
+        PlayerRB.constraints = RigidbodyConstraints.None;
+        PlayerRB.constraints = RigidbodyConstraints.FreezeRotation;
+        playerController.enabled = true;
 
+        Anzuelo.SetActive(false);
+
+        yield return new WaitForSeconds(1f);
+        Lanzar = true;
+
+        StopAllCoroutines();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
