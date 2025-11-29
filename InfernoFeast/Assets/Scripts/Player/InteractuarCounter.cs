@@ -6,7 +6,9 @@ public class InteractuarCounter : MonoBehaviour
 {
     public GameObject Padre;
 
-    public bool Hold, Cortar, Pelar, Hornear, Hervir, Freir, Batir, basura;
+    public bool Hold, Cortar, Pelar, Hornear, Hervir, Freir, Batir, basura, Empezarturno;
+
+    [HideInInspector] public bool turnoEmpezado = false;
 
     private GameObject Counter;
     private void Update()
@@ -50,6 +52,17 @@ public class InteractuarCounter : MonoBehaviour
                 Basura bas = Counter.GetComponent<Basura>();
                 bas.Eliminar();
             }
+        }
+
+        if (Empezarturno && Input.GetKeyDown(KeyCode.E))
+        {
+            if (!turnoEmpezado)
+            {
+                EmpezarTurno em = Counter.GetComponent<EmpezarTurno>();
+                em.TurnoStart();
+                turnoEmpezado = true;
+            }
+
         }
 
     }
@@ -97,6 +110,12 @@ public class InteractuarCounter : MonoBehaviour
             basura = true;
             Counter = collision.gameObject;
         }
+
+        if (collision.gameObject.name == "EmpezarTurno")
+        {
+            Empezarturno = true;
+            Counter = collision.gameObject;
+        }
     }
 
     private void OnCollisionExit(Collision collision)
@@ -140,6 +159,12 @@ public class InteractuarCounter : MonoBehaviour
         if(collision.gameObject.name == "Basura")
         {
             basura = false;
+            Counter = null;
+        }
+
+        if (collision.gameObject.name == "EmpezarTurno")
+        {
+            Empezarturno = false;
             Counter = null;
         }
     }
