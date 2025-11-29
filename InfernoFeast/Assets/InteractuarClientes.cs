@@ -63,6 +63,11 @@ public class InteractuarClientes : MonoBehaviour
 
     private void ElegirComandaV()
     {
+        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
+        int pedido = Random.Range(0, 3);
+
+        comanda.text = em.NombresComandas[pedido];
+        em.cantidadCom[pedido]++;
     }
 }
