@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
+using UnityEngine;
 
 public class ClienteManager : MonoBehaviour
 {
@@ -11,11 +12,35 @@ public class ClienteManager : MonoBehaviour
     [Header("Mesas del restaurante")]
     public Mesa[] mesas;
 
-    private List<GameObject> clientesActivos = new List<GameObject>();
+    [Header("Empezar Turno Counter")]
+    public GameObject ETC; //Gameobject del counter de empezar turno
 
-    private void Start()
+    private List<GameObject> clientesActivos = new List<GameObject>();
+    private Dictionary<GameObject, int> clienteMesa = new Dictionary<GameObject, int>();
+
+    private bool Empezado = true; //Bool para empezar solo una vez la corrutina
+
+    /*//Estos son antiguos gameobjects locales que los he puesto globales
+    private int mesaLibre;
+    private GameObject nuevoCliente;*/
+
+    private void Update()
     {
-        StartCoroutine(SpawnClientes());
+        EmpezarTurno em = ETC.GetComponent<EmpezarTurno>(); //Referencia a empezar turno
+
+        if (em.empezado && Empezado) //Empieza la corrutina
+        {
+            StartCoroutine(SpawnClientes());
+            Empezado = false;
+        }
+        
+        if(!em.empezado) //Se para todo
+        {
+            StopAllCoroutines();
+            Empezado = true;
+        }
+
+        
     }
 
     IEnumerator SpawnClientes()
@@ -77,11 +102,30 @@ public class ClienteManager : MonoBehaviour
             yield return null;
         }
 
-        // Cliente se queda un tiempo (definido en el ScriptableObject)
+      /*  // Cliente se queda un tiempo (definido en el ScriptableObject)
         yield return new WaitForSeconds(data.tiempoEnMesa);
 
         // Cliente se va
         mesas[indexMesa].ocupada = false;
+        clientesActivos.Remove(cliente);
+        Destroy(cliente);*/
+    }
+
+    public void ClienteAdios(GameObject cliente)
+    {
+        if (cliente == null)
+            return;
+
+        // Primero intentamos obtener el índice guardado de la mesa
+        if (clienteMesa.TryGetValue(cliente, out int indexMesa))
+        {
+            if (indexMesa >= 0 && indexMesa < mesas.Length)
+            {
+                mesas[indexMesa].ocupada = false;
+            }
+            clienteMesa.Remove(cliente);
+        }
+
         clientesActivos.Remove(cliente);
         Destroy(cliente);
     }

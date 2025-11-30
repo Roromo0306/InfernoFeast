@@ -16414,6 +16414,7 @@ MonoBehaviour:
     ocupada: 0
   - posicion: {fileID: 626045542}
     ocupada: 0
+  ETC: {fileID: 1879869073}
 --- !u!4 &1913186731
 Transform:
   m_ObjectHideFlags: 0
