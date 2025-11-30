@@ -16,7 +16,10 @@ public class InteractuarClientes : MonoBehaviour
     public GameObject clienteManager;
 
     public bool Elegido = false;
+
+
     private bool Atendido = false; //Este bool controlara si se ha atendido al cliente.
+    [HideInInspector] public int pedido;
     private void Start()
     {
         if(EmpezarTurnoCounter == null)
@@ -36,29 +39,44 @@ public class InteractuarClientes : MonoBehaviour
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
         if (em.empezado)
-        {
-            //Clientes normales
+        { 
+            //Clientes normales cuando no se les ha atendido
             if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido) 
             {
-                Debug.Log("2");
                 ElegirComandaN();
                 Elegido = true;
             }
 
-            //Clientes VIP
+            //Clientes VIP cuando no se les ha atendido
             if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido)
             {
                 ElegirComandaV();
                 Elegido = true;
             }
+
+            //Clientes normales atendidos
+            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && Elegido)
+            {
+                GameObject Colisionado = collision.gameObject;
+                RevisarComanda(Colisionado);
+            }
+
+
+            //Clientes VIP atendidos
+            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && Elegido)
+            {
+                GameObject Colisionado = collision.gameObject;
+                RevisarComanda(Colisionado);
+            }
         }
     }
-
+    
+    //Comanda de los clientes nomales
     private void ElegirComandaN()
     {
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
-        int pedido = Random.Range(0, 3);
+        pedido = Random.Range(0, 3);
 
         comanda.text = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
@@ -66,26 +84,62 @@ public class InteractuarClientes : MonoBehaviour
         //Inicia cuenta atrás
         float tiempo = 60f;
         Atendido = true;
-
-        //Si le da el plato llamar a ClienteAdios() de ClienteManger
-
-        //Desaparecer tras acabarse la cuenta atras
-
     }
 
+    //Comanda de los VIP
     private void ElegirComandaV()
     {
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
-        int pedido = Random.Range(0, 3);
+        pedido = Random.Range(0, 3);
 
         comanda.text = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
+
+        //Inicia cuenta atrás
+        float tiempo = 60f;
+        Atendido = true;
     }
 
+
+    //Scrip para revisar que le traes el plato correcto
+    private void RevisarComanda(GameObject Player)
+    {
+        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+        ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
+
+        GameObject sujetarOb = Player.transform.GetChild(2).gameObject;
+
+        if (sujetarOb.transform.childCount <= 0)
+        {
+            Debug.Log("No tiene plato");
+        }
+        else
+        {
+            GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
+            
+            if(Plato.name == em.NombresComandas[pedido])
+            {
+                Destroy(Plato);
+                Debug.Log("Has acertado");
+                em.cantidadCom[pedido]--;
+                CM.ClienteAdios(this.gameObject);
+            }
+            else
+            {
+                Destroy(Plato);
+                Debug.Log("No has acertado");
+                CM.ClienteAdios(this.gameObject);
+            }
+        }
+    }
+
+
+    //Corrutina que controla la cuenta atras hasta que se marche el cliente
     IEnumerator InicioCuentaAtras()
     {
         ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
+        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
         float tiempo = 0f; //Creo la variable tiempo (por mi la hubiera creado directamente en el if pero daba error)
 
@@ -112,7 +166,7 @@ public class InteractuarClientes : MonoBehaviour
 
             yield return null;
         }
-
+        em.cantidadCom[pedido]--;
         CM.ClienteAdios(this.gameObject);
     }
 }

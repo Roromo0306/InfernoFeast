@@ -89,6 +89,8 @@ public class ClienteManager : MonoBehaviour
     IEnumerator EnviarAmesa(GameObject cliente, int indexMesa, ClientesSO data)
     {
         mesas[indexMesa].ocupada = true;
+        clienteMesa[cliente] = indexMesa;
+
         Transform destino = mesas[indexMesa].posicion;
 
         // Movimiento simple hacia la mesa

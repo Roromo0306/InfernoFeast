@@ -13,7 +13,7 @@ public class EmpezarTurno : MonoBehaviour
 
     [Header("Lista Comandas")]
     public List<string> NombresComandas;
-    [HideInInspector] public List<int> cantidadCom;
+    public List<int> cantidadCom;
 
     [Header("Componentes UI Comandas")]
     public TextMeshProUGUI comanda1;
@@ -23,7 +23,7 @@ public class EmpezarTurno : MonoBehaviour
     public TextMeshProUGUI cant2;
     public TextMeshProUGUI cant3;
 
-     public bool empezado = false;
+   [HideInInspector] public bool empezado = false;
 
     private void Update()
     {
