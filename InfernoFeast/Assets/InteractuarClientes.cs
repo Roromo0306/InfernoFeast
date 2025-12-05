@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractuarClientes : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class InteractuarClientes : MonoBehaviour
     public int ClienteTipo = 0; //Tipo 1 = normal. Tipo 2 = VIP;
 
     [Header("Canvas Propio")]
-    public TextMeshProUGUI comanda;
+    public Image comanda;
 
     [Header("Cliente Manager")]
     public GameObject clienteManager;
@@ -78,7 +79,7 @@ public class InteractuarClientes : MonoBehaviour
 
         pedido = Random.Range(0, 3);
 
-        comanda.text = em.NombresComandas[pedido];
+        comanda.sprite = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
 
         //Inicia cuenta atrás
@@ -93,7 +94,7 @@ public class InteractuarClientes : MonoBehaviour
 
         pedido = Random.Range(0, 3);
 
-        comanda.text = em.NombresComandas[pedido];
+        comanda.sprite = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
 
         //Inicia cuenta atrás
@@ -118,7 +119,7 @@ public class InteractuarClientes : MonoBehaviour
         {
             GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
             
-            if(Plato.name == em.NombresComandas[pedido])
+            /*if(Plato.name == em.NombresComandas[pedido])
             {
                 Destroy(Plato);
                 Debug.Log("Has acertado");
@@ -130,7 +131,7 @@ public class InteractuarClientes : MonoBehaviour
                 Destroy(Plato);
                 Debug.Log("No has acertado");
                 CM.ClienteAdios(this.gameObject);
-            }
+            }*/
         }
     }
 

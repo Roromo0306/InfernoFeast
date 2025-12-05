@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class EmpezarTurno : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class EmpezarTurno : MonoBehaviour
     public GameObject Player;
 
     [Header("Lista Comandas")]
-    public List<string> NombresComandas;
+    public List<Sprite> NombresComandas;
     public List<int> cantidadCom;
 
     [Header("Componentes UI Comandas")]
