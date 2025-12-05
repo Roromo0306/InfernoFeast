@@ -23,9 +23,9 @@ public class VideoCinematic : MonoBehaviour
 
         List<string> dialogo = new List<string>()
         {
-            "Hola, bienvenido al juego.",
-            "Espero que disfrutes la aventura.",
-            "¡Vamos a comenzar!"
+            "Bienvenido seas Cedrik!",
+            "Espero que disfrutes la experiencia.",
+            "¡Demuestra de lo que eres capaz!"
         };
 
         dialogueBoss.StartDialog(dialogo);

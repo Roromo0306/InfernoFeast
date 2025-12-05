@@ -47,6 +47,7 @@ public class DialogueBoss : MonoBehaviour
             {
                 StopAllCoroutines();
                 dialogText.text = lines[index];
+
                 isTyping = false;
             }
             else
