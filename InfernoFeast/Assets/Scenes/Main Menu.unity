@@ -208,7 +208,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &54415966
 RectTransform:
   m_ObjectHideFlags: 0
@@ -714,7 +714,7 @@ RectTransform:
   m_Father: {fileID: 2000835936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1253,7 +1253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &754839691
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1291,6 +1291,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8743ba956479b43924120a7d13d2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settingsData: {fileID: 0}
+  audioMixer: {fileID: 0}
+  musicVolumeParam: MusicVolume
 --- !u!114 &754839693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1303,6 +1306,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba73e131e530b84a8ddf32814a3e283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settingsManager: {fileID: 0}
+  settingsData: {fileID: 0}
+  musicSlider: {fileID: 0}
+  resolutionDropdown: {fileID: 0}
+  fullscreenToggle: {fileID: 0}
+  applyButton: {fileID: 0}
+  defaultsButton: {fileID: 0}
 --- !u!1 &880635169
 GameObject:
   m_ObjectHideFlags: 0
@@ -1514,7 +1524,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 3021920467581553604, guid: 91084d037bbe78044b8423cadc7a60c9, type: 2}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 60e8cb450e3ee9945bf614801a13f00c, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1749,7 +1759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &971011920
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3132,7 +3142,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1721605480
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4050,7 +4060,7 @@ RectTransform:
   m_Father: {fileID: 1016975950}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4370,7 +4380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2115895050
 RectTransform:
   m_ObjectHideFlags: 0
