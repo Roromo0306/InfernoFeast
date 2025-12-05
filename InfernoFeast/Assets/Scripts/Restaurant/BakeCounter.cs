@@ -24,6 +24,8 @@ public class BakeCounter : MonoBehaviour
     public InteractuarCounter counterInt;
     public TipoIngrediente Quemado;
 
+    private bool quemado = false;
+
     //Funcion de hornear
     public void Hornear()
     {
@@ -71,9 +73,9 @@ public class BakeCounter : MonoBehaviour
         }
     }
 
-    private void InstanciarQuemado(GameObject HijoPadre)
+    private void InstanciarQuemado()
     {
-        Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
+        Destroy(this.gameObject.transform.GetChild(0).gameObject); //Destruyo el objeto que llevaba el jugador
 
         GameObject nuevoObjeto = Instantiate(Quemado.prefabIngrediente, PadrePlayer.transform.position, Quemado.prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
         nuevoObjeto.name = Quemado.prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
@@ -92,35 +94,45 @@ public class BakeCounter : MonoBehaviour
         float tiempoPasado = 0f;
         while(tiempoPasado < duracion)
         {
+            tiempoPasado += Time.deltaTime;
+            slider.value = Mathf.Clamp01(tiempoPasado / duracion); //Fija el valor
+
             if (Input.GetKeyDown(KeyCode.R) && counterInt.Hornear)
             {
                 //Se cancela
                 
-                if(slider.value >= 0 && slider.value <= 0.7f)
+                if(slider.value >= 0 && slider.value <= 0.9f)
                 {
                     slider.gameObject.SetActive(false);
                     slider.value = 0f;
                     Instanciar(objetoHorno);
+                    yield break;
                 }
 
-                if (slider.value > 0.7f)
+                if (slider.value >= 0.99f)
                 {
-                    slider.gameObject.SetActive(false);
-                    slider.value = 0f;
-                    InstanciarQuemado(objetoHorno);
+                    quemado = true;
+                    yield break;
                 }
 
                 
             }
 
-            tiempoPasado += Time.deltaTime;
-            slider.value = Mathf.Clamp01(tiempoPasado/duracion); //Fija el valor
-
             yield return null;
         }
-
-        slider.gameObject.SetActive(false);
         //Completa el bake
+        quemado = true;
         yield break;
+    }
+
+    private void Update()
+    {
+        if(quemado && Input.GetKeyDown(KeyCode.R) && counterInt.Hornear)
+        {
+            slider.gameObject.SetActive(false);
+            slider.value = 0f;
+            InstanciarQuemado();
+            quemado = false;
+        }
     }
 }
