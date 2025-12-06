@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: VieirasAmorEterno
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 7020691240451091539, guid: c01ecefcf0a050b47962d1be61a1c7f4, type: 3}
+  prefabIngrediente: {fileID: 6600566202860690816, guid: c434840b70c9c9d43ac35575f1c181dc, type: 3}

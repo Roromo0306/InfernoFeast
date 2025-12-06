@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: Apple
   m_EditorClassIdentifier: 
-  TipoIngredientes: 5
-  prefabIngrediente: {fileID: 1098754340161814675, guid: 6076cdc301dc73d498d78be1ea194181, type: 3}
-  NombreIngrediente: Apple
+  prefabIngrediente: {fileID: 4563072293717643431, guid: 38c5ddf974ac86041ae841093ff4a6e5, type: 3}

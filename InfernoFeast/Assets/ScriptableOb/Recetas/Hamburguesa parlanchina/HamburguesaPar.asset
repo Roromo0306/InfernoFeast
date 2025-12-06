@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: HamburguesaPar
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 7849947903808893956, guid: 1fc7f380c3871d14489c8fc74026b557, type: 3}
+  prefabIngrediente: {fileID: 5139105496105896491, guid: f30d9218ba9e91d41be833f0129f3cf7, type: 3}

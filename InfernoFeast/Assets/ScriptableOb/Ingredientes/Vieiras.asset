@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: Vieiras
   m_EditorClassIdentifier: 
-  TipoIngredientes: 12
-  prefabIngrediente: {fileID: 6895533678688030144, guid: ee4cc4450ce97444b915c3ec30017f23, type: 3}
-  NombreIngrediente: Shells
+  prefabIngrediente: {fileID: 6179346133021479473, guid: a23a563c99f0dd349931e52e9de16699, type: 3}
