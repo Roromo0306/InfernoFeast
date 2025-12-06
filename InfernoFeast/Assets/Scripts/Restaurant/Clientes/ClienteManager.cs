@@ -91,9 +91,10 @@ public class ClienteManager : MonoBehaviour
     {
         mesas[indexMesa].ocupada = true;
         clienteMesa[cliente] = indexMesa;
+        
 
         Transform destino = mesas[indexMesa].posicion;
-
+        Vector3 direccion = (destino.position - cliente.transform.position).normalized;
         // Movimiento simple hacia la mesa
         while (Vector3.Distance(cliente.transform.position, destino.position) > 0.1f)
         {
@@ -102,6 +103,16 @@ public class ClienteManager : MonoBehaviour
                 destino.position,
                 Time.deltaTime * 2f
             );
+
+            if (direccion != Vector3.zero)
+            {
+                Quaternion rot = Quaternion.LookRotation(direccion);
+                cliente.transform.rotation = Quaternion.Slerp(
+                    cliente.transform.rotation,
+                    rot,
+                    Time.deltaTime * 5f   // velocidad de giro
+                );
+            }
             yield return null;
         }
 
