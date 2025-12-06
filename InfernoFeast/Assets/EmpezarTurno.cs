@@ -17,9 +17,9 @@ public class EmpezarTurno : MonoBehaviour
     public List<int> cantidadCom;
 
     [Header("Componentes UI Comandas")]
-    public TextMeshProUGUI comanda1;
-    public TextMeshProUGUI comanda2;
-    public TextMeshProUGUI comanda3;
+    public GameObject comanda1;
+    public GameObject comanda2;
+    public GameObject comanda3;
     public TextMeshProUGUI cant1;
     public TextMeshProUGUI cant2;
     public TextMeshProUGUI cant3;

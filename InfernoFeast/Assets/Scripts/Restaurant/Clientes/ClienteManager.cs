@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
@@ -69,7 +70,7 @@ public class ClienteManager : MonoBehaviour
             return;
         }
 
-        GameObject nuevoCliente = Instantiate(data.prefab, transform.position, Quaternion.identity);
+        GameObject nuevoCliente = Instantiate(data.prefab, transform.position, data.prefab.transform.rotation);
         clientesActivos.Add(nuevoCliente);
 
         // Enviar a mesa con los datos del ScriptableObject

@@ -25,6 +25,8 @@ public class PotCounter : MonoBehaviour
     public InteractuarCounter counterInt;
     public TipoIngrediente Quemado;
 
+    public Image QuemadoImage;
+
     private bool quemado = false;
 
     public void Hervir()
@@ -111,6 +113,7 @@ public class PotCounter : MonoBehaviour
                 if (slider.value >= 0.99f)
                 {
                     quemado = true;
+                    QuemadoImage.enabled = true;
                     yield break;
                 }
 
@@ -122,6 +125,7 @@ public class PotCounter : MonoBehaviour
 
         //Completa el bake
         quemado = true;
+        QuemadoImage.enabled = true;
         yield break;
     }
 
@@ -131,6 +135,7 @@ public class PotCounter : MonoBehaviour
         {
             slider.gameObject.SetActive(false);
             slider.value = 0f;
+            QuemadoImage.enabled = false;
             InstanciarQuemado();
             quemado = false;
         }

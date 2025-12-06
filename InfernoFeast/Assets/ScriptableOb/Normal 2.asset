@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9deb7f547ba3383439e87df32845b841, type: 3}
-  m_Name: Normal
+  m_Name: Normal 2
   m_EditorClassIdentifier: 
   nombre: Juan
   tipo: 0
   tiempoEnMesa: 60
-  prefab: {fileID: 4981521204175286519, guid: d641e49cc87504a4f830663a6a81ead0, type: 3}
+  prefab: {fileID: 4903977337682306500, guid: cd0cb6470c2b6864199c6dfb1b292717, type: 3}

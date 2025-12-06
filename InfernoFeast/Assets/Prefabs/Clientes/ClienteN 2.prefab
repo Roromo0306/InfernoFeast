@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 7807360596473976177}
   - component: {fileID: 6098747124826395000}
   m_Layer: 0
-  m_Name: Cliente 4
+  m_Name: ClienteN 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -205,14 +205,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6511201619292078977}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: -0.956259, y: 0.30442584, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4196355652303276181}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
 --- !u!33 &6305505641174610114
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -303,4 +303,5 @@ MonoBehaviour:
   comanda: {fileID: 7931240347998430025}
   clienteManager: {fileID: 0}
   Elegido: 0
+  canvas: {fileID: 2800571348912898392}
   pedido: 0

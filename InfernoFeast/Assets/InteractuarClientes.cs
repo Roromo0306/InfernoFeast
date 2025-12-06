@@ -18,6 +18,8 @@ public class InteractuarClientes : MonoBehaviour
 
     public bool Elegido = false;
 
+    public Canvas canvas;
+
 
     private bool Atendido = false; //Este bool controlara si se ha atendido al cliente.
     [HideInInspector] public int pedido;
@@ -80,6 +82,7 @@ public class InteractuarClientes : MonoBehaviour
         pedido = Random.Range(0, 3);
 
         comanda.sprite = em.NombresComandas[pedido];
+        canvas.enabled = true;
         em.cantidadCom[pedido]++;
 
         //Inicia cuenta atrás
@@ -96,6 +99,7 @@ public class InteractuarClientes : MonoBehaviour
 
         comanda.sprite = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
+        canvas.enabled = true;
 
         //Inicia cuenta atrás
         float tiempo = 60f;
@@ -119,19 +123,21 @@ public class InteractuarClientes : MonoBehaviour
         {
             GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
             
-            /*if(Plato.name == em.NombresComandas[pedido])
+            if(Plato.name == em.NombresComandas[pedido].name)
             {
                 Destroy(Plato);
                 Debug.Log("Has acertado");
                 em.cantidadCom[pedido]--;
+                canvas.enabled = false;
                 CM.ClienteAdios(this.gameObject);
             }
             else
             {
                 Destroy(Plato);
                 Debug.Log("No has acertado");
+                canvas.enabled = false;
                 CM.ClienteAdios(this.gameObject);
-            }*/
+            }
         }
     }
 
