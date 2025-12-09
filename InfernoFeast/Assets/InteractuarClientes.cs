@@ -152,11 +152,11 @@ public class InteractuarClientes : MonoBehaviour
 
         if (!Atendido) //Si no se ha atendido al cliente el tiempo es 45
         {
-            tiempo = 45f;
+            tiempo = 90f;
         }
         else //Si se ha atendido al cliente el tiempo es 60
         {
-            tiempo = 60f;
+            tiempo = 90f;
             Atendido = false;
         }
 

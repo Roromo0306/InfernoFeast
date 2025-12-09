@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [DisallowMultipleComponent]
 public class MultiRayOccluder : MonoBehaviour
@@ -34,6 +35,8 @@ public class MultiRayOccluder : MonoBehaviour
 
     void Update()
     {
+
+        Reset();
         if (target == null) return;
 
         Vector3 camPos = transform.position;
@@ -59,10 +62,8 @@ public class MultiRayOccluder : MonoBehaviour
         {
             for (int y = 0; y < axis; y++)
             {
-                // compute normalized grid coordinates in [-1,1]
                 float nx = (axis == 1) ? 0f : ((x - half) / (float)half);
                 float ny = (axis == 1) ? 0f : ((y - half) / (float)half);
-                // if axis even, scale down to keep sampling centered
                 if (axis % 2 == 0) { nx *= (half / (float)(half + 0.5f)); ny *= (half / (float)(half + 0.5f)); }
 
                 Vector3 origin = camPos + right * nx * sampleRadius + up * ny * sampleRadius;
@@ -77,7 +78,6 @@ public class MultiRayOccluder : MonoBehaviour
 
                 if (isHit)
                 {
-                    // get renderer from hit collider (handle child colliders)
                     Renderer r = hit.collider.GetComponent<Renderer>();
                     if (r == null)
                         r = hit.collider.GetComponentInParent<Renderer>();
@@ -114,13 +114,21 @@ public class MultiRayOccluder : MonoBehaviour
 
                 if (info.clone != null)
                 {
-                    Color c = info.clone.color;
+                    Color c;
+                    if (info.clone.HasProperty("_BaseColor"))
+                        c = info.clone.GetColor("_BaseColor");
+                    else
+                        c = info.clone.color;
+
                     c.a = info.currentAlpha;
-                    info.clone.color = c;
+
+                    if (info.clone.HasProperty("_BaseColor"))
+                        info.clone.SetColor("_BaseColor", c);
+                    else
+                        info.clone.color = c;
                 }
                 else
                 {
-                    // fallback: enable/disable renderer
                     if (fallbackDisableRenderer)
                         r.enabled = isHitNow;
                 }
@@ -144,6 +152,99 @@ public class MultiRayOccluder : MonoBehaviour
         return r.transform.IsChildOf(target);
     }
 
+    // ---------------------------
+    // NUEVAS VERSIONES REEMPLAZADAS
+    // ---------------------------
+
+    bool TryMakeTransparent(Material m)
+    {
+        if (m == null) return false;
+
+        // 1) BUILT-IN STANDARD
+        if (m.HasProperty("_Mode"))
+        {
+            m.SetFloat("_Mode", 3f);
+            m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            m.SetInt("_ZWrite", 0);
+            m.DisableKeyword("_ALPHATEST_ON");
+            m.EnableKeyword("_ALPHABLEND_ON");
+            m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            return true;
+        }
+
+        // 2) URP Lit
+        if (m.HasProperty("_Surface"))
+        {
+            m.SetFloat("_Surface", 1f);
+            if (m.HasProperty("_Blend")) m.SetFloat("_Blend", 0f);
+            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+
+            if (m.HasProperty("_BaseColor"))
+            {
+                Color c = m.GetColor("_BaseColor");
+                c.a = c.a;
+                m.SetColor("_BaseColor", c);
+            }
+            else if (m.HasProperty("_Color"))
+            {
+                Color c = m.color;
+                c.a = c.a;
+                m.color = c;
+            }
+            return true;
+        }
+
+        // 3) HDRP
+        if (m.HasProperty("_SurfaceType"))
+        {
+            m.SetFloat("_SurfaceType", 1f);
+            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            if (m.HasProperty("_BaseColor"))
+            {
+                Color c = m.GetColor("_BaseColor");
+                m.SetColor("_BaseColor", c);
+            }
+            return true;
+        }
+
+        // 4) Generic alpha attempts
+        if (m.HasProperty("_BaseColor"))
+        {
+            Color c = m.GetColor("_BaseColor");
+            c.a = c.a;
+            m.SetColor("_BaseColor", c);
+            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            return true;
+        }
+
+        if (m.HasProperty("_Color"))
+        {
+            Color c = m.color;
+            c.a = c.a;
+            m.color = c;
+            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            return true;
+        }
+
+        try
+        {
+            m.EnableKeyword("_ALPHABLEND_ON");
+            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            return true;
+        }
+        catch { }
+
+        return false;
+    }
+    private void Reset()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
     void SetupRenderer(Renderer r)
     {
         Material[] shared = r.sharedMaterials;
@@ -163,15 +264,24 @@ public class MultiRayOccluder : MonoBehaviour
                 Material clone = new Material(orig);
                 if (TryMakeTransparent(clone))
                 {
-                    Color cc = clone.color;
-                    cc.a = info.currentAlpha;
-                    clone.color = cc;
+                    if (clone.HasProperty("_BaseColor"))
+                    {
+                        Color cc = clone.GetColor("_BaseColor");
+                        cc.a = info.currentAlpha;
+                        clone.SetColor("_BaseColor", cc);
+                    }
+                    else if (clone.HasProperty("_Color"))
+                    {
+                        Color cc = clone.color;
+                        cc.a = info.currentAlpha;
+                        clone.color = cc;
+                    }
                     info.clone = clone;
                     createdAnyClone = true;
                 }
                 else
                 {
-                    // if shader doesn't support transparency, leave clone null and fallback to disable renderer
+                    Destroy(clone);
                     info.clone = null;
                 }
             }
@@ -184,9 +294,10 @@ public class MultiRayOccluder : MonoBehaviour
             for (int i = 0; i < infos.Length; i++) mats[i] = infos[i].clone ?? shared[i];
             r.materials = mats;
         }
-        else if (fallbackDisableRenderer)
+        else
         {
-            r.enabled = false;
+            if (fallbackDisableRenderer)
+                Debug.LogWarning($"MultiRayOccluder: no transparent clone could be created for Renderer '{r.name}'. Renderer left enabled (disable fallback if undesired).");
         }
 
         tracked.Add(r, infos);
@@ -212,46 +323,12 @@ public class MultiRayOccluder : MonoBehaviour
             for (int i = 0; i < infos.Length; i++) origs[i] = infos[i].original;
             r.materials = origs;
         }
-        r.enabled = true;
-    }
 
-    bool TryMakeTransparent(Material m)
-    {
-        if (m == null) return false;
-        // Standard shader (has _Mode)
-        if (m.HasProperty("_Mode"))
-        {
-            m.SetFloat("_Mode", 3f);
-            m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            m.SetInt("_ZWrite", 0);
-            m.DisableKeyword("_ALPHATEST_ON");
-            m.EnableKeyword("_ALPHABLEND_ON");
-            m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-            return true;
-        }
-        // URP/HDRP shaders: try color alpha if available (may not work)
-        if (m.HasProperty("_BaseColor")) // URP Lit uses _BaseColor
-        {
-            Color c = m.GetColor("_BaseColor");
-            c.a = 1f;
-            m.SetColor("_BaseColor", c);
-            return true;
-        }
-        if (m.HasProperty("_Color"))
-        {
-            Color c = m.color;
-            c.a = 1f;
-            m.color = c;
-            return true;
-        }
-        return false;
+        r.enabled = true;
     }
 
     void OnDisable()
     {
-        // restore everything
         var keys = new List<Renderer>(tracked.Keys);
         foreach (var r in keys) RestoreRenderer(r);
         tracked.Clear();

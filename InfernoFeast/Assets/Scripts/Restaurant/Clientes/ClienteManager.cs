@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class ClienteManager : MonoBehaviour
@@ -104,7 +103,7 @@ public class ClienteManager : MonoBehaviour
                 Time.deltaTime * 2f
             );
 
-            if (direccion != Vector3.zero)
+            /*if (direccion != Vector3.zero)
             {
                 Quaternion rot = Quaternion.LookRotation(direccion);
                 cliente.transform.rotation = Quaternion.Slerp(
@@ -112,7 +111,7 @@ public class ClienteManager : MonoBehaviour
                     rot,
                     Time.deltaTime * 5f   // velocidad de giro
                 );
-            }
+            }*/
             yield return null;
         }
 

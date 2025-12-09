@@ -7581,9 +7581,9 @@ MonoBehaviour:
   cameraTransform: {fileID: 1554064265}
   powerSlider: {fileID: 1156420679}
   throwKey: 113
-  minThrowForce: 1
-  maxThrowForce: 10
-  maxChargeTime: 1.5
+  minThrowForce: 5
+  maxThrowForce: 15
+  maxChargeTime: 5
   throwMode: 1
   useCameraForward: 0
   fixedAngleDegrees: -50
@@ -7752,12 +7752,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2340dc82b59694c43bf8965bc031010d, type: 2}
   - {fileID: 11400000, guid: 1d334cab87dfb154b94f3f66a5af3c18, type: 2}
   - {fileID: 11400000, guid: 6bb55648848b7f148a728bd18f0cfef3, type: 2}
-  - {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
+  - {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
   slider: {fileID: 1394415855}
   duracion: 7
   counterInt: {fileID: 1439954584}
   Quemado: {fileID: 11400000, guid: d891737d80cc78343bb498bc9895c746, type: 2}
   QuemadoImage: {fileID: 299968674}
+  quemado: 0
 --- !u!23 &1486843763
 MeshRenderer:
   m_ObjectHideFlags: 0
