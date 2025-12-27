@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CogerSoltarObjeto : MonoBehaviour
@@ -60,11 +61,13 @@ public class CogerSoltarObjeto : MonoBehaviour
             EncimeraSoltar = false;
             EncimeraCounter = null;
         }
+        StopAllCoroutines();
     }
 
     //Funcion para soltar el objeto en una encimera
     private void SoltarObjeto(GameObject collision)
     {
+        StopAllCoroutines();
         if (Padre.transform.childCount > 0)
         {
             GameObject objeto = Padre.transform.GetChild(0).gameObject;
@@ -99,11 +102,14 @@ public class CogerSoltarObjeto : MonoBehaviour
                 objeto = null;
                 PadreEncimera = null;
             }
+
+            StartCoroutine(TempCoger());
         }
     }
 
     private void CogerObjeto(GameObject collision)
     {
+        StopAllCoroutines();
         GameObject PadreEncimera = collision.transform.GetChild(0).gameObject;
 
         if (PadreEncimera.transform.childCount > 0)
@@ -114,7 +120,7 @@ public class CogerSoltarObjeto : MonoBehaviour
             GameObject newObj = Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform);
             newObj.name = newObj.name.Replace("(Clone)", "").Trim();
 
-            // IMPORTANT: dejar la rigidbody en kinematic mientras est� en la mano
+            // IMPORTANT: dejar la rigidbody en kinematic mientras esta en la mano
             Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
             if (rbNew != null)
             {
@@ -124,14 +130,31 @@ public class CogerSoltarObjeto : MonoBehaviour
                 rbNew.angularVelocity = Vector3.zero;
             }
 
-            // ajustar posici�n local en caso de que haga falta
+            // ajustar posicion local en caso de que haga falta
             newObj.transform.localPosition = Vector3.zero;
-            newObj.transform.localRotation = Quaternion.identity;
+            //newObj.transform.localRotation = Quaternion.identity;
 
             Destroy(objeto);
 
             objeto = null;
             PadreEncimera = null;
         }
+        StartCoroutine(TempSoltar());
+    }
+
+    IEnumerator TempCoger()
+    {
+        yield return new WaitForSeconds(0.1f);
+        EncimeraCoger = true;
+        EncimeraSoltar = false;
+        StopAllCoroutines();
+    }
+
+    IEnumerator TempSoltar()
+    {
+        yield return new WaitForSeconds(0.1f);
+        EncimeraCoger = false;
+        EncimeraSoltar = true;
+        StopAllCoroutines();
     }
 }
