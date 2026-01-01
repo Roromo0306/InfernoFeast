@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class InteractuarCounter : MonoBehaviour
 {
     public GameObject Padre;
 
-    public bool Hold, Cortar, Pelar, Hornear, Hervir, Freir, Batir, basura, Empezarturno;
+    public bool Hold, Cortar, Pelar, Hornear, Hervir, Hervir2, Freir, Freir2, Batir, basura, Empezarturno, ObjetoDejado;
 
     [HideInInspector] public bool turnoEmpezado = false;
 
-    private GameObject Counter;
+    public GameObject Counter, PadreFreir, PadreHorno, PadreHervir;
     private void Update()
     {
         Hold = Padre.transform.childCount > 0;
@@ -26,22 +27,56 @@ public class InteractuarCounter : MonoBehaviour
             if(Hornear && Input.GetKeyDown(KeyCode.E))
             {
                 BakeCounter bake = Counter.GetComponent<BakeCounter>();
-                bake.Hornear();
+
+                if (!ObjetoDejado)
+                {
+                    bake.Hornear();
+                }
             }
 
             if(Hervir && Input.GetKeyDown(KeyCode.E))
             {
                 PotCounter pot = Counter.GetComponent<PotCounter>();
-                pot.Hervir();
+               
+                if (!ObjetoDejado)
+                {
+                    pot.Hervir();
+                }
             }
 
-            if(Freir && Input.GetKeyDown(KeyCode.E))
+            if (Hervir2 && Input.GetKeyDown(KeyCode.E))
+            {
+                PotCounter pot = Counter.GetComponent<PotCounter>();
+
+                if (!ObjetoDejado)
+                {
+                    pot.Hervir();
+                }
+            }
+
+            if (Freir && Input.GetKeyDown(KeyCode.E))
             {
                 FryCounter fry = Counter.GetComponent<FryCounter>();
-                fry.Freir();
+
+                if (!ObjetoDejado)
+                {
+                    fry.Freir();
+                }
+                
             }
 
-            if(Batir && Input.GetKeyDown(KeyCode.E))
+            if (Freir2 && Input.GetKeyDown(KeyCode.E))
+            {
+                FryCounter fry = Counter.GetComponent<FryCounter>();
+
+                if (!ObjetoDejado)
+                {
+                    fry.Freir();
+                }
+
+            }
+
+            if (Batir && Input.GetKeyDown(KeyCode.E))
             {
                 MixCounter mix = Counter.GetComponent<MixCounter>();
                 mix.StartMixing();
@@ -85,6 +120,12 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hornear = true;
             Counter = collision.gameObject;
+
+            PadreHorno = Counter.transform.GetChild(0).gameObject;
+            if(PadreHorno.transform.GetChild(0) != null)
+            {
+                ObjetoDejado = true;
+            }
         }
 
         if (collision.gameObject.name == "Batir")
@@ -97,15 +138,51 @@ public class InteractuarCounter : MonoBehaviour
         {
             Freir = true;
             Counter = collision.gameObject;
+
+            PadreFreir = Counter.transform.GetChild(0).gameObject;
+            if (PadreFreir.transform.GetChild(0) != null)
+            {
+                ObjetoDejado = true;
+            }
         }
 
-        if(collision.gameObject.name == "Hervir")
+        if (collision.gameObject.name == "Freir2")
+        {
+            Freir2 = true;
+            Counter = collision.gameObject;
+
+            PadreFreir = Counter.transform.GetChild(0).gameObject;
+            if (PadreFreir.transform.GetChild(0) != null)
+            {
+                ObjetoDejado = true;
+            }
+        }
+
+        if (collision.gameObject.name == "Hervir")
         {
             Hervir = true;
             Counter = collision.gameObject;
+
+            PadreHervir = Counter.transform.GetChild(0).gameObject;
+            if (PadreHervir.transform.GetChild(0) != null)
+            {
+                ObjetoDejado = true;
+            }
         }
 
-        if(collision.gameObject.name == "Basura")
+        if (collision.gameObject.name == "Hervir2")
+        {
+            Hervir2 = true;
+            Counter = collision.gameObject;
+
+            PadreHervir = Counter.transform.GetChild(0).gameObject;
+            if (PadreHervir.transform.GetChild(0) != null)
+            {
+                ObjetoDejado = true;
+            }
+        }
+
+        if (collision.gameObject.name == "Basura")
         {
             basura = true;
             Counter = collision.gameObject;
@@ -136,6 +213,9 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hornear = false;
             Counter = null;
+
+            ObjetoDejado = false;
+            PadreHorno = null;
         }
 
         if (collision.gameObject.name == "Batir")
@@ -148,15 +228,39 @@ public class InteractuarCounter : MonoBehaviour
         {
             Freir = false;
             Counter = null;
+
+            ObjetoDejado = false;
+            PadreFreir = null;
+        }
+
+        if (collision.gameObject.name == "Freir2")
+        {
+            Freir2 = false;
+            Counter = null;
+
+            ObjetoDejado = false;
+            PadreFreir = null;
         }
 
         if (collision.gameObject.name == "Hervir")
         {
             Hervir = false;
             Counter = null;
+
+            ObjetoDejado = false;
+            PadreHervir = null;
         }
 
-        if(collision.gameObject.name == "Basura")
+        if (collision.gameObject.name == "Hervir2")
+        {
+            Hervir2 = false;
+            Counter = null;
+
+            ObjetoDejado = false;
+            PadreHervir = null;
+        }
+
+        if (collision.gameObject.name == "Basura")
         {
             basura = false;
             Counter = null;

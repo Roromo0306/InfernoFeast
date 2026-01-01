@@ -94,13 +94,14 @@ public class FryCounter : MonoBehaviour
         slider.maxValue = 1f;
         slider.value = 0f;
 
+        yield return null;
         float tiempoPasado = 0f;
         while (tiempoPasado < duracion)
         {
             tiempoPasado += Time.deltaTime;
             slider.value = Mathf.Clamp01(tiempoPasado / duracion); //Fija el valor
 
-            if (Input.GetKeyDown(KeyCode.R) && counterInt.Freir)
+            if (Input.GetKeyDown(KeyCode.E) && counterInt.Freir)
             {
                 //Se cancela
 

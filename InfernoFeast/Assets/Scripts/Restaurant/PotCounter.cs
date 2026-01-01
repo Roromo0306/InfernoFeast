@@ -94,6 +94,7 @@ public class PotCounter : MonoBehaviour
         slider.maxValue = 1f;
         slider.value = 0f;
 
+        yield return null;
         float tiempoPasado = 0f;
         while (tiempoPasado < duracion)
         {

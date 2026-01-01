@@ -6977,10 +6977,16 @@ MonoBehaviour:
   Hornear: 0
   Hervir: 0
   Freir: 0
+  Freir2: 0
   Batir: 0
   basura: 0
   Empezarturno: 0
+  ObjetoDejado: 0
   turnoEmpezado: 0
+  Counter: {fileID: 0}
+  PadreFreir: {fileID: 0}
+  PadreHorno: {fileID: 0}
+  PadreHervir: {fileID: 0}
 --- !u!1 &683651964
 GameObject:
   m_ObjectHideFlags: 0
@@ -14504,7 +14510,7 @@ GameObject:
   - component: {fileID: 1401909676}
   - component: {fileID: 1401909675}
   m_Layer: 0
-  m_Name: Freir
+  m_Name: Freir2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21311,7 +21317,7 @@ GameObject:
   - component: {fileID: 1981020351}
   - component: {fileID: 1981020350}
   m_Layer: 0
-  m_Name: Hervir
+  m_Name: Hervir2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
