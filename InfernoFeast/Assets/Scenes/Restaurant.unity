@@ -6976,6 +6976,7 @@ MonoBehaviour:
   Pelar: 0
   Hornear: 0
   Hervir: 0
+  Hervir2: 0
   Freir: 0
   Freir2: 0
   Batir: 0
@@ -9842,38 +9843,38 @@ PrefabInstance:
       insertIndex: 9
       addedObject: {fileID: 104680943}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 10
-      addedObject: {fileID: 1401909674}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 14
+      insertIndex: 13
       addedObject: {fileID: 1262164053}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 15
+      insertIndex: 14
       addedObject: {fileID: 1337703131}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 16
+      insertIndex: 15
       addedObject: {fileID: 1173574541}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 17
+      insertIndex: 16
       addedObject: {fileID: 1129132350}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 19
+      insertIndex: 18
       addedObject: {fileID: 120477319}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 20
+      insertIndex: 19
       addedObject: {fileID: 1576880389}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 21
+      insertIndex: 20
       addedObject: {fileID: 515740305}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 22
+      insertIndex: 21
       addedObject: {fileID: 2127018150}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 24
+      insertIndex: 23
       addedObject: {fileID: 1981020349}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
-      insertIndex: 25
+      insertIndex: 24
       addedObject: {fileID: 492829203}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
+      insertIndex: 25
+      addedObject: {fileID: 1401909674}
     - targetCorrespondingSourceObject: {fileID: -2093772787462966335, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2134164235}
@@ -20127,7 +20128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1855824899}
   m_Layer: 0
-  m_Name: PadreFreidora
+  m_Name: PadreFreidora2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

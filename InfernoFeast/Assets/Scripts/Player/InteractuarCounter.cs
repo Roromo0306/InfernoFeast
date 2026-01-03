@@ -62,7 +62,6 @@ public class InteractuarCounter : MonoBehaviour
                 {
                     fry.Freir();
                 }
-                
             }
 
             if (Freir2 && Input.GetKeyDown(KeyCode.E))

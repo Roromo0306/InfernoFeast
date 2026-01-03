@@ -102,24 +102,26 @@ public class BakeCounter : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R) && counterInt.Hornear)
             {
-                //Se cancela
-                
-                if(slider.value >= 0 && slider.value <= 0.9f)
+                if (PadrePlayer.transform.childCount <= 0)
                 {
-                    slider.gameObject.SetActive(false);
-                    slider.value = 0f;
-                    Instanciar(objetoHorno);
-                    StopAllCoroutines();
-                    yield break;
-                }
+                    //Se cancela
 
-                if (slider.value >= 0.99f)
-                {
-                    quemado = true;
-                    QuemadoImage.enabled = true;
-                    yield break;
-                }
+                    if (slider.value >= 0 && slider.value <= 0.9f)
+                    {
+                        slider.gameObject.SetActive(false);
+                        slider.value = 0f;
+                        Instanciar(objetoHorno);
+                        StopAllCoroutines();
+                        yield break;
+                    }
 
+                    if (slider.value >= 0.99f)
+                    {
+                        quemado = true;
+                        QuemadoImage.enabled = true;
+                        yield break;
+                    }
+                }
                 
             }
 
@@ -134,7 +136,7 @@ public class BakeCounter : MonoBehaviour
 
     private void Update()
     {
-        if(quemado && Input.GetKeyDown(KeyCode.R) && counterInt.Hornear)
+        if(quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Hornear)
         {
             slider.gameObject.SetActive(false);
             slider.value = 0f;

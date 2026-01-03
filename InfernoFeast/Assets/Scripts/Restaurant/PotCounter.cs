@@ -101,27 +101,58 @@ public class PotCounter : MonoBehaviour
             tiempoPasado += Time.deltaTime;
             slider.value = Mathf.Clamp01(tiempoPasado / duracion); //Fija el valor
 
-            if (Input.GetKeyDown(KeyCode.R) && counterInt.Hervir)
+            if(this.gameObject.name == "Hervir")
             {
-                //Se cancela
-
-                if (slider.value >= 0 && slider.value <= 0.9f)
+                if (Input.GetKeyDown(KeyCode.R) && counterInt.Hervir)
                 {
-                    slider.gameObject.SetActive(false);
-                    slider.value = 0f;
-                    Instanciar(objetoPot);
-                    StopAllCoroutines();
+                    if (PadrePlayer.transform.childCount <= 0)
+                    {
+                        //Se cancela
+
+                        if (slider.value >= 0 && slider.value <= 0.9f)
+                        {
+                            slider.gameObject.SetActive(false);
+                            slider.value = 0f;
+                            Instanciar(objetoPot);
+                            StopAllCoroutines();
+                        }
+
+                        if (slider.value >= 0.99f)
+                        {
+                            quemado = true;
+                            QuemadoImage.enabled = true;
+                            yield break;
+                        }
+                    }
                 }
-
-                if (slider.value >= 0.99f)
-                {
-                    quemado = true;
-                    QuemadoImage.enabled = true;
-                    yield break;
-                }
-
-
             }
+
+            if (this.gameObject.name == "Hervir2")
+            {
+                if (Input.GetKeyDown(KeyCode.R) && counterInt.Hervir2)
+                {
+                    if (PadrePlayer.transform.childCount <= 0)
+                    {
+                        //Se cancela
+
+                        if (slider.value >= 0 && slider.value <= 0.9f)
+                        {
+                            slider.gameObject.SetActive(false);
+                            slider.value = 0f;
+                            Instanciar(objetoPot);
+                            StopAllCoroutines();
+                        }
+
+                        if (slider.value >= 0.99f)
+                        {
+                            quemado = true;
+                            QuemadoImage.enabled = true;
+                            yield break;
+                        }
+                    }
+                }
+            }
+
 
             yield return null;
         }
@@ -135,7 +166,7 @@ public class PotCounter : MonoBehaviour
 
     private void Update()
     {
-        if (quemado && Input.GetKeyDown(KeyCode.R) && counterInt.Hervir)
+        if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Hervir)
         {
             slider.gameObject.SetActive(false);
             slider.value = 0f;
