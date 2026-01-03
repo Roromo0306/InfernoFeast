@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2699383973687808537}
   - component: {fileID: 930020933427690074}
   - component: {fileID: 2223446852631156601}
+  - component: {fileID: 8551591096135355276}
   m_Layer: 0
   m_Name: Vieiras Hervidas
   m_TagString: Untagged
@@ -105,3 +106,16 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8551591096135355276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7976623220770151798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652d5e3d3136ee0478666e8e30c09928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  estado: 3

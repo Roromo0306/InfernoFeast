@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8431524379638804884}
   - component: {fileID: 1576567262426506053}
   - component: {fileID: 1893396823117022892}
+  - component: {fileID: 2944966272169659791}
   m_Layer: 0
   m_Name: Vieiras
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2944966272169659791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6179346133021479473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652d5e3d3136ee0478666e8e30c09928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  estado: 0

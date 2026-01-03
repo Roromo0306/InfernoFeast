@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5081496809343649877}
   - component: {fileID: 6078369719583180149}
   - component: {fileID: 4865907145801229249}
+  - component: {fileID: 9212366085866576250}
   m_Layer: 0
   m_Name: SlimeHervido Batido
   m_TagString: Untagged
@@ -105,3 +106,16 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9212366085866576250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237322106065669325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652d5e3d3136ee0478666e8e30c09928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  estado: 5
