@@ -121,7 +121,7 @@ public class InteractuarCounter : MonoBehaviour
             Counter = collision.gameObject;
 
             PadreHorno = Counter.transform.GetChild(0).gameObject;
-            if(PadreHorno.transform.GetChild(0) != null)
+            if(PadreHorno.transform.childCount > 0)
             {
                 ObjetoDejado = true;
             }
@@ -139,7 +139,7 @@ public class InteractuarCounter : MonoBehaviour
             Counter = collision.gameObject;
 
             PadreFreir = Counter.transform.GetChild(0).gameObject;
-            if (PadreFreir.transform.GetChild(0) != null)
+            if (PadreFreir.transform.childCount > 0)
             {
                 ObjetoDejado = true;
             }
@@ -151,7 +151,7 @@ public class InteractuarCounter : MonoBehaviour
             Counter = collision.gameObject;
 
             PadreFreir = Counter.transform.GetChild(0).gameObject;
-            if (PadreFreir.transform.GetChild(0) != null)
+            if (PadreFreir.transform.childCount > 0)
             {
                 ObjetoDejado = true;
             }
@@ -163,7 +163,7 @@ public class InteractuarCounter : MonoBehaviour
             Counter = collision.gameObject;
 
             PadreHervir = Counter.transform.GetChild(0).gameObject;
-            if (PadreHervir.transform.GetChild(0) != null)
+            if (PadreHervir.transform.childCount > 0)
             {
                 ObjetoDejado = true;
             }
@@ -175,7 +175,7 @@ public class InteractuarCounter : MonoBehaviour
             Counter = collision.gameObject;
 
             PadreHervir = Counter.transform.GetChild(0).gameObject;
-            if (PadreHervir.transform.GetChild(0) != null)
+            if (PadreHervir.transform.childCount > 0)
             {
                 ObjetoDejado = true;
             }
