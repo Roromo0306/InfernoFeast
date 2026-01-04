@@ -27,6 +27,9 @@ public class BakeCounter : MonoBehaviour
 
     private bool quemado = false;
 
+    private bool haSonado = false;
+    public AudioSource audio;
+
     //Funcion de hornear
     public void Hornear()
     {
@@ -107,13 +110,19 @@ public class BakeCounter : MonoBehaviour
             tiempoPasado += Time.deltaTime;
             slider.value = Mathf.Clamp01(tiempoPasado / duracion); //Fija el valor
 
+            if (slider.value >= 0.4 && !haSonado)
+            {
+                audio.Play();
+                haSonado = true;
+            }
+
             if (Input.GetKeyDown(KeyCode.E) && counterInt.Hornear)
             {
                 if (PadrePlayer.transform.childCount <= 0)
                 {
                     //Se cancela
 
-                    if (slider.value >= 0 && slider.value <= 0.9f)
+                    if (slider.value >= 0.4 && slider.value <= 0.9f)
                     {
                         slider.gameObject.SetActive(false);
                         slider.value = 0f;
@@ -128,6 +137,8 @@ public class BakeCounter : MonoBehaviour
                         QuemadoImage.enabled = true;
                         yield break;
                     }
+
+                    haSonado = false;
                 }
                 
             }

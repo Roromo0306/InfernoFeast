@@ -30,6 +30,9 @@ public class FryCounter : MonoBehaviour
 
     private bool quemado = false;
 
+    private bool haSonado = false;
+    public AudioSource audio;
+
     public void Freir()
     {
         GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
@@ -111,13 +114,19 @@ public class FryCounter : MonoBehaviour
 
             if(this.gameObject.name == "Freir")
             {
+                if (slider.value >= 0.4 && !haSonado)
+                {
+                    audio.Play();
+                    haSonado = true;
+                }
+
                 if (Input.GetKeyDown(KeyCode.E) && counterInt.Freir)
                 {
                     if (PadrePlayer.transform.childCount <= 0)
                     {
                         //Se cancela
 
-                        if (slider.value >= 0 && slider.value <= 0.9f)
+                        if (slider.value >= 0.4 && slider.value <= 0.9f)
                         {
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
@@ -131,19 +140,28 @@ public class FryCounter : MonoBehaviour
                             QuemadoImage.enabled = true;
                             yield break;
                         }
+
+                        haSonado = false;
                     }
                 }
             }
 
             if (this.gameObject.name == "Freir2")
             {
+
+                if (slider.value >= 0.4 && !haSonado)
+                {
+                    audio.Play();
+                    haSonado = true;
+                }
+
                 if (Input.GetKeyDown(KeyCode.E) && counterInt.Freir2)
                 {
                     if (PadrePlayer.transform.childCount <= 0)
                     {
                         //Se cancela
 
-                        if (slider.value >= 0 && slider.value <= 0.9f)
+                        if (slider.value >= 0.4 && slider.value <= 0.9f)
                         {
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
@@ -157,6 +175,8 @@ public class FryCounter : MonoBehaviour
                             QuemadoImage.enabled = true;
                             yield break;
                         }
+
+                        haSonado = false;
                     }
                 }
             }
