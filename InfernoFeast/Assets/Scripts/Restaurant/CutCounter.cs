@@ -61,6 +61,13 @@ public class CutCounter : MonoBehaviour
     {
         GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
 
+        //Detecto el componente Estado Alimento para saber si dejar que el elemento se pueda freir
+        EstadoAlimento Est = HijoPadre.GetComponent<EstadoAlimento>();
+        if (Est.estado == 1 || Est.estado == 6 || Est.estado == 7)
+        {
+            return;
+        }
+
         //Con este for recorre la lista entera hasta que encuentra un objeto que se llama igual que el objeto que lleva el jugador. Al encontrar esto, activo el bool y guardo el indice
         for (int i = 0; i < ingredientes.Count; i++)
         {

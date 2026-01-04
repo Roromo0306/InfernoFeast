@@ -33,6 +33,13 @@ public class PotCounter : MonoBehaviour
     {
         GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
 
+        //Detecto el componente Estado Alimento para saber si dejar que el elemento se pueda freir
+        EstadoAlimento Est = HijoPadre.GetComponent<EstadoAlimento>();
+        if (Est.estado == 3 || Est.estado == 6 || Est.estado == 7)
+        {
+            return;
+        }
+
         //Con este for recorre la lista entera hasta que encuentra un objeto que se llama igual que el objeto que lleva el jugador. Al encontrar esto, activo el bool y guardo el indice
         for (int i = 0; i < ingredientes.Count; i++)
         {
@@ -166,13 +173,29 @@ public class PotCounter : MonoBehaviour
 
     private void Update()
     {
-        if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Hervir)
+        if (this.gameObject.name == "Hervir")
         {
-            slider.gameObject.SetActive(false);
-            slider.value = 0f;
-            QuemadoImage.enabled = false;
-            InstanciarQuemado();
-            quemado = false;
+            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Hervir)
+            {
+                slider.gameObject.SetActive(false);
+                slider.value = 0f;
+                QuemadoImage.enabled = false;
+                InstanciarQuemado();
+                quemado = false;
+            }
         }
+
+        if (this.gameObject.name == "Hervir2")
+        {
+            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Hervir2)
+            {
+                slider.gameObject.SetActive(false);
+                slider.value = 0f;
+                QuemadoImage.enabled = false;
+                InstanciarQuemado();
+                quemado = false;
+            }
+        }
+
     }
 }

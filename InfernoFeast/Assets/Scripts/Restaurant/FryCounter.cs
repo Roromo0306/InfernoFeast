@@ -173,13 +173,29 @@ public class FryCounter : MonoBehaviour
 
     private void Update()
     {
-        if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Freir)
+        if (this.gameObject.name == "Freir")
         {
-            slider.gameObject.SetActive(false);
-            slider.value = 0f;
-            QuemadoImage.enabled = false;
-            InstanciarQuemado();
-            quemado = false;
+            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Freir)
+            {
+                slider.gameObject.SetActive(false);
+                slider.value = 0f;
+                QuemadoImage.enabled = false;
+                InstanciarQuemado();
+                quemado = false;
+            }
         }
+
+        if (this.gameObject.name == "Freir2")
+        {
+            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Freir2)
+            {
+                slider.gameObject.SetActive(false);
+                slider.value = 0f;
+                QuemadoImage.enabled = false;
+                InstanciarQuemado();
+                quemado = false;
+            }
+        }
+
     }
 }

@@ -83,6 +83,13 @@ public class MixCounter : MonoBehaviour
     {
         GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
 
+        //Detecto el componente Estado Alimento para saber si dejar que el elemento se pueda freir
+        EstadoAlimento Est = HijoPadre.GetComponent<EstadoAlimento>();
+        if (Est.estado == 5 || Est.estado == 6 || Est.estado == 7)
+        {
+            return;
+        }
+
         HijoMix = Instantiate(HijoPadre, PadreMix.transform.position, HijoPadre.transform.rotation, PadreMix.transform);
         HijoMix.name = HijoPadre.name;
 
