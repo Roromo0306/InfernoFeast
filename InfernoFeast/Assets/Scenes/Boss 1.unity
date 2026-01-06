@@ -7558,15 +7558,15 @@ MonoBehaviour:
   cameraTransform: {fileID: 1554064265}
   powerSlider: {fileID: 1156420679}
   throwKey: 113
-  minThrowForce: 5
-  maxThrowForce: 15
-  maxChargeTime: 5
+  minThrowForce: 6
+  maxThrowForce: 10
+  maxChargeTime: 2
   throwMode: 1
   useCameraForward: 0
-  fixedAngleDegrees: -50
+  fixedAngleDegrees: -20
   targetDistance: 8
-  raycastMaxDistance: 100
-  extraTorque: 2
+  raycastMaxDistance: 20
+  extraTorque: 0
   drawDebug: 1
   invertThrowDirection: 1
 --- !u!114 &1439954584
