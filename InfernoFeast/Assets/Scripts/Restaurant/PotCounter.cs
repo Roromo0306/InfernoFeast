@@ -113,7 +113,7 @@ public class PotCounter : MonoBehaviour
 
             if(this.gameObject.name == "Hervir")
             {
-                if (slider.value >= 0.4 && !haSonado)
+                if (slider.value >= 0.6 && !haSonado)
                 {
                     audio.Play();
                     haSonado = true;
@@ -125,7 +125,7 @@ public class PotCounter : MonoBehaviour
                     {
                         //Se cancela
 
-                        if (slider.value >= 0.4 && slider.value <= 0.9f)
+                        if (slider.value >= 0.6 && slider.value <= 0.9f)
                         {
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
@@ -148,7 +148,7 @@ public class PotCounter : MonoBehaviour
             if (this.gameObject.name == "Hervir2")
             {
 
-                if (slider.value >= 0.4 && !haSonado)
+                if (slider.value >= 0.6 && !haSonado)
                 {
                     audio.Play();
                     haSonado = true;
@@ -160,7 +160,7 @@ public class PotCounter : MonoBehaviour
                     {
                         //Se cancela
 
-                        if (slider.value >= 0.4 && slider.value <= 0.9f)
+                        if (slider.value >= 0.6 && slider.value <= 0.9f)
                         {
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
@@ -187,6 +187,8 @@ public class PotCounter : MonoBehaviour
         //Completa el bake
         quemado = true;
         QuemadoImage.enabled = true;
+        audio.loop = true;
+        audio.Play();
         StopAllCoroutines();
         yield break;
     }
@@ -202,6 +204,7 @@ public class PotCounter : MonoBehaviour
                 QuemadoImage.enabled = false;
                 InstanciarQuemado();
                 quemado = false;
+                audio.loop = false;
             }
         }
 
@@ -214,6 +217,7 @@ public class PotCounter : MonoBehaviour
                 QuemadoImage.enabled = false;
                 InstanciarQuemado();
                 quemado = false;
+                audio.loop = false;
             }
         }
 

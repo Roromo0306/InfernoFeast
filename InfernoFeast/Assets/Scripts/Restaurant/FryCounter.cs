@@ -114,7 +114,7 @@ public class FryCounter : MonoBehaviour
 
             if(this.gameObject.name == "Freir")
             {
-                if (slider.value >= 0.4 && !haSonado)
+                if (slider.value >= 0.6 && !haSonado)
                 {
                     audio.Play();
                     haSonado = true;
@@ -126,7 +126,7 @@ public class FryCounter : MonoBehaviour
                     {
                         //Se cancela
 
-                        if (slider.value >= 0.4 && slider.value <= 0.9f)
+                        if (slider.value >= 0.6 && slider.value <= 0.9f)
                         {
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
@@ -149,7 +149,7 @@ public class FryCounter : MonoBehaviour
             if (this.gameObject.name == "Freir2")
             {
 
-                if (slider.value >= 0.4 && !haSonado)
+                if (slider.value >= 0.6 && !haSonado)
                 {
                     audio.Play();
                     haSonado = true;
@@ -161,7 +161,7 @@ public class FryCounter : MonoBehaviour
                     {
                         //Se cancela
 
-                        if (slider.value >= 0.4 && slider.value <= 0.9f)
+                        if (slider.value >= 0.6 && slider.value <= 0.9f)
                         {
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
@@ -187,6 +187,8 @@ public class FryCounter : MonoBehaviour
         //Completa el bake
         quemado = true;
         QuemadoImage.enabled = true;
+        audio.loop = true;
+        audio.Play();
         StopAllCoroutines();
         yield break;
     }
@@ -202,6 +204,7 @@ public class FryCounter : MonoBehaviour
                 QuemadoImage.enabled = false;
                 InstanciarQuemado();
                 quemado = false;
+                audio.loop = false;
             }
         }
 
@@ -214,6 +217,7 @@ public class FryCounter : MonoBehaviour
                 QuemadoImage.enabled = false;
                 InstanciarQuemado();
                 quemado = false;
+                audio.loop = false;
             }
         }
 

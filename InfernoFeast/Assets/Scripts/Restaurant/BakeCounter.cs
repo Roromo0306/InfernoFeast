@@ -110,7 +110,7 @@ public class BakeCounter : MonoBehaviour
             tiempoPasado += Time.deltaTime;
             slider.value = Mathf.Clamp01(tiempoPasado / duracion); //Fija el valor
 
-            if (slider.value >= 0.4 && !haSonado)
+            if (slider.value >= 0.6 && !haSonado)
             {
                 audio.Play();
                 haSonado = true;
@@ -122,7 +122,7 @@ public class BakeCounter : MonoBehaviour
                 {
                     //Se cancela
 
-                    if (slider.value >= 0.4 && slider.value <= 0.9f)
+                    if (slider.value >= 0.6 && slider.value <= 0.9f)
                     {
                         slider.gameObject.SetActive(false);
                         slider.value = 0f;
@@ -148,6 +148,8 @@ public class BakeCounter : MonoBehaviour
         //Completa el bake
         quemado = true;
         QuemadoImage.enabled = true;
+        audio.loop = true;
+        audio.Play();
         StopAllCoroutines();
         yield break;
     }
@@ -161,6 +163,7 @@ public class BakeCounter : MonoBehaviour
             QuemadoImage.enabled = false;
             InstanciarQuemado();
             quemado = false;
+            audio.loop = false;
         }
     }
 }
