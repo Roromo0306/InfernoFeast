@@ -39,6 +39,7 @@ public class VideoCinematic : MonoBehaviour
         {
             musicAudioSource.clip = backgroundMusic;
             musicAudioSource.loop = true;
+            musicAudioSource.volume = 0.55f;
             musicAudioSource.Play();
         }
 
