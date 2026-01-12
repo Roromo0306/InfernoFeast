@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameRoundsManager : MonoBehaviour
 {
@@ -12,6 +14,13 @@ public class GameRoundsManager : MonoBehaviour
     [Header("Strikes")]
     public int maxStrikes = 3;
     public int currentStrikes = 0;
+
+    [Header("Audio de fallos")]
+    public AudioClip strikeSound;      // Arrastrar el audio en el inspector
+    
+
+    [Header("UI de fallos")]
+    public List<Image> strikeIcons;
 
     [Header("Referencias")]
     public Timer timer;
@@ -121,7 +130,34 @@ public class GameRoundsManager : MonoBehaviour
 
         Debug.Log($"[GameRoundsManager] Ronda {roundIndex + 1} iniciada con {currentRoundGroups.Count} mesas.");
     }
+    void ShowStrikesUI()
+    {
+        bool playedSound = false; // Control para reproducir el audio solo una vez
 
+        for (int i = 0; i < strikeIcons.Count; i++)
+        {
+            if (i < currentStrikes)
+            {
+                if (!strikeIcons[i].gameObject.activeSelf)
+                {
+                    StartCoroutine(PopIcon(strikeIcons[i]));
+
+                    // Reproducir el sonido solo la primera vez que se activa un icono
+                    if (!playedSound)
+                    {
+                        if (audioSource != null && strikeSound != null)
+                            audioSource.PlayOneShot(strikeSound);
+
+                        playedSound = true;
+                    }
+                }
+            }
+            else
+            {
+                strikeIcons[i].gameObject.SetActive(false);
+            }
+        }
+    }
     public void OnPlateDelivered(TableAnchor anchor, Plate plate)
     {
         if (anchor == null || anchor.group == null || plate == null) return;
@@ -131,31 +167,42 @@ public class GameRoundsManager : MonoBehaviour
         if (!currentRoundGroups.Contains(group)) return;
         if (group.served) return;
 
-        if (anchor.group.requiredDish == plate.dish)
-        {
-            audioSource.PlayOneShot(successSound);
-            anchor.group.OnServed();
-        }
-        else
-        {
-            anchor.group.OnMissed();
-        }
         bool correct = plate.dish == group.requiredDish;
 
         if (correct)
         {
+            audioSource.PlayOneShot(successSound);
+
             group.OnServed();
             Destroy(plate.gameObject, 0.05f);
             currentRoundGroups.Remove(group);
 
+            // Si ya no quedan mesas activas, pasamos a la siguiente ronda
             if (currentRoundGroups.Count == 0)
                 NextRound();
+        }
+        else
+        {
+            // Plato incorrecto → contamos fallo
+            group.OnMissed();
+
+            currentStrikes++;
+            if (currentStrikes > maxStrikes) currentStrikes = maxStrikes;
+
+            ShowStrikesUI();
+
+            if (currentStrikes >= maxStrikes)
+                LoseGame();
         }
     }
 
     void OnRoundTimeUp()
     {
+        // Todos los platos no servidos cuentan como fallos
         currentStrikes += currentRoundGroups.Count;
+        if (currentStrikes > maxStrikes) currentStrikes = maxStrikes;
+
+        ShowStrikesUI();
 
         foreach (var g in currentRoundGroups)
             g.OnMissed();
@@ -212,5 +259,46 @@ public class GameRoundsManager : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(pendingSceneToLoad))
             SceneManager.LoadScene(pendingSceneToLoad);
+    }
+
+    IEnumerator PopIcon(Image icon)
+    {
+        icon.gameObject.SetActive(true);
+
+        float duration = 0.25f;        // Duración total del pop
+        Vector3 startScale = Vector3.zero;
+        Vector3 overshootScale = Vector3.one * 1.2f; // Tamaño máximo temporal
+        Vector3 endScale = Vector3.one;              // Tamaño final
+        float halfDuration = duration / 2f;
+        float time = 0f;
+
+        icon.rectTransform.localScale = startScale;
+
+        // Primera fase: 0 → overshoot
+        while (time < halfDuration)
+        {
+            float t = time / halfDuration;
+            float scale = Mathf.SmoothStep(0f, overshootScale.x, t);
+            icon.rectTransform.localScale = Vector3.one * scale;
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // Aseguramos overshoot exacto
+        icon.rectTransform.localScale = overshootScale;
+
+        // Segunda fase: overshoot → tamaño final
+        time = 0f;
+        while (time < halfDuration)
+        {
+            float t = time / halfDuration;
+            float scale = Mathf.SmoothStep(overshootScale.x, endScale.x, t);
+            icon.rectTransform.localScale = Vector3.one * scale;
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ajustamos al tamaño final exacto
+        icon.rectTransform.localScale = endScale;
     }
 }
