@@ -30,6 +30,10 @@ public class ClientTableGroup : MonoBehaviour
         served = false;
         platePlaced = false;
 
+        FadeGroupAndDisable fade = GetComponent<FadeGroupAndDisable>();
+        if (fade != null)
+            fade.ResetFade();
+
         if (client != null) client.SetActive(true);
         if (table != null) table.SetActive(true);
     }
@@ -45,7 +49,14 @@ public class ClientTableGroup : MonoBehaviour
     {
         served = true;
         platePlaced = true;
-        Deactivate();
+
+        // 🔹 Fade al servir
+        FadeGroupAndDisable fade = GetComponent<FadeGroupAndDisable>();
+        if (fade != null)
+            fade.FadeOut();
+        else
+            Deactivate(); // fallback
+
     }
 
     // Se llama cuando el plato es incorrecto
