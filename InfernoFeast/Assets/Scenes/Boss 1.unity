@@ -393,6 +393,7 @@ MonoBehaviour:
     duration: 90
   maxStrikes: 3
   currentStrikes: 0
+  strikeSound: {fileID: 8300000, guid: d522a7f21cf8de347aaee79b930f8483, type: 3}
   strikeIcons:
   - {fileID: 1685742971}
   - {fileID: 1168637013}
@@ -8436,6 +8437,8 @@ MonoBehaviour:
   videoPlayer: {fileID: 1824667565}
   cinematica: {fileID: 1824667563}
   dialogueBoss: {fileID: 566125965}
+  musicAudioSource: {fileID: 1554064267}
+  backgroundMusic: {fileID: 8300000, guid: 6e3fbcda98d696444bceb69a71cb0bb4, type: 3}
 --- !u!82 &1554064267
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8448,7 +8451,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
