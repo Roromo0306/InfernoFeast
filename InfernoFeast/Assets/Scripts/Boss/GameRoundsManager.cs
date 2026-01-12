@@ -25,6 +25,10 @@ public class GameRoundsManager : MonoBehaviour
     public List<string> winLines = new List<string>() { "¡Enhorabuena! Has superado el reto." };
     public List<string> loseLines = new List<string>() { "No has conseguido superar el reto." };
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip successSound;
+
     List<ClientTableGroup> allGroups = new List<ClientTableGroup>();
     List<ClientTableGroup> currentRoundGroups = new List<ClientTableGroup>();
 
@@ -127,6 +131,15 @@ public class GameRoundsManager : MonoBehaviour
         if (!currentRoundGroups.Contains(group)) return;
         if (group.served) return;
 
+        if (anchor.group.requiredDish == plate.dish)
+        {
+            audioSource.PlayOneShot(successSound);
+            anchor.group.OnServed();
+        }
+        else
+        {
+            anchor.group.OnMissed();
+        }
         bool correct = plate.dish == group.requiredDish;
 
         if (correct)

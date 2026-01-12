@@ -1,12 +1,12 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(BoxCollider))]
 public class Plate : MonoBehaviour
 {
-    public TipoIngrediente dish; // asigna aquí el SO del plato (vieira, etc.)
-    bool hasSnapped = false;
+    public TipoIngrediente dish; // plato final (vieiras, etc.)
 
-    public float snapDelay = 0.02f; // pequeño delay para evitar interferencias de física
+    private bool hasSnapped = false;
 
     public void HandleSnap(TableAnchor anchor)
     {
@@ -21,15 +21,15 @@ public class Plate : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        // mover y parentear al snapPoint
-        if (anchor != null && anchor.snapPoint != null)
+        Transform snap = anchor.SnapPoint;
+
+        if (snap != null)
         {
-            transform.position = anchor.snapPoint.position;
-            transform.rotation = anchor.snapPoint.rotation;
-            transform.SetParent(anchor.snapPoint, true);
+            transform.SetParent(snap);
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
         }
 
-        // avisar al GameRoundsManager (singleton)
         GameRoundsManager.Instance?.OnPlateDelivered(anchor, this);
     }
 }
