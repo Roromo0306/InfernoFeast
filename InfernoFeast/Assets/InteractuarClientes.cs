@@ -99,6 +99,7 @@ public class InteractuarClientes : MonoBehaviour
 
         comanda.sprite = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
+
         canvas.enabled = true;
 
         //Inicia cuenta atrás
@@ -128,6 +129,7 @@ public class InteractuarClientes : MonoBehaviour
                 Destroy(Plato);
                 Debug.Log("Has acertado");
                 em.cantidadCom[pedido]--;
+
                 canvas.enabled = false;
                 CM.ClienteAdios(this.gameObject);
             }
