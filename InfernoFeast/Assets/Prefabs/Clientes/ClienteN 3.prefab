@@ -25,13 +25,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4711482133850087400}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 6.09}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8372962557776829779}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -697.7765, y: -388.649}
@@ -201,6 +201,11 @@ MonoBehaviour:
   comanda: {fileID: 8253134012235626382}
   clienteManager: {fileID: 0}
   Elegido: 0
+  Sentado: 0
+  ListoPedir: {fileID: 21300000, guid: df99eb4b8971708419389d1e7d07fad0, type: 3}
+  Feliz: {fileID: 21300000, guid: a6dca7e4039830e4f8f264e7375bed4c, type: 3}
+  Neutral: {fileID: 21300000, guid: 645c7bbda3ff0c14da08c8d0e05e2429, type: 3}
+  Enfadado: {fileID: 21300000, guid: e97325098c92b4a4983beb7e16c1f08d, type: 3}
   canvas: {fileID: 7291682707394294182}
   pedido: 0
 --- !u!1 &6409777092240344748

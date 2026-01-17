@@ -17,14 +17,31 @@ public class InteractuarClientes : MonoBehaviour
     public GameObject clienteManager;
 
     public bool Elegido = false;
+    
+    //Variables para controlar si se ha sentado
+    public bool Sentado = false; //Bool para saber si se ha sentado
+    private Vector3 ultimaPos;
+    private float tiempoSinMoverse = 0f; //Calcula el tiempo que esta sin moverse
+    private float tiempoParaSentarse = 0.2f; //Tiempo de referencia para saber si se ha sentado
+    public Sprite ListoPedir; //Sprite que indica que está listo para pedir
+
+    [Header("Reacciones")]
+    public Sprite Feliz;
+    public Sprite Neutral;
+    public Sprite Enfadado;
 
     public Canvas canvas;
 
-
     private bool Atendido = false; //Este bool controlara si se ha atendido al cliente.
+
+    private bool AtendidoCuent = false;
+    private float tiempoPasado;
+    
     [HideInInspector] public int pedido;
     private void Start()
     {
+        ultimaPos = transform.position;
+
         if(EmpezarTurnoCounter == null)
         {
             EmpezarTurnoCounter = GameObject.Find("EmpezarTurno");
@@ -37,6 +54,40 @@ public class InteractuarClientes : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        float distancia = Vector3.Distance(transform.position, ultimaPos);
+
+        if(distancia < 0.01f)
+        {
+            tiempoSinMoverse += Time.deltaTime;
+
+            if(tiempoSinMoverse >= tiempoParaSentarse)
+            {
+                Sentado = true;
+            }
+        }
+        else
+        {
+            tiempoSinMoverse = 0f;
+        }
+
+        ultimaPos = transform.position;
+
+        //Si se ha sentado y no lo han antendido muestra el sprite de take order
+        if(Sentado && !Elegido)
+        {
+            comanda.sprite = ListoPedir;
+            canvas.enabled = true;
+        }
+
+        //Cuenta atras para saber cuanto tiempo tarda el cliente en llevar un plato
+        if (AtendidoCuent)
+        {
+            tiempoPasado += Time.deltaTime;
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
@@ -44,21 +95,21 @@ public class InteractuarClientes : MonoBehaviour
         if (em.empezado)
         { 
             //Clientes normales cuando no se les ha atendido
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido) 
+            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido && Sentado) 
             {
                 ElegirComandaN();
                 Elegido = true;
             }
 
             //Clientes VIP cuando no se les ha atendido
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido)
+            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido && Sentado)
             {
                 ElegirComandaV();
                 Elegido = true;
             }
 
             //Clientes normales atendidos
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && Elegido)
+            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && Elegido && Sentado)
             {
                 GameObject Colisionado = collision.gameObject;
                 RevisarComanda(Colisionado);
@@ -66,7 +117,7 @@ public class InteractuarClientes : MonoBehaviour
 
 
             //Clientes VIP atendidos
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && Elegido)
+            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && Elegido && Sentado)
             {
                 GameObject Colisionado = collision.gameObject;
                 RevisarComanda(Colisionado);
@@ -82,12 +133,11 @@ public class InteractuarClientes : MonoBehaviour
         pedido = Random.Range(0, 3);
 
         comanda.sprite = em.NombresComandas[pedido];
-        canvas.enabled = true;
         em.cantidadCom[pedido]++;
 
         //Inicia cuenta atrás
-        float tiempo = 60f;
         Atendido = true;
+        AtendidoCuent = true;
     }
 
     //Comanda de los VIP
@@ -100,11 +150,9 @@ public class InteractuarClientes : MonoBehaviour
         comanda.sprite = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
 
-        canvas.enabled = true;
-
         //Inicia cuenta atrás
-        float tiempo = 60f;
         Atendido = true;
+        AtendidoCuent = true;
     }
 
 
@@ -112,7 +160,8 @@ public class InteractuarClientes : MonoBehaviour
     private void RevisarComanda(GameObject Player)
     {
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
-        ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
+
+        AtendidoCuent = false;
 
         GameObject sujetarOb = Player.transform.GetChild(2).gameObject;
 
@@ -124,25 +173,41 @@ public class InteractuarClientes : MonoBehaviour
         {
             GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
             
-            if(Plato.name == em.NombresComandas[pedido].name)
+            if(Plato.name == em.NombresComandas[pedido].name) //Has acertado
             {
                 Destroy(Plato);
                 Debug.Log("Has acertado");
                 em.cantidadCom[pedido]--;
+                
+                if(tiempoPasado < 75)
+                {
+                    comanda.sprite = Feliz;
+                }
+                else
+                {
+                    comanda.sprite = Neutral;
+                }
+                StartCoroutine(Adios());
 
-                canvas.enabled = false;
-                CM.ClienteAdios(this.gameObject);
             }
-            else
+            else //No has acertado
             {
                 Destroy(Plato);
                 Debug.Log("No has acertado");
-                canvas.enabled = false;
-                CM.ClienteAdios(this.gameObject);
+                comanda.sprite = Enfadado;
+                StartCoroutine(Adios());
             }
         }
     }
 
+    IEnumerator Adios()
+    {
+        ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
+
+        yield return new WaitForSeconds(3f);
+        canvas.enabled = false;
+        CM.ClienteAdios(this.gameObject);
+    }
 
     //Corrutina que controla la cuenta atras hasta que se marche el cliente
     IEnumerator InicioCuentaAtras()
@@ -154,12 +219,13 @@ public class InteractuarClientes : MonoBehaviour
 
         if (!Atendido) //Si no se ha atendido al cliente el tiempo es 45
         {
-            tiempo = 90f;
+            tiempo = 45f;
         }
-        else //Si se ha atendido al cliente el tiempo es 60
+        else //Si se ha atendido al cliente el tiempo es 90
         {
             tiempo = 90f;
-            Atendido = false;
+            Atendido = false; 
+
         }
 
         while (tiempo > 0) //Cuenta atras
