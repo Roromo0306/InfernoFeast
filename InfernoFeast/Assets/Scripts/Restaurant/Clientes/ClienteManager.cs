@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ClienteManager : MonoBehaviour
 {
@@ -15,14 +16,14 @@ public class ClienteManager : MonoBehaviour
     [Header("Empezar Turno Counter")]
     public GameObject ETC; //Gameobject del counter de empezar turno
 
+    [Header("NavMesh")]
+    [Tooltip("Distancia a la que el agente considerará que ha llegado")]
+    public float agentStoppingDistance = 0.5f;
+
     private List<GameObject> clientesActivos = new List<GameObject>();
     private Dictionary<GameObject, int> clienteMesa = new Dictionary<GameObject, int>();
 
     private bool Empezado = true; //Bool para empezar solo una vez la corrutina
-
-    /*//Estos son antiguos gameobjects locales que los he puesto globales
-    private int mesaLibre;
-    private GameObject nuevoCliente;*/
 
     private void Update()
     {
@@ -33,14 +34,24 @@ public class ClienteManager : MonoBehaviour
             StartCoroutine(SpawnClientes());
             Empezado = false;
         }
-        
-        if(!em.empezado) //Se para todo
+
+        if (!em.empezado) //Se para todo
         {
             StopAllCoroutines();
+            // Además, detener a los NavMeshAgents activos para que no sigan moviéndose.
+            foreach (var cliente in clientesActivos)
+            {
+                if (cliente == null) continue;
+                if (cliente.TryGetComponent<NavMeshAgent>(out NavMeshAgent a))
+                {
+                    a.isStopped = true;
+                    a.ResetPath();
+                }
+            }
             Empezado = true;
         }
 
-        
+
     }
 
     IEnumerator SpawnClientes()
@@ -55,13 +66,8 @@ public class ClienteManager : MonoBehaviour
     void SpawnCliente()
     {
         int mesaLibre = BuscarMesaLibre();
-        if (mesaLibre == -1)
-        {
-            //Debug.Log("No hay mesas libres, no entra más gente.");
-            return;
-        }
+        if (mesaLibre == -1) return;
 
-        // Escoger un tipo de cliente aleatorio
         ClientesSO data = clientesDisponibles[Random.Range(0, clientesDisponibles.Length)];
         if (data.prefab == null)
         {
@@ -72,9 +78,44 @@ public class ClienteManager : MonoBehaviour
         GameObject nuevoCliente = Instantiate(data.prefab, transform.position, data.prefab.transform.rotation);
         clientesActivos.Add(nuevoCliente);
 
-        // Enviar a mesa con los datos del ScriptableObject
+        // ---- Ajuste: asegurar que el visual/modelo conserve la inclinación X ----
+        // Busca un child llamado "Model" por convención; si no existe, busca el primer MeshRenderer.
+        Transform visual = nuevoCliente.transform.Find("Model");
+        if (visual == null)
+        {
+            foreach (Transform t in nuevoCliente.GetComponentsInChildren<Transform>())
+            {
+                if (t.GetComponent<MeshRenderer>() != null)
+                {
+                    visual = t;
+                    break;
+                }
+            }
+        }
+
+        if (visual != null)
+        {
+            // Mantén la inclinación X que necesites (ej. -90)
+            visual.localEulerAngles = new Vector3(-90f, 0f, 0f);
+        }
+
+        // Ajustes iniciales del NavMeshAgent si existe
+        if (nuevoCliente.TryGetComponent<NavMeshAgent>(out NavMeshAgent agent))
+        {
+            agent.stoppingDistance = agentStoppingDistance;
+            agent.autoBraking = true;
+            agent.isStopped = false;
+            // Deja updateRotation=true si quieres que el agente rote la raíz para mirar a la dirección de movimiento.
+            agent.updateRotation = true;
+        }
+        else
+        {
+            Debug.LogWarning($"Prefab del cliente {data.nombre} no contiene NavMeshAgent. Añádelo al prefab para movimiento con NavMesh.");
+        }
+
         StartCoroutine(EnviarAmesa(nuevoCliente, mesaLibre, data));
     }
+
 
     int BuscarMesaLibre()
     {
@@ -88,41 +129,68 @@ public class ClienteManager : MonoBehaviour
 
     IEnumerator EnviarAmesa(GameObject cliente, int indexMesa, ClientesSO data)
     {
+        if (cliente == null)
+            yield break;
+
         mesas[indexMesa].ocupada = true;
         clienteMesa[cliente] = indexMesa;
-        
 
         Transform destino = mesas[indexMesa].posicion;
-        Vector3 direccion = (destino.position - cliente.transform.position).normalized;
-        // Movimiento simple hacia la mesa
-        while (Vector3.Distance(cliente.transform.position, destino.position) > 0.1f)
-        {
-            cliente.transform.position = Vector3.MoveTowards(
-                cliente.transform.position,
-                destino.position,
-                Time.deltaTime * 2f
-            );
 
-            /*if (direccion != Vector3.zero)
+        NavMeshAgent agent = null;
+        cliente.TryGetComponent<NavMeshAgent>(out agent);
+
+        if (agent != null)
+        {
+            agent.isStopped = false;
+            agent.SetDestination(destino.position);
+
+            // Esperar hasta que llegue (o hasta que el path esté listo y remainingDistance <= stoppingDistance)
+            while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
             {
-                Quaternion rot = Quaternion.LookRotation(direccion);
-                cliente.transform.rotation = Quaternion.Slerp(
-                    cliente.transform.rotation,
-                    rot,
-                    Time.deltaTime * 5f   // velocidad de giro
+                // Si el turno se para desde fuera, es posible que quieras abortar:
+                yield return null;
+                if (agent == null) yield break;
+            }
+        }
+        else
+        {
+            // Fallback: movimiento simple si no hay NavMeshAgent (mantén esto para debug o prefabs sin agente)
+            while (Vector3.Distance(cliente.transform.position, destino.position) > 0.1f)
+            {
+                cliente.transform.position = Vector3.MoveTowards(
+                    cliente.transform.position,
+                    destino.position,
+                    Time.deltaTime * 2f
                 );
-            }*/
-            yield return null;
+                yield return null;
+            }
         }
 
-      /*  // Cliente se queda un tiempo (definido en el ScriptableObject)
+        // Llegó a la mesa: opcional ajustar rotación
+        Vector3 lookDir = destino.position - cliente.transform.position;
+        if (lookDir.sqrMagnitude > 0.001f)
+        {
+            cliente.transform.rotation = Quaternion.LookRotation(lookDir);
+        }
+
+        // Cliente se queda un tiempo (definido en el ScriptableObject)
+        // Asegúrate de que ClientesSO tenga 'tiempoEnMesa' o cambia esto
         yield return new WaitForSeconds(data.tiempoEnMesa);
 
         // Cliente se va
-        mesas[indexMesa].ocupada = false;
+        if (clienteMesa.TryGetValue(cliente, out int idx))
+        {
+            if (idx >= 0 && idx < mesas.Length)
+                mesas[idx].ocupada = false;
+            clienteMesa.Remove(cliente);
+        }
+
         clientesActivos.Remove(cliente);
-        Destroy(cliente);*/
+        if (cliente != null)
+            Destroy(cliente);
     }
+
 
     public void ClienteAdios(GameObject cliente)
     {
@@ -137,6 +205,13 @@ public class ClienteManager : MonoBehaviour
                 mesas[indexMesa].ocupada = false;
             }
             clienteMesa.Remove(cliente);
+        }
+
+        // Detener agente si lo tiene
+        if (cliente.TryGetComponent<NavMeshAgent>(out NavMeshAgent agent))
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
         }
 
         clientesActivos.Remove(cliente);

@@ -15,4 +15,4 @@ MonoBehaviour:
   nombre: Juan
   tipo: 0
   tiempoEnMesa: 60
-  prefab: {fileID: 4981521204175286519, guid: d641e49cc87504a4f830663a6a81ead0, type: 3}
+  prefab: {fileID: 5773553705700913651, guid: 6f05291c934ea7c4d906cac638c40881, type: 3}

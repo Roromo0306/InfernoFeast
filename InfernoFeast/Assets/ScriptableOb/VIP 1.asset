@@ -15,4 +15,4 @@ MonoBehaviour:
   nombre: Manolo
   tipo: 1
   tiempoEnMesa: 8
-  prefab: {fileID: 699422815441407015, guid: 691ade0588570514ab11605b704ef745, type: 3}
+  prefab: {fileID: 3953775679693613435, guid: 2f11f34bff0090744a12e5ec35d8aa2c, type: 3}
