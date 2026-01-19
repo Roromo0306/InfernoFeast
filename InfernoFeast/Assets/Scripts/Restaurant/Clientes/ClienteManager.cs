@@ -23,6 +23,17 @@ public class ClienteManager : MonoBehaviour
     public float sitYOffset = 0.35f; //Cuánto sube el modelo al sentarse (unidades locales)
     public float sitLerpDuration = 0.25f; //Tiempo para animar el subir/bajar al sentarse
 
+    [Header("Chair detection & rotation")]
+    [Tooltip("Radio (m) para considerar sillas cercanas al destino")]
+    public float chairDetectRadius = 0.6f;
+    [Tooltip("Duración (s) para interpolar la rotación Y al sentarse")]
+    public float rotationLerpDuration = 0.12f;
+
+    [Tooltip("Offset en grados que se suma a la rotación de la silla tipo 'SillaDe'")]
+    public float rotationOffsetY_De = 0f;
+    [Tooltip("Offset en grados que se suma a la rotación de la silla tipo 'SillaIz'")]
+    public float rotationOffsetY_Iz = 0f;
+
     private List<GameObject> clientesActivos = new List<GameObject>();
     private Dictionary<GameObject, int> clienteMesa = new Dictionary<GameObject, int>();
 
@@ -46,7 +57,8 @@ public class ClienteManager : MonoBehaviour
             foreach (var cliente in clientesActivos)
             {
                 if (cliente == null) continue;
-                if (cliente.TryGetComponent<NavMeshAgent>(out NavMeshAgent a))
+                NavMeshAgent a = cliente.GetComponentInChildren<NavMeshAgent>();
+                if (a != null)
                 {
                     a.isStopped = true;
                     a.ResetPath();
@@ -54,8 +66,6 @@ public class ClienteManager : MonoBehaviour
             }
             Empezado = true;
         }
-
-
     }
 
     IEnumerator SpawnClientes()
@@ -89,7 +99,7 @@ public class ClienteManager : MonoBehaviour
         {
             foreach (Transform t in nuevoCliente.GetComponentsInChildren<Transform>())
             {
-                if (t.GetComponent<MeshRenderer>() != null)
+                if (t.GetComponent<MeshRenderer>() != null || t.GetComponent<SkinnedMeshRenderer>() != null)
                 {
                     visual = t;
                     break;
@@ -104,13 +114,14 @@ public class ClienteManager : MonoBehaviour
         }
 
         // Ajustes iniciales del NavMeshAgent si existe
-        if (nuevoCliente.TryGetComponent<NavMeshAgent>(out NavMeshAgent agent))
+        NavMeshAgent agent = nuevoCliente.GetComponentInChildren<NavMeshAgent>();
+        if (agent != null)
         {
             agent.stoppingDistance = agentStoppingDistance;
             agent.autoBraking = true;
             agent.isStopped = false;
-            // Deja updateRotation=true si quieres que el agente rote la raíz para mirar a la dirección de movimiento.
             agent.updateRotation = true;
+            agent.updatePosition = true;
         }
         else
         {
@@ -119,7 +130,6 @@ public class ClienteManager : MonoBehaviour
 
         StartCoroutine(EnviarAmesa(nuevoCliente, mesaLibre, data));
     }
-
 
     int BuscarMesaLibre()
     {
@@ -141,8 +151,7 @@ public class ClienteManager : MonoBehaviour
 
         Transform destino = mesas[indexMesa].posicion;
 
-        NavMeshAgent agent = null;
-        cliente.TryGetComponent<NavMeshAgent>(out agent);
+        NavMeshAgent agent = cliente.GetComponentInChildren<NavMeshAgent>();
 
         if (agent != null)
         {
@@ -156,6 +165,9 @@ public class ClienteManager : MonoBehaviour
                 yield return null;
                 if (agent == null) yield break;
             }
+
+            // Parar agente al llegar
+            agent.isStopped = true;
         }
         else
         {
@@ -171,13 +183,32 @@ public class ClienteManager : MonoBehaviour
             }
         }
 
-        //LLega a la mesa
-        Vector3 lookDir = destino.position - cliente.transform.position;
-        lookDir.y = 0f; // ignorar componente vertical
-        if (lookDir.sqrMagnitude > 0.001f)
+        // --- Buscar la silla por TAG cerca del destino y rotar en Y para mirar "hacia delante" de la silla ---
+        Transform silla = FindNearestSillaByTags(destino.position, chairDetectRadius);
+        if (silla != null)
         {
-            Quaternion targetY = Quaternion.LookRotation(lookDir);
-            cliente.transform.rotation = Quaternion.Euler(0f, targetY.eulerAngles.y, 0f);
+            float targetY = silla.eulerAngles.y;
+            // Aplicar offset según el tag de la silla
+            if (silla.CompareTag("SillaDe"))
+            {
+                targetY += rotationOffsetY_De;
+            }
+            else if (silla.CompareTag("SillaIz"))
+            {
+                targetY += rotationOffsetY_Iz;
+            }
+            yield return StartCoroutine(RotateRootToY(cliente.transform, targetY, rotationLerpDuration));
+        }
+        else
+        {
+            // Si no encuentra silla, fallback a mirar hacia el destino (solo Y) sin offset
+            Vector3 lookDir = destino.position - cliente.transform.position;
+            lookDir.y = 0f;
+            if (lookDir.sqrMagnitude > 0.001f)
+            {
+                float targetY = Quaternion.LookRotation(lookDir).eulerAngles.y;
+                yield return StartCoroutine(RotateRootToY(cliente.transform, targetY, rotationLerpDuration));
+            }
         }
 
         // --- Simular sentarse: subir el visual/local model en Y ---
@@ -213,6 +244,54 @@ public class ClienteManager : MonoBehaviour
         clientesActivos.Remove(cliente);
         if (cliente != null)
             Destroy(cliente);
+    }
+
+    // Busca la silla más cercana por TAG "SillaDe" o "SillaIz" alrededor de 'pos' dentro de 'radius'.
+    Transform FindNearestSillaByTags(Vector3 pos, float radius)
+    {
+        List<GameObject> sillas = new List<GameObject>();
+        sillas.AddRange(GameObject.FindGameObjectsWithTag("SillaDe"));
+        sillas.AddRange(GameObject.FindGameObjectsWithTag("SillaIz"));
+
+        Transform best = null;
+        float bestDist = float.MaxValue;
+        float radiusSqr = radius * radius;
+
+        foreach (var go in sillas)
+        {
+            if (go == null) continue;
+            float dSqr = (go.transform.position - pos).sqrMagnitude;
+            if (dSqr <= radiusSqr && dSqr < bestDist)
+            {
+                bestDist = dSqr;
+                best = go.transform;
+            }
+        }
+
+        return best;
+    }
+
+    // Rota la raíz solo en Y hasta targetY en segundos (suave)
+    IEnumerator RotateRootToY(Transform root, float targetY, float duration)
+    {
+        Quaternion start = root.rotation;
+        Quaternion end = Quaternion.Euler(0f, targetY, 0f);
+
+        if (duration <= 0f)
+        {
+            root.rotation = end;
+            yield break;
+        }
+
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / duration);
+            root.rotation = Quaternion.Slerp(start, end, k);
+            yield return null;
+        }
+        root.rotation = end;
     }
 
     Transform GetVisualTransform(GameObject cliente)
@@ -271,15 +350,28 @@ public class ClienteManager : MonoBehaviour
             clienteMesa.Remove(cliente);
         }
 
-        // Detener agente si lo tiene
-        if (cliente.TryGetComponent<NavMeshAgent>(out NavMeshAgent agent))
+        // Restaurar visual si se cambió su localPosition
+        if (visualOriginalLocalPos.TryGetValue(cliente, out Vector3 orig))
         {
-            agent.isStopped = true;
-            agent.ResetPath();
+            Transform visual = GetVisualTransform(cliente);
+            if (visual != null)
+            {
+                visual.localPosition = orig;
+            }
+            visualOriginalLocalPos.Remove(cliente);
+        }
+
+        // Detener agente si lo tiene
+        NavMeshAgent a = cliente.GetComponentInChildren<NavMeshAgent>();
+        if (a != null)
+        {
+            a.isStopped = true;
+            a.ResetPath();
         }
 
         clientesActivos.Remove(cliente);
         Destroy(cliente);
     }
 }
+
 

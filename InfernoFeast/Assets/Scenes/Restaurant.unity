@@ -2264,7 +2264,7 @@ GameObject:
   - component: {fileID: 284077663}
   - component: {fileID: 284077662}
   m_Layer: 0
-  m_Name: Silla (6)
+  m_Name: SillaIz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3038,7 +3038,7 @@ GameObject:
   - component: {fileID: 349033760}
   - component: {fileID: 349033759}
   m_Layer: 0
-  m_Name: Silla
+  m_Name: SillaDe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5812,7 +5812,7 @@ GameObject:
   - component: {fileID: 568989684}
   - component: {fileID: 568989683}
   m_Layer: 0
-  m_Name: Silla (2)
+  m_Name: SillaIz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8585,7 +8585,7 @@ GameObject:
   - component: {fileID: 929068373}
   - component: {fileID: 929068372}
   m_Layer: 0
-  m_Name: Silla (1)
+  m_Name: SillaDe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11569,8 +11569,8 @@ GameObject:
   - component: {fileID: 1084116804}
   - component: {fileID: 1084116803}
   m_Layer: 0
-  m_Name: Silla (7)
-  m_TagString: Untagged
+  m_Name: Silla
+  m_TagString: SillaIz
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12150,7 +12150,7 @@ GameObject:
   - component: {fileID: 1143945767}
   - component: {fileID: 1143945766}
   m_Layer: 0
-  m_Name: Silla (2)
+  m_Name: SillaIz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12700,7 +12700,7 @@ GameObject:
   - component: {fileID: 1174716419}
   - component: {fileID: 1174716418}
   m_Layer: 0
-  m_Name: Silla (4)
+  m_Name: SillaDe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14360,7 +14360,7 @@ GameObject:
   - component: {fileID: 1385800989}
   - component: {fileID: 1385800988}
   m_Layer: 0
-  m_Name: Silla (3)
+  m_Name: SillaIz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15053,7 +15053,7 @@ GameObject:
   - component: {fileID: 1408260132}
   - component: {fileID: 1408260131}
   m_Layer: 0
-  m_Name: Silla (5)
+  m_Name: SillaDe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15279,7 +15279,7 @@ GameObject:
   - component: {fileID: 1414876882}
   - component: {fileID: 1414876881}
   m_Layer: 0
-  m_Name: Silla (1)
+  m_Name: SillaDe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17113,7 +17113,7 @@ GameObject:
   - component: {fileID: 1583964437}
   - component: {fileID: 1583964436}
   m_Layer: 0
-  m_Name: Silla (3)
+  m_Name: SillaIz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17293,8 +17293,8 @@ GameObject:
   - component: {fileID: 1591334523}
   - component: {fileID: 1591334522}
   m_Layer: 0
-  m_Name: Silla (5)
-  m_TagString: Untagged
+  m_Name: Silla
+  m_TagString: SillaDe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19379,8 +19379,8 @@ GameObject:
   - component: {fileID: 1744807018}
   - component: {fileID: 1744807017}
   m_Layer: 0
-  m_Name: Silla (6)
-  m_TagString: Untagged
+  m_Name: Silla
+  m_TagString: SillaIz
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20215,8 +20215,8 @@ GameObject:
   - component: {fileID: 1824513926}
   - component: {fileID: 1824513925}
   m_Layer: 0
-  m_Name: Silla (4)
-  m_TagString: Untagged
+  m_Name: Silla
+  m_TagString: SillaDe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20421,7 +20421,7 @@ GameObject:
   - component: {fileID: 1848878692}
   - component: {fileID: 1848878691}
   m_Layer: 0
-  m_Name: Silla (7)
+  m_Name: SillaIz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21129,6 +21129,10 @@ MonoBehaviour:
   agentStoppingDistance: 0.5
   sitYOffset: 0.9
   sitLerpDuration: 0.25
+  chairDetectRadius: 0.6
+  rotationLerpDuration: 0.12
+  rotationOffsetY_De: -45
+  rotationOffsetY_Iz: 45
 --- !u!4 &1913186731
 Transform:
   m_ObjectHideFlags: 0
@@ -25339,7 +25343,7 @@ GameObject:
   - component: {fileID: 7609180550397051145}
   - component: {fileID: 7609180550397051146}
   m_Layer: 0
-  m_Name: Silla
+  m_Name: SillaDe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
