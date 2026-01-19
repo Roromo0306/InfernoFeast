@@ -21127,6 +21127,8 @@ MonoBehaviour:
     ocupada: 0
   ETC: {fileID: 1337703130}
   agentStoppingDistance: 0.5
+  sitYOffset: 0.9
+  sitLerpDuration: 0.25
 --- !u!4 &1913186731
 Transform:
   m_ObjectHideFlags: 0

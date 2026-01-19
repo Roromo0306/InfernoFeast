@@ -17,12 +17,16 @@ public class ClienteManager : MonoBehaviour
     public GameObject ETC; //Gameobject del counter de empezar turno
 
     [Header("NavMesh")]
-    [Tooltip("Distancia a la que el agente considerará que ha llegado")]
-    public float agentStoppingDistance = 0.5f;
+    public float agentStoppingDistance = 0.5f; //Distancia a la que el agente considerará que ha llegado
+
+    [Header("Sitting")]
+    public float sitYOffset = 0.35f; //Cuánto sube el modelo al sentarse (unidades locales)
+    public float sitLerpDuration = 0.25f; //Tiempo para animar el subir/bajar al sentarse
 
     private List<GameObject> clientesActivos = new List<GameObject>();
     private Dictionary<GameObject, int> clienteMesa = new Dictionary<GameObject, int>();
 
+    private Dictionary<GameObject, Vector3> visualOriginalLocalPos = new Dictionary<GameObject, Vector3>(); //// Guardar la localPosition original del visual para restaurarla al irse.
     private bool Empezado = true; //Bool para empezar solo una vez la corrutina
 
     private void Update()
@@ -167,16 +171,36 @@ public class ClienteManager : MonoBehaviour
             }
         }
 
-        // Llegó a la mesa: opcional ajustar rotación
+        //LLega a la mesa
         Vector3 lookDir = destino.position - cliente.transform.position;
+        lookDir.y = 0f; // ignorar componente vertical
         if (lookDir.sqrMagnitude > 0.001f)
         {
-            cliente.transform.rotation = Quaternion.LookRotation(lookDir);
+            Quaternion targetY = Quaternion.LookRotation(lookDir);
+            cliente.transform.rotation = Quaternion.Euler(0f, targetY.eulerAngles.y, 0f);
+        }
+
+        // --- Simular sentarse: subir el visual/local model en Y ---
+        Transform visual = GetVisualTransform(cliente);
+        if (visual != null)
+        {
+            // Guardar posición local original para restaurar luego
+            if (!visualOriginalLocalPos.ContainsKey(cliente))
+                visualOriginalLocalPos[cliente] = visual.localPosition;
+
+            // Subir la Y local suavemente
+            yield return StartCoroutine(SitDown(visual, sitYOffset, sitLerpDuration));
         }
 
         // Cliente se queda un tiempo (definido en el ScriptableObject)
-        // Asegúrate de que ClientesSO tenga 'tiempoEnMesa' o cambia esto
         yield return new WaitForSeconds(data.tiempoEnMesa);
+
+        // Antes de irse, restaurar visual si es necesario
+        if (visual != null && visualOriginalLocalPos.TryGetValue(cliente, out Vector3 orig))
+        {
+            visual.localPosition = orig;
+            visualOriginalLocalPos.Remove(cliente);
+        }
 
         // Cliente se va
         if (clienteMesa.TryGetValue(cliente, out int idx))
@@ -191,6 +215,46 @@ public class ClienteManager : MonoBehaviour
             Destroy(cliente);
     }
 
+    Transform GetVisualTransform(GameObject cliente)
+    {
+        // Preferencia por hijo llamado "Model" (convención)
+        Transform t = cliente.transform.Find("Model");
+        if (t != null) return t;
+
+        // Si no, buscar el primer hijo con MeshRenderer o SkinnedMeshRenderer
+        foreach (Transform child in cliente.GetComponentsInChildren<Transform>())
+        {
+            if (child == cliente.transform) continue;
+            if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<SkinnedMeshRenderer>() != null)
+                return child;
+        }
+
+        // Si no encuentra nada, devuelve la raíz (aunque no es ideal)
+        return cliente.transform;
+    }
+
+    // Coroutine para elevar el modelo local Y suavemente (sit)
+    IEnumerator SitDown(Transform visual, float yOffset, float duration)
+    {
+        Vector3 start = visual.localPosition;
+        Vector3 target = start + new Vector3(0f, yOffset, 0f);
+
+        if (duration <= 0f)
+        {
+            visual.localPosition = target;
+            yield break;
+        }
+
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / duration);
+            visual.localPosition = Vector3.Lerp(start, target, k);
+            yield return null;
+        }
+        visual.localPosition = target;
+    }
 
     public void ClienteAdios(GameObject cliente)
     {
