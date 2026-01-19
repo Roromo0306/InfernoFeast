@@ -16,8 +16,7 @@ public class GameRoundsManager : MonoBehaviour
     public int currentStrikes = 0;
 
     [Header("Audio de fallos")]
-    public AudioClip strikeSound;      // Arrastrar el audio en el inspector
-    
+    public AudioClip strikeSound;
 
     [Header("UI de fallos")]
     public List<Image> strikeIcons;
@@ -56,10 +55,7 @@ public class GameRoundsManager : MonoBehaviour
 
     void Start()
     {
-        // 🔎 Encuentra TODAS las mesas de la escena
         allGroups.AddRange(FindObjectsOfType<ClientTableGroup>());
-
-        // 🔥 Apagar TODAS las mesas al iniciar
         DeactivateAllGroups();
 
         if (timer != null)
@@ -74,7 +70,6 @@ public class GameRoundsManager : MonoBehaviour
             return;
         }
 
-        // ▶️ Iniciar primera ronda
         StartRound(0);
     }
 
@@ -116,6 +111,9 @@ public class GameRoundsManager : MonoBehaviour
         if (timer != null)
             timer.duration = rounds[roundIndex].duration;
 
+        // ⏸️ Aseguramos que el tiempo NO corre durante el mensaje
+        timer?.StopTimer();
+
         if (dialogueBoss != null)
         {
             dialogueBoss.timer = timer;
@@ -130,34 +128,7 @@ public class GameRoundsManager : MonoBehaviour
 
         Debug.Log($"[GameRoundsManager] Ronda {roundIndex + 1} iniciada con {currentRoundGroups.Count} mesas.");
     }
-    void ShowStrikesUI()
-    {
-        bool playedSound = false; // Control para reproducir el audio solo una vez
 
-        for (int i = 0; i < strikeIcons.Count; i++)
-        {
-            if (i < currentStrikes)
-            {
-                if (!strikeIcons[i].gameObject.activeSelf)
-                {
-                    StartCoroutine(PopIcon(strikeIcons[i]));
-
-                    // Reproducir el sonido solo la primera vez que se activa un icono
-                    if (!playedSound)
-                    {
-                        if (audioSource != null && strikeSound != null)
-                            audioSource.PlayOneShot(strikeSound);
-
-                        playedSound = true;
-                    }
-                }
-            }
-            else
-            {
-                strikeIcons[i].gameObject.SetActive(false);
-            }
-        }
-    }
     public void OnPlateDelivered(TableAnchor anchor, Plate plate)
     {
         if (anchor == null || anchor.group == null || plate == null) return;
@@ -177,13 +148,11 @@ public class GameRoundsManager : MonoBehaviour
             Destroy(plate.gameObject, 0.05f);
             currentRoundGroups.Remove(group);
 
-            // Si ya no quedan mesas activas, pasamos a la siguiente ronda
             if (currentRoundGroups.Count == 0)
                 NextRound();
         }
         else
         {
-            // Plato incorrecto → contamos fallo
             group.OnMissed();
 
             currentStrikes++;
@@ -198,7 +167,6 @@ public class GameRoundsManager : MonoBehaviour
 
     void OnRoundTimeUp()
     {
-        // Todos los platos no servidos cuentan como fallos
         currentStrikes += currentRoundGroups.Count;
         if (currentStrikes > maxStrikes) currentStrikes = maxStrikes;
 
@@ -217,6 +185,9 @@ public class GameRoundsManager : MonoBehaviour
 
     void NextRound()
     {
+        // ⏸️ Parar el tiempo de la ronda anterior
+        timer?.StopTimer();
+
         int next = currentRoundIndex + 1;
 
         if (next >= rounds.Count)
@@ -257,24 +228,58 @@ public class GameRoundsManager : MonoBehaviour
 
     void OnDialogClosed()
     {
+        // Si hay escena pendiente (victoria o derrota)
         if (!string.IsNullOrEmpty(pendingSceneToLoad))
+        {
             SceneManager.LoadScene(pendingSceneToLoad);
+            return;
+        }
+
+        // ▶️ Arranca el timer SOLO cuando se cierra el mensaje de ronda
+        timer?.StartTimer();
+    }
+
+    void ShowStrikesUI()
+    {
+        bool playedSound = false;
+
+        for (int i = 0; i < strikeIcons.Count; i++)
+        {
+            if (i < currentStrikes)
+            {
+                if (!strikeIcons[i].gameObject.activeSelf)
+                {
+                    StartCoroutine(PopIcon(strikeIcons[i]));
+
+                    if (!playedSound)
+                    {
+                        if (audioSource != null && strikeSound != null)
+                            audioSource.PlayOneShot(strikeSound);
+
+                        playedSound = true;
+                    }
+                }
+            }
+            else
+            {
+                strikeIcons[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     IEnumerator PopIcon(Image icon)
     {
         icon.gameObject.SetActive(true);
 
-        float duration = 0.25f;        // Duración total del pop
+        float duration = 0.25f;
         Vector3 startScale = Vector3.zero;
-        Vector3 overshootScale = Vector3.one * 1.2f; // Tamaño máximo temporal
-        Vector3 endScale = Vector3.one;              // Tamaño final
+        Vector3 overshootScale = Vector3.one * 1.2f;
+        Vector3 endScale = Vector3.one;
         float halfDuration = duration / 2f;
         float time = 0f;
 
         icon.rectTransform.localScale = startScale;
 
-        // Primera fase: 0 → overshoot
         while (time < halfDuration)
         {
             float t = time / halfDuration;
@@ -284,10 +289,8 @@ public class GameRoundsManager : MonoBehaviour
             yield return null;
         }
 
-        // Aseguramos overshoot exacto
         icon.rectTransform.localScale = overshootScale;
 
-        // Segunda fase: overshoot → tamaño final
         time = 0f;
         while (time < halfDuration)
         {
@@ -298,7 +301,6 @@ public class GameRoundsManager : MonoBehaviour
             yield return null;
         }
 
-        // Ajustamos al tamaño final exacto
         icon.rectTransform.localScale = endScale;
     }
 }
