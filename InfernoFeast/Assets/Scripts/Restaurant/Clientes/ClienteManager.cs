@@ -221,6 +221,8 @@ public class ClienteManager : MonoBehaviour
 
             // Subir la Y local suavemente
             yield return StartCoroutine(SitDown(visual, sitYOffset, sitLerpDuration));
+
+            cliente.SendMessage("OnSitted", SendMessageOptions.DontRequireReceiver);
         }
 
         // Cliente se queda un tiempo (definido en el ScriptableObject)

@@ -56,7 +56,7 @@ public class InteractuarClientes : MonoBehaviour
 
     private void Update()
     {
-        float distancia = Vector3.Distance(transform.position, ultimaPos);
+        /*float distancia = Vector3.Distance(transform.position, ultimaPos);
 
         if(distancia < 0.01f)
         {
@@ -72,7 +72,7 @@ public class InteractuarClientes : MonoBehaviour
             tiempoSinMoverse = 0f;
         }
 
-        ultimaPos = transform.position;
+        ultimaPos = transform.position;*/
 
         //Si se ha sentado y no lo han antendido muestra el sprite de take order
         if(Sentado && !Elegido)
@@ -86,6 +86,11 @@ public class InteractuarClientes : MonoBehaviour
         {
             tiempoPasado += Time.deltaTime;
         }
+    }
+
+    public void OnSitted()
+    {
+        Sentado = true;
     }
 
     private void OnCollisionEnter(Collision collision)

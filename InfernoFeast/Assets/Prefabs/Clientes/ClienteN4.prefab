@@ -189,7 +189,6 @@ GameObject:
   - component: {fileID: 6944668506162301592}
   - component: {fileID: 5010388603284235047}
   - component: {fileID: 1600694760923428467}
-  - component: {fileID: 8965083170106715669}
   m_Layer: 0
   m_Name: ClienteN 4
   m_TagString: Untagged
@@ -286,30 +285,6 @@ CapsuleCollider:
   m_Height: 1.92
   m_Direction: 2
   m_Center: {x: 0, y: -0.029792216, z: 0.86}
---- !u!114 &8965083170106715669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7099507558881148635, guid: 248ab16eb956ff44da0ca86aafe41c15, type: 3}
-  m_PrefabInstance: {fileID: 8545776505646981182}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8427232753134622890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58cb4dc01eae42e4c80e8692e3308571, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EmpezarTurnoCounter: {fileID: 0}
-  ClienteTipo: 1
-  comanda: {fileID: 5455082817694360217}
-  clienteManager: {fileID: 0}
-  Elegido: 0
-  Sentado: 0
-  ListoPedir: {fileID: 21300000, guid: df99eb4b8971708419389d1e7d07fad0, type: 3}
-  Feliz: {fileID: 21300000, guid: a6dca7e4039830e4f8f264e7375bed4c, type: 3}
-  Neutral: {fileID: 21300000, guid: 645c7bbda3ff0c14da08c8d0e05e2429, type: 3}
-  Enfadado: {fileID: 21300000, guid: e97325098c92b4a4983beb7e16c1f08d, type: 3}
-  canvas: {fileID: 7750020101197277669}
-  pedido: 0
 --- !u!1 &8626033045968939238
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8438589044132524659}
   - component: {fileID: 7232523873734693694}
+  - component: {fileID: 8123839014871372569}
   m_Layer: 0
   m_Name: ClienteN4
   m_TagString: Untagged
@@ -365,6 +341,30 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &8123839014871372569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8626033045968939238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58cb4dc01eae42e4c80e8692e3308571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EmpezarTurnoCounter: {fileID: 0}
+  ClienteTipo: 1
+  comanda: {fileID: 5455082817694360217}
+  clienteManager: {fileID: 0}
+  Elegido: 0
+  Sentado: 0
+  ListoPedir: {fileID: 21300000, guid: df99eb4b8971708419389d1e7d07fad0, type: 3}
+  Feliz: {fileID: 21300000, guid: a6dca7e4039830e4f8f264e7375bed4c, type: 3}
+  Neutral: {fileID: 21300000, guid: 645c7bbda3ff0c14da08c8d0e05e2429, type: 3}
+  Enfadado: {fileID: 21300000, guid: e97325098c92b4a4983beb7e16c1f08d, type: 3}
+  canvas: {fileID: 7750020101197277669}
+  pedido: 0
 --- !u!1001 &8545776505646981182
 PrefabInstance:
   m_ObjectHideFlags: 0
