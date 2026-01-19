@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,11 +24,26 @@ public class SceneFadeManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void Start()
     {
-        // Siempre empezamos con Fade IN
+        // Empezamos siempre en negro
         canvasGroup.alpha = 1f;
-        StartCoroutine(FadeIn());
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Cada vez que se carga una escena → Fade IN
+        StartCoroutine(Fade(1f, 0f));
     }
 
     public void LoadSceneWithFade(string sceneName)
@@ -47,17 +62,7 @@ public class SceneFadeManager : MonoBehaviour
         // Cargar escena
         SceneManager.LoadScene(sceneName);
 
-        yield return null; // esperar 1 frame
-
-        // Fade IN
-        yield return Fade(1f, 0f);
-
         isFading = false;
-    }
-
-    IEnumerator FadeIn()
-    {
-        yield return Fade(1f, 0f);
     }
 
     IEnumerator Fade(float from, float to)
@@ -75,4 +80,5 @@ public class SceneFadeManager : MonoBehaviour
         canvasGroup.alpha = to;
     }
 }
+
 

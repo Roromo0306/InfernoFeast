@@ -207,7 +207,7 @@ public class GameRoundsManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(successSceneName);
+            SceneFadeManager.Instance.LoadSceneWithFade(successSceneName);
         }
     }
 
@@ -222,7 +222,7 @@ public class GameRoundsManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(failSceneName);
+            SceneFadeManager.Instance.LoadSceneWithFade(failSceneName);
         }
     }
 

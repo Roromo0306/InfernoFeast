@@ -53,7 +53,7 @@ public class ExitRestaurant : MonoBehaviour
 
     public void Boss1()
     {
-        SceneManager.LoadScene("Boss 1");
+        SceneFadeManager.Instance.LoadSceneWithFade("Boss 1");
     }
 
     public void FishingLake()

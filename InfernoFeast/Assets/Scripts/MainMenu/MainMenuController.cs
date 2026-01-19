@@ -5,32 +5,32 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    private GameObject settingsPanel;
-    private GameObject creditsPanel;
+    //private GameObject settingsPanel;
+    //private GameObject creditsPanel;
 
     // Start is called before the first frame update
     void Start()
     {
-        settingsPanel = GameObject.Find("Settings Panel");
-        settingsPanel.SetActive(false);
+        //settingsPanel = GameObject.Find("Settings Panel");
+        //settingsPanel.SetActive(false);
 
-        creditsPanel = GameObject.Find("Credits Panel");
-        creditsPanel.SetActive(false);
+        //creditsPanel = GameObject.Find("Credits Panel");
+        //creditsPanel.SetActive(false);
     }
 
     public void NewGame()
     {
-        SceneManager.LoadScene("Restaurant");
+        SceneFadeManager.Instance.LoadSceneWithFade("Restaurant");
     }
 
     public void Settings()
     {
-        settingsPanel.SetActive(true);
+        //settingsPanel.SetActive(true);
     }
 
     public void Credits()
     {
-        creditsPanel.SetActive(true);
+        //creditsPanel.SetActive(true);
     }
 
     public void ExitGame()
