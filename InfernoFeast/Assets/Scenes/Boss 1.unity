@@ -8439,6 +8439,7 @@ MonoBehaviour:
   dialogueBoss: {fileID: 566125965}
   musicAudioSource: {fileID: 1554064267}
   backgroundMusic: {fileID: 8300000, guid: 6e3fbcda98d696444bceb69a71cb0bb4, type: 3}
+  fadeDuration: 1
 --- !u!82 &1554064267
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9885,6 +9886,7 @@ GameObject:
   - component: {fileID: 1824667567}
   - component: {fileID: 1824667566}
   - component: {fileID: 1824667565}
+  - component: {fileID: 1824667568}
   m_Layer: 5
   m_Name: Cinematica
   m_TagString: Untagged
@@ -9982,6 +9984,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824667563}
   m_CullTransparentMesh: 1
+--- !u!225 &1824667568
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824667563}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1846314449
 GameObject:
   m_ObjectHideFlags: 0
