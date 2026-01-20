@@ -231,7 +231,8 @@ public class GameRoundsManager : MonoBehaviour
         // Si hay escena pendiente (victoria o derrota)
         if (!string.IsNullOrEmpty(pendingSceneToLoad))
         {
-            SceneManager.LoadScene(pendingSceneToLoad);
+            SceneFadeManager.Instance.LoadSceneWithFade(pendingSceneToLoad);
+            pendingSceneToLoad = ""; // Limpiar para evitar reentradas
             return;
         }
 
