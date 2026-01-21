@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 3032988271947732045}
   - component: {fileID: 3318093216472547161}
   - component: {fileID: 8558178982513111027}
+  - component: {fileID: 6337608056269030063}
   m_Layer: 0
   m_Name: ClienteN3
   m_TagString: Untagged
@@ -290,6 +291,29 @@ MonoBehaviour:
   Enfadado: {fileID: 21300000, guid: e97325098c92b4a4983beb7e16c1f08d, type: 3}
   canvas: {fileID: 457763962985275614}
   pedido: 0
+--- !u!136 &6337608056269030063
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3140934411802565158}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.55
+  m_Height: 1.92
+  m_Direction: 1
+  m_Center: {x: 0.03, y: 0.92, z: 0.02}
 --- !u!1 &6523788201792648635
 GameObject:
   m_ObjectHideFlags: 0
