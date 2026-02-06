@@ -10,19 +10,19 @@ public class Encimera : MonoBehaviour
     public bool TieneObjeto = false, EncontradoPareja = true;
     void Update()
     {
-        if (PadreEncimera.transform.childCount == 1)
+        if (PadreEncimera.transform.childCount == 1) //Verifica si tiene un objeto
         {
             objeto1 = PadreEncimera.transform.GetChild(0).gameObject;
             TieneObjeto = true;
         }
 
-        if(PadreEncimera.transform.childCount <= 0)
+        if(PadreEncimera.transform.childCount <= 0) //Verifica si no tiene objetos
         {
             objeto1 = null;
             TieneObjeto = false;
         }
 
-        if(objeto2 != null && objeto1 != null)
+        if(objeto2 != null && objeto1 != null) //Verifica si ya va a haber dos objetos y por ende, hay que fusionarlos
         {
             Recetas();
         }
@@ -38,7 +38,7 @@ public class Encimera : MonoBehaviour
             Debug.Log("Nombre objeto 2: " + objeto2.name);
             Debug.Log("Nombre Ingrediente 1: " + recetas[i].Ingrediente1.name);
             Debug.Log("Nombre Ingrediente 2: " + recetas[i].Ingrediente2.name);*/
-            if (recetas[i].Ingrediente1.name == objeto1.name && recetas[i].Ingrediente2.name == objeto2.name)
+            if (recetas[i].Ingrediente1.name == objeto1.name && recetas[i].Ingrediente2.name == objeto2.name) //Accede a scriptable object para verificar que los dos gameobjects son compatibles para fusionarse
             {
                 Debug.Log("Encontrado");
                 Destroy(objeto1);
@@ -57,13 +57,13 @@ public class Encimera : MonoBehaviour
             }
         }
 
-        if (!EncontradoPareja)
+        if (!EncontradoPareja) //Esto sucede en caso de que los objetos no concuerden
         {
             Debug.Log("No Encontrado");
             Destroy(objeto1);
             Destroy(objeto2);
 
-            Instantiate(mezcla.prefabIngrediente, PadreEncimera.transform.position, PadreEncimera.transform.rotation, PadreEncimera.transform);
+            Instantiate(mezcla.prefabIngrediente, PadreEncimera.transform.position, PadreEncimera.transform.rotation, PadreEncimera.transform); //Instancia el objeto mezcla
             PadreEncimera.transform.GetChild(0).name = PadreEncimera.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
 
             objeto1 = objeto2 = null;

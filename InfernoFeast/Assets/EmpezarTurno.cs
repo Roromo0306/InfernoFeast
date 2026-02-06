@@ -13,14 +13,14 @@ public class EmpezarTurno : MonoBehaviour
     public GameObject Player;
 
     [Header("Lista Comandas")]
-    public List<Sprite> NombresComandas;
-    public List<int> cantidadCom;
+    public List<Sprite> NombresComandas; //Estos son los nombres de las comandas que pueden aparecer
+    public List<int> cantidadCom; //Esta es la cantidad de comandas de un mismo plato que se han pedido
 
     [Header("Componentes UI Comandas")]
-    public GameObject comanda1;
+    public GameObject comanda1; //Estos hacen referencia a la imagen de la comanda que va a aparecer
     public GameObject comanda2;
     public GameObject comanda3;
-    public TextMeshProUGUI cant1;
+    public TextMeshProUGUI cant1; //Estos textos hacen referencia a la cantidad que se ha pedido de esa comanda
     public TextMeshProUGUI cant2;
     public TextMeshProUGUI cant3;
 
