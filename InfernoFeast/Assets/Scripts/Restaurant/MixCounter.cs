@@ -16,8 +16,8 @@ public class MixCounter : MonoBehaviour
     public float rotationThreshold = 10.8f; //Cuantos grados de rotacion se necesitan para contar el progrso
 
     [Header("Padres")]
-    public GameObject PadrePlayer;
-    public GameObject PadreMix;
+    public GameObject PadrePlayer; //Objeto padre del player que lleva los objetos
+    public GameObject PadreMix; //Objeto padre de la mezcladora donde se instancian la comida cuando se deposita
 
     private float currentProgress = 0f;
     private bool isInteracting = false;
@@ -26,12 +26,12 @@ public class MixCounter : MonoBehaviour
 
     private GameObject HijoMix;
 
-    private int Indice;
+    private int Indice; //Variable de referencia del indice de la lista
     private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
 
     [Header("Listas")]
-    public List<TipoIngrediente> batidos;
-    public List<TipoIngrediente> ingredientes;
+    public List<TipoIngrediente> batidos; //Lista de ingredientes ya batidos
+    public List<TipoIngrediente> ingredientes; //Lista de ingredientes compatibles para batir
 
     void Update()
     {
@@ -68,12 +68,12 @@ public class MixCounter : MonoBehaviour
         }
     }
 
-    private void AddProgress()
+    private void AddProgress() //Añade progreso al circulo
     {
         currentProgress += progressIncrement;
         progressBar.value = currentProgress / maxProgress;
 
-        if (currentProgress >= maxProgress)
+        if (currentProgress >= maxProgress) //Si se termina se llama a la siguiente funcion
         {
             EndMixing();
         }

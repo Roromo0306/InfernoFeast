@@ -7,31 +7,31 @@ using UnityEngine.UI;
 public class FryCounter : MonoBehaviour
 {
     [Header("Padres")]
-    public GameObject PadrePlayer;
-    public GameObject PadreFreidora;
+    public GameObject PadrePlayer; //Objeto padre del player que lleva los objetos
+    public GameObject PadreFreidora; //Objeto padre de la freidora donde se instancian la comida cuando se deposita
 
-    private int Indice;
+    private int Indice; //Variable de referencia del indice de la lista
     private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
 
     [Header("Listas")]
-    public List<TipoIngrediente> fritos;
-    public List<TipoIngrediente> ingredientes;
+    public List<TipoIngrediente> fritos; //Lista de ingredientes ya freidos
+    public List<TipoIngrediente> ingredientes; //Lista de ingredientes compatibles para freir
 
     [Header("UI")]
-    public Slider slider;
-    public float duracion = 7f;
+    public Slider slider; //Referencia al slider
+    public float duracion = 7f; //Duracion del objeto hasta que termine el slider
 
-    private Coroutine corrutina = null;
+    private Coroutine corrutina = null; //Referencia a corrutina
 
-    public InteractuarCounter counterInt;
-    public TipoIngrediente Quemado;
+    public InteractuarCounter counterInt; //Referencia la codigo que usa el player para interactuar con los counter
+    public TipoIngrediente Quemado; //Referencia al objeto quemado
 
-    public Image QuemadoImage;
+    public Image QuemadoImage; //Imagen de quemado que sale
 
-    private bool quemado = false;
+    private bool quemado = false; //Bool que indica si ya se ha quemado el objeto
 
-    private bool haSonado = false;
-    public AudioSource audio;
+    private bool haSonado = false; //Bool para saber si ha sonado el sonido de quemado
+    public AudioSource audio; //Referencia al componente audioSource
 
     public void Freir()
     {
@@ -55,11 +55,11 @@ public class FryCounter : MonoBehaviour
             }
         }
 
-        GameObject objetoFreidora = Instantiate(HijoPadre, PadreFreidora.transform.position, HijoPadre.transform.rotation, PadreFreidora.transform);
-        objetoFreidora.name = HijoPadre.name;
+        GameObject objetoFreidora = Instantiate(HijoPadre, PadreFreidora.transform.position, HijoPadre.transform.rotation, PadreFreidora.transform); //Instancia el objeto en la freidora
+        objetoFreidora.name = HijoPadre.name; //Le da su mismo nombre
         Destroy(HijoPadre);
 
-        corrutina = StartCoroutine(ProcesoFreir(objetoFreidora));
+        corrutina = StartCoroutine(ProcesoFreir(objetoFreidora)); //Inicia la corrutina
 
     }
 

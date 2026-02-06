@@ -6,31 +6,31 @@ using UnityEngine.UI;
 public class PotCounter : MonoBehaviour
 {
     [Header("Padres")]
-    public GameObject PadrePlayer;
-    public GameObject PadrePot;
+    public GameObject PadrePlayer; //Objeto padre del player que lleva los objetos
+    public GameObject PadrePot; //Objeto padre de la hervidora donde se instancian la comida cuando se deposita
 
-    private int Indice;
+    private int Indice; //Variable de referencia del indice de la lista
     private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
 
     [Header("Listas")]
-    public List<TipoIngrediente> hervidos;
-    public List<TipoIngrediente> ingredientes;
+    public List<TipoIngrediente> hervidos; //Lista de ingredientes ya hervidos
+    public List<TipoIngrediente> ingredientes; //Lista de ingredientes compatibles para hervir
 
     [Header("UI")]
-    public Slider slider;
-    public float duracion = 7f;
+    public Slider slider; //Referencia al slider
+    public float duracion = 7f; //Duracion del objeto hasta que termine el slider
 
-    private Coroutine corrutina = null;
+    private Coroutine corrutina = null; //Referencia a corrutina
 
-    public InteractuarCounter counterInt;
-    public TipoIngrediente Quemado;
+    public InteractuarCounter counterInt; //Referencia la codigo que usa el player para interactuar con los counter
+    public TipoIngrediente Quemado; //Referencia al objeto quemado
 
-    public Image QuemadoImage;
+    public Image QuemadoImage; //Imagen de quemado que sale
 
-    public bool quemado = false;
+    public bool quemado = false; //Bool que indica si ya se ha quemado el objeto
 
-    private bool haSonado = false;
-    public AudioSource audio;
+    private bool haSonado = false; //Bool para saber si ha sonado el sonido de quemado
+    public AudioSource audio; //Referencia al componente audioSource
 
     public void Hervir()
     {
