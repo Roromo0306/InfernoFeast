@@ -30,8 +30,11 @@ public class FryCounter : MonoBehaviour
 
     private bool quemado = false; //Bool que indica si ya se ha quemado el objeto
 
-    private bool haSonado = false; //Bool para saber si ha sonado el sonido de quemado
+    [Header("Audios")]
+    private bool haSonado = false, haSonado2 = false; //Bool para saber si ha sonado el sonido de quemado
     public AudioSource audio; //Referencia al componente audioSource
+    public AudioSource audioQuemado;
+    public AudioSource audioFriendo;
 
     public void Freir()
     {
@@ -61,10 +64,14 @@ public class FryCounter : MonoBehaviour
 
         corrutina = StartCoroutine(ProcesoFreir(objetoFreidora)); //Inicia la corrutina
 
+        audioFriendo.Play();
+
     }
 
     private void Instanciar(GameObject HijoPadre)
     {
+        StopAudioReset();
+
         //Si el bool es true pasa lo siguiente
         if (ObjetoEncontrado)
         {
@@ -87,6 +94,8 @@ public class FryCounter : MonoBehaviour
 
     private void InstanciarQuemado()
     {
+        StopAudioReset();
+
         GameObject PadrePot = this.gameObject.transform.GetChild(0).gameObject;
         Destroy(PadrePot.gameObject.transform.GetChild(0).gameObject); //Destruyo el objeto que llevaba el jugador
 
@@ -120,6 +129,12 @@ public class FryCounter : MonoBehaviour
                     haSonado = true;
                 }
 
+                if (slider.value >= 0.9 && !haSonado2)
+                {
+                    audioQuemado.Play();
+                    haSonado2 = true;
+                }
+
                 if (Input.GetKeyDown(KeyCode.E) && counterInt.Freir)
                 {
                     if (PadrePlayer.transform.childCount <= 0)
@@ -131,17 +146,22 @@ public class FryCounter : MonoBehaviour
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
                             Instanciar(objetoFreidora);
-                            StopAllCoroutines();
+                            yield break;
                         }
 
                         if (slider.value >= 0.99f)
                         {
                             quemado = true;
                             QuemadoImage.enabled = true;
+                            StopAudioReset();
                             yield break;
                         }
 
-                        haSonado = false;
+                        StopAudioReset();
+                        slider.gameObject.SetActive(false);
+                        slider.value = 0f;
+                        yield break;
+
                     }
                 }
             }
@@ -155,6 +175,12 @@ public class FryCounter : MonoBehaviour
                     haSonado = true;
                 }
 
+                if (slider.value >= 0.9 && !haSonado2)
+                {
+                    audioQuemado.Play();
+                    haSonado2 = true;
+                }
+
                 if (Input.GetKeyDown(KeyCode.E) && counterInt.Freir2)
                 {
                     if (PadrePlayer.transform.childCount <= 0)
@@ -166,17 +192,21 @@ public class FryCounter : MonoBehaviour
                             slider.gameObject.SetActive(false);
                             slider.value = 0f;
                             Instanciar(objetoFreidora);
-                            StopAllCoroutines();
+                            yield break;
                         }
 
                         if (slider.value >= 0.99f)
                         {
                             quemado = true;
                             QuemadoImage.enabled = true;
+                            StopAudioReset();
                             yield break;
                         }
 
-                        haSonado = false;
+                        StopAudioReset();
+                        slider.gameObject.SetActive(false);
+                        slider.value = 0f;
+                        yield break;
                     }
                 }
             }
@@ -189,7 +219,8 @@ public class FryCounter : MonoBehaviour
         QuemadoImage.enabled = true;
         audio.loop = true;
         audio.Play();
-        StopAllCoroutines();
+
+        corrutina = null;
         yield break;
     }
 
@@ -202,9 +233,11 @@ public class FryCounter : MonoBehaviour
                 slider.gameObject.SetActive(false);
                 slider.value = 0f;
                 QuemadoImage.enabled = false;
+                StopAudioReset();
                 InstanciarQuemado();
                 quemado = false;
                 audio.loop = false;
+
             }
         }
 
@@ -215,11 +248,25 @@ public class FryCounter : MonoBehaviour
                 slider.gameObject.SetActive(false);
                 slider.value = 0f;
                 QuemadoImage.enabled = false;
+                StopAudioReset();
                 InstanciarQuemado();
                 quemado = false;
                 audio.loop = false;
             }
         }
 
+    }
+
+    private void StopAudioReset()
+    {
+        if (audioFriendo != null && audioFriendo.isPlaying) audioFriendo.Stop();
+        if (audioQuemado != null && audioQuemado.isPlaying) audioQuemado.Stop();
+
+        if (audio != null && audio.isPlaying && !audio.loop) audio.Stop();
+
+        haSonado = false;
+        haSonado2 = false;
+
+        corrutina = null;
     }
 }

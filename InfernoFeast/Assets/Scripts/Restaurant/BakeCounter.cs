@@ -27,8 +27,10 @@ public class BakeCounter : MonoBehaviour
 
     private bool quemado = false; //Bool que indica si ya se ha quemado el objeto
 
-    private bool haSonado = false; //Bool para saber si ha sonado el sonido de quemado
+    [Header("Audios")]
+    private bool haSonado = false, haSonado2 = false; //Bool para saber si ha sonado el sonido de quemado
     public AudioSource audio; //Referencia al componente audioSource
+    public AudioSource audioQuemado;
 
     //Funcion de hornear
     public void Hornear()
@@ -64,6 +66,8 @@ public class BakeCounter : MonoBehaviour
 
     private void Instanciar(GameObject HijoPadre)
     {
+        StopAudioReset();
+
         //Si el bool es true pasa lo siguiente
         if (ObjetoEncontrado)
         {
@@ -86,6 +90,8 @@ public class BakeCounter : MonoBehaviour
 
     private void InstanciarQuemado()
     {
+        StopAudioReset();
+
         GameObject PadrePot = this.gameObject.transform.GetChild(0).gameObject;
         Destroy(PadrePot.gameObject.transform.GetChild(0).gameObject); //Destruyo el objeto que llevaba el jugador
 
@@ -116,6 +122,12 @@ public class BakeCounter : MonoBehaviour
                 haSonado = true;
             }
 
+            if(slider.value >= 0.9 && !haSonado2)
+            {
+                audioQuemado.Play();
+                haSonado2 = true;
+            }
+
             if (Input.GetKeyDown(KeyCode.E) && counterInt.Hornear)
             {
                 if (PadrePlayer.transform.childCount <= 0)
@@ -127,7 +139,6 @@ public class BakeCounter : MonoBehaviour
                         slider.gameObject.SetActive(false);
                         slider.value = 0f;
                         Instanciar(objetoHorno);
-                        StopAllCoroutines();
                         yield break;
                     }
 
@@ -135,10 +146,9 @@ public class BakeCounter : MonoBehaviour
                     {
                         quemado = true;
                         QuemadoImage.enabled = true;
+                        StopAudioReset();
                         yield break;
                     }
-
-                    haSonado = false;
                 }
                 
             }
@@ -150,7 +160,8 @@ public class BakeCounter : MonoBehaviour
         QuemadoImage.enabled = true;
         audio.loop = true;
         audio.Play();
-        StopAllCoroutines();
+
+        corrutina = null;
         yield break;
     }
 
@@ -161,9 +172,22 @@ public class BakeCounter : MonoBehaviour
             slider.gameObject.SetActive(false);
             slider.value = 0f;
             QuemadoImage.enabled = false;
+            StopAudioReset();
             InstanciarQuemado();
             quemado = false;
             audio.loop = false;
         }
+    }
+
+    private void StopAudioReset()
+    {
+        if (audioQuemado != null && audioQuemado.isPlaying) audioQuemado.Stop();
+
+        if (audio != null && audio.isPlaying && !audio.loop) audio.Stop();
+
+        haSonado = false;
+        haSonado2 = false;
+
+        corrutina = null;
     }
 }
