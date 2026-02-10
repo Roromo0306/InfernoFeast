@@ -43,6 +43,9 @@ public class GameRoundsManager : MonoBehaviour
     int currentRoundIndex = 0;
     string pendingSceneToLoad = "";
 
+    [Header("Sprite receta")]
+    public Sprite RecetaBoss;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -198,6 +201,8 @@ public class GameRoundsManager : MonoBehaviour
 
     void WinGame()
     {
+        ComandasManager.Instance?.AddComanda(RecetaBoss);
+
         timer?.StopTimer();
 
         if (dialogueBoss != null)

@@ -88,6 +88,8 @@ public class EmpezarTurno : MonoBehaviour
     {
         InteractuarCounter inte = Player.GetComponent<InteractuarCounter>();
 
+        ElegirComandas();
+
         float tiempo = 180f;
         while (tiempo > 0)
         {
@@ -103,5 +105,19 @@ public class EmpezarTurno : MonoBehaviour
         Cuenta.text = "00:00";
         inte.turnoEmpezado = false;
         empezado = false;
+    }
+
+    private void ElegirComandas()
+    {
+        NombresComandas.Clear(); //Limpiamos la lista por si acaso
+
+        List<Sprite> copia = new List<Sprite>(ComandasManager.Instance.NombresComandasTotales); //Creamos una copia para evitar que salgan tres comandas iguales
+
+        for(int i = 0; i < 3 && copia.Count > 0; i++)
+        {
+            int r = Random.Range(0, copia.Count);
+            NombresComandas.Add(copia[r]);
+            copia.RemoveAt(r);
+        }
     }
 }
