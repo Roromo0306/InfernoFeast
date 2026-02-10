@@ -202,6 +202,7 @@ public class GameRoundsManager : MonoBehaviour
     void WinGame()
     {
         ComandasManager.Instance?.AddComanda(RecetaBoss);
+        Debug.Log("Hola");
 
         timer?.StopTimer();
 
@@ -213,6 +214,14 @@ public class GameRoundsManager : MonoBehaviour
         else
         {
             SceneFadeManager.Instance.LoadSceneWithFade(successSceneName);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            WinGame();
         }
     }
 
