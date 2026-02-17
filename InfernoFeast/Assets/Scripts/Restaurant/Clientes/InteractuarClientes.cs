@@ -61,23 +61,7 @@ public class InteractuarClientes : MonoBehaviour
 
     private void Update()
     {
-        /*float distancia = Vector3.Distance(transform.position, ultimaPos);
 
-        if(distancia < 0.01f)
-        {
-            tiempoSinMoverse += Time.deltaTime;
-
-            if(tiempoSinMoverse >= tiempoParaSentarse)
-            {
-                Sentado = true;
-            }
-        }
-        else
-        {
-            tiempoSinMoverse = 0f;
-        }
-
-        ultimaPos = transform.position;*/
 
         //Si se ha sentado y no lo han antendido muestra el sprite de take order
         if(Sentado && !Elegido)
@@ -98,13 +82,15 @@ public class InteractuarClientes : MonoBehaviour
         Sentado = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
         if (em.empezado)
-        { 
-            //Clientes normales cuando no se les ha atendido
+        {
+            if (Input.GetKey(KeyCode.E)) { 
+
+           //Clientes normales cuando no se les ha atendido
             if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido && Sentado) 
             {
                 ElegirComandaN();
@@ -132,9 +118,11 @@ public class InteractuarClientes : MonoBehaviour
                 GameObject Colisionado = collision.gameObject;
                 RevisarComanda(Colisionado);
             }
+            
+        }
         }
     }
-    
+
     //Comanda de los clientes nomales
     private void ElegirComandaN()
     {
@@ -177,7 +165,7 @@ public class InteractuarClientes : MonoBehaviour
 
         if (sujetarOb.transform.childCount <= 0)
         {
-            Debug.Log("No tiene plato");
+           // Debug.Log("No tiene plato");
         }
         else
         {
@@ -186,7 +174,7 @@ public class InteractuarClientes : MonoBehaviour
             if(Plato.name == em.NombresComandas[pedido].name) //Has acertado
             {
                 Destroy(Plato);
-                Debug.Log("Has acertado");
+                //Debug.Log("Has acertado");
                 em.cantidadCom[pedido]--;
                 
                 if(tiempoPasado < 75)
@@ -205,7 +193,7 @@ public class InteractuarClientes : MonoBehaviour
             else //No has acertado
             {
                 Destroy(Plato);
-                Debug.Log("No has acertado");
+                //Debug.Log("No has acertado");
                 comanda.sprite = Enfadado;
                 modo = 3;
                 StartCoroutine(Adios());
@@ -248,7 +236,7 @@ public class InteractuarClientes : MonoBehaviour
 
             if (Atendido) //Si se ha atendido al cliente para la corrutina y la inicia de nuevo
             {
-                Debug.Log("Se ha atendido al cliente");
+                //Debug.Log("Se ha atendido al cliente");
                 StopAllCoroutines();
                 StartCoroutine(InicioCuentaAtras());
             }
