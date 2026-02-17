@@ -8123,6 +8123,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861119645}
   m_CullTransparentMesh: 1
+--- !u!1 &863543987
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 863543989}
+  - component: {fileID: 863543988}
+  m_Layer: 0
+  m_Name: ManagerFinDia
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &863543988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863543987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 059c0ccabd3ed0c4c8a6bda04d4c1ca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dinero: 0
+  reputacion: 0
+--- !u!4 &863543989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863543987}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 54.448414, y: -53.596024, z: 9.537077}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &873181212
 GameObject:
   m_ObjectHideFlags: 0
@@ -13578,6 +13624,8 @@ MonoBehaviour:
   cant2: {fileID: 1547123337}
   cant3: {fileID: 1380183137}
   empezado: 0
+  dineroTurno: 0
+  reputacionTurno: 0
 --- !u!65 &1337703133
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27569,3 +27617,4 @@ SceneRoots:
   - {fileID: 1924941202}
   - {fileID: 1651544609}
   - {fileID: 458179549}
+  - {fileID: 863543989}

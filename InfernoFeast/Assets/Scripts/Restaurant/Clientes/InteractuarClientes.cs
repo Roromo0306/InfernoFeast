@@ -36,7 +36,12 @@ public class InteractuarClientes : MonoBehaviour
 
     private bool AtendidoCuent = false;
     private float tiempoPasado;
-    
+
+    [Header("Variables fin del dia")]
+    public int dineroCli;
+    public int reputacionCli;
+    private int modo = 0; //El modo indica la recompensa que se obtendra del cliente. Leyenda: 0-Nunca llego el plato o nunca se atendio al cliente, 1-Plato correcto y a tiempo, 2-Plato correcto pero a destiempo, 3-Plato incorrecto
+
     [HideInInspector] public int pedido;
     private void Start()
     {
@@ -187,10 +192,12 @@ public class InteractuarClientes : MonoBehaviour
                 if(tiempoPasado < 75)
                 {
                     comanda.sprite = Feliz;
+                    modo = 1;
                 }
                 else
                 {
                     comanda.sprite = Neutral;
+                    modo = 2;
                 }
                 StartCoroutine(Adios());
 
@@ -200,6 +207,7 @@ public class InteractuarClientes : MonoBehaviour
                 Destroy(Plato);
                 Debug.Log("No has acertado");
                 comanda.sprite = Enfadado;
+                modo = 3;
                 StartCoroutine(Adios());
             }
         }
@@ -208,6 +216,7 @@ public class InteractuarClientes : MonoBehaviour
     IEnumerator Adios()
     {
         ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
+        VariablesFinDia();
 
         yield return new WaitForSeconds(3f);
         canvas.enabled = false;
@@ -247,6 +256,44 @@ public class InteractuarClientes : MonoBehaviour
             yield return null;
         }
         em.cantidadCom[pedido]--;
+        VariablesFinDia();
         CM.ClienteAdios(this.gameObject);
     }
+
+    private void VariablesFinDia()
+    {
+        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+
+        if (modo == 0)
+        {
+            dineroCli = 0;
+            reputacionCli = -2;
+        }
+
+        if (modo == 1)
+        {
+            dineroCli = 2;
+            reputacionCli = 2;
+        }
+
+        if (modo == 2)
+        {
+            dineroCli = 2;
+            reputacionCli = 1;
+
+        }
+
+        if (modo == 3)
+        {
+            dineroCli = -1;
+            reputacionCli = 1;
+        }
+
+        //Se annade el dinero y la reputacion al manager de turno
+        em.dineroTurno += dineroCli;
+        em.reputacionTurno += reputacionCli;
+
+        modo = 0;
+    }
+
 }

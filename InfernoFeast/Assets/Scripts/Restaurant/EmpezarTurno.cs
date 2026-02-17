@@ -26,6 +26,10 @@ public class EmpezarTurno : MonoBehaviour
 
    [HideInInspector] public bool empezado = false;
 
+    [Header("Variables dinero y reputacion")]
+    public int dineroTurno;
+    public int reputacionTurno;
+
     private void Update()
     {
         //Textos de la primera comanda
@@ -105,6 +109,7 @@ public class EmpezarTurno : MonoBehaviour
         Cuenta.text = "00:00";
         inte.turnoEmpezado = false;
         empezado = false;
+        FinDeDiaVariables();
     }
 
     private void ElegirComandas()
@@ -119,5 +124,16 @@ public class EmpezarTurno : MonoBehaviour
             NombresComandas.Add(copia[r]);
             copia.RemoveAt(r);
         }
+    }
+
+    private void FinDeDiaVariables()
+    {
+        //Annado la reputacion y el dinero al singleton
+        ManagerFinDia.Instance.dinero += dineroTurno;
+        ManagerFinDia.Instance.reputacion += reputacionTurno;
+
+        //Reseteo el dinero
+        dineroTurno = 0;
+        reputacionTurno = 0;
     }
 }
