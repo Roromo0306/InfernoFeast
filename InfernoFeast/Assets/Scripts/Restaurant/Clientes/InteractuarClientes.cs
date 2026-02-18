@@ -62,7 +62,6 @@ public class InteractuarClientes : MonoBehaviour
     private void Update()
     {
 
-
         //Si se ha sentado y no lo han antendido muestra el sprite de take order
         if(Sentado && !Elegido)
         {
@@ -187,6 +186,7 @@ public class InteractuarClientes : MonoBehaviour
                     comanda.sprite = Neutral;
                     modo = 2;
                 }
+                FadeOut(0.5f); //Activamos el fade out
                 StartCoroutine(Adios());
 
             }
@@ -196,7 +196,8 @@ public class InteractuarClientes : MonoBehaviour
                 //Debug.Log("No has acertado");
                 comanda.sprite = Enfadado;
                 modo = 3;
-                StartCoroutine(Adios());
+                FadeOut(0.5f); //Activamos el fade out
+                StartCoroutine(Adios()); //Corrutina que finaliza todo
             }
         }
     }
@@ -234,6 +235,11 @@ public class InteractuarClientes : MonoBehaviour
         {
             tiempo -= Time.deltaTime;
 
+            if(tiempo <= 2)
+            {
+                FadeOut(0.5f);
+            }
+
             if (Atendido) //Si se ha atendido al cliente para la corrutina y la inicia de nuevo
             {
                 //Debug.Log("Se ha atendido al cliente");
@@ -243,6 +249,7 @@ public class InteractuarClientes : MonoBehaviour
 
             yield return null;
         }
+        
         em.cantidadCom[pedido]--;
         VariablesFinDia();
         CM.ClienteAdios(this.gameObject);
@@ -284,4 +291,22 @@ public class InteractuarClientes : MonoBehaviour
         modo = 0;
     }
 
+    //Funicones relacionadas con el fade out
+    private void FadeOut(float duracion)
+    {
+        StartCoroutine(FadeO(0f, duracion));
+    }
+
+    IEnumerator FadeO(float target, float time)
+    {
+        float start = comanda.color.a;
+
+        for(float t = 0; t < time; t += Time.deltaTime)
+        {
+            float a = Mathf.Lerp(start, target, t / time);
+            comanda.color = new Color(comanda.color.r, comanda.color.g, comanda.color.b, a);
+            yield return null;
+        }
+        comanda.color = new Color(comanda.color.r, comanda.color.g, comanda.color.b, target);
+    }
 }
