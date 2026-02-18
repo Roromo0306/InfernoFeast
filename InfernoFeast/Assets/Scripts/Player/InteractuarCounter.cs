@@ -6,11 +6,14 @@ public class InteractuarCounter : MonoBehaviour
 {
     public GameObject Padre;
 
-    public bool Hold, Cortar, Pelar, Hornear, Hervir, Hervir2, Freir, Freir2, Batir, basura, Empezarturno, ObjetoDejado;
+    [HideInInspector] public bool Hold, Cortar, Pelar, Hornear, Hervir, Hervir2, Freir, Freir2, Batir, basura, Empezarturno, ObjetoDejado;
 
     [HideInInspector] public bool turnoEmpezado = false;
 
-    public GameObject Counter, PadreFreir, PadreHorno, PadreHervir;
+    [HideInInspector] public GameObject Counter, PadreFreir, PadreHorno, PadreHervir;
+
+    [Header("Imagenes E")]
+    public GameObject CortarE, Cortar2E, HornearE, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E;
     private void Update()
     {
         Hold = Padre.transform.childCount > 0;
@@ -100,12 +103,26 @@ public class InteractuarCounter : MonoBehaviour
 
     }
 
+    //Entrada de la colision
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Cortar")
+        if (collision.gameObject.name == "Cortar" || collision.gameObject.name == "Cortar2")
         {
             Cortar = true;
             Counter = collision.gameObject;
+            Debug.Log("Hola");
+
+            if(collision.gameObject.name == "Cortar")
+            {
+                CortarE.gameObject.SetActive(true);
+                Debug.Log("Hola2");
+            }
+            else
+            {
+                Cortar2E.gameObject.SetActive(true);
+            }
+            
         }
 
         if (collision.gameObject.name == "Pelar")
@@ -118,6 +135,7 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hornear = true;
             Counter = collision.gameObject;
+            HornearE.gameObject.SetActive(true);
 
             PadreHorno = Counter.transform.GetChild(0).gameObject;
             if(PadreHorno.transform.childCount > 0)
@@ -126,16 +144,26 @@ public class InteractuarCounter : MonoBehaviour
             }
         }
 
-        if (collision.gameObject.name == "Batir")
+        if (collision.gameObject.name == "Batir" || collision.gameObject.name == "Batir2")
         {
             Batir = true;
             Counter = collision.gameObject;
+
+            if (collision.gameObject.name == "Batir")
+            {
+                BatirE.gameObject.SetActive(true);
+            }
+            else
+            {
+                Batir2E.gameObject.SetActive(true);
+            }
         }
 
         if (collision.gameObject.name == "Freir")
         {
             Freir = true;
             Counter = collision.gameObject;
+            FreirE.gameObject.SetActive(true);
 
             PadreFreir = Counter.transform.GetChild(0).gameObject;
             if (PadreFreir.transform.childCount > 0)
@@ -148,6 +176,7 @@ public class InteractuarCounter : MonoBehaviour
         {
             Freir2 = true;
             Counter = collision.gameObject;
+            Freir2E.gameObject.SetActive(true);
 
             PadreFreir = Counter.transform.GetChild(0).gameObject;
             if (PadreFreir.transform.childCount > 0)
@@ -160,6 +189,7 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hervir = true;
             Counter = collision.gameObject;
+            HervirE.gameObject.SetActive(true);
 
             PadreHervir = Counter.transform.GetChild(0).gameObject;
             if (PadreHervir.transform.childCount > 0)
@@ -172,6 +202,7 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hervir2 = true;
             Counter = collision.gameObject;
+            Hervir2E.gameObject.SetActive(true);
 
             PadreHervir = Counter.transform.GetChild(0).gameObject;
             if (PadreHervir.transform.childCount > 0)
@@ -184,21 +215,67 @@ public class InteractuarCounter : MonoBehaviour
         {
             basura = true;
             Counter = collision.gameObject;
+            BasuraE.gameObject.SetActive(true);
         }
 
         if (collision.gameObject.name == "EmpezarTurno")
         {
             Empezarturno = true;
             Counter = collision.gameObject;
+            EmpezarTurnoE.gameObject.SetActive(true);
+        }
+
+        if(collision.gameObject.name == "CajaCarne")
+        {
+            CajaCarneE.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaPescado")
+        {
+            CajaPescadoE.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaEspecias")
+        {
+            CajaEspeciasE.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaPan")
+        {
+            CajaPanE.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaVerdura")
+        {
+            CajaVegetalesE.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "Encimera")
+        {
+            EncimeraE.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "Encimera2")
+        {
+            Encimera2E.gameObject.SetActive(true);
         }
     }
 
+    //Salida de la colision
     private void OnCollisionExit(Collision collision)
     {
-        if(collision.gameObject.name == "Cortar")
+        if(collision.gameObject.name == "Cortar" || collision.gameObject.name == "Cortar2")
         {
             Cortar = false;
             Counter = null;
+            if (collision.gameObject.name == "Cortar")
+            {
+                CortarE.gameObject.SetActive(false);
+            }
+            else
+            {
+                Cortar2E.gameObject.SetActive(false);
+            }
         }
 
         if (collision.gameObject.name == "Pelar")
@@ -211,21 +288,32 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hornear = false;
             Counter = null;
+            HornearE.gameObject.SetActive(false);
 
             ObjetoDejado = false;
             PadreHorno = null;
         }
 
-        if (collision.gameObject.name == "Batir")
+        if (collision.gameObject.name == "Batir" || collision.gameObject.name == "Batir2")
         {
             Batir = false;
             Counter = null;
+
+            if (collision.gameObject.name == "Batir")
+            {
+                BatirE.gameObject.SetActive(false);
+            }
+            else
+            {
+                Batir2E.gameObject.SetActive(false);
+            }
         }
 
         if (collision.gameObject.name == "Freir")
         {
             Freir = false;
             Counter = null;
+            FreirE.gameObject.SetActive(false);
 
             ObjetoDejado = false;
             PadreFreir = null;
@@ -235,6 +323,7 @@ public class InteractuarCounter : MonoBehaviour
         {
             Freir2 = false;
             Counter = null;
+            Freir2E.gameObject.SetActive(false);
 
             ObjetoDejado = false;
             PadreFreir = null;
@@ -244,6 +333,7 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hervir = false;
             Counter = null;
+            HervirE.gameObject.SetActive(false);
 
             ObjetoDejado = false;
             PadreHervir = null;
@@ -253,6 +343,7 @@ public class InteractuarCounter : MonoBehaviour
         {
             Hervir2 = false;
             Counter = null;
+            Hervir2E.gameObject.SetActive(false);
 
             ObjetoDejado = false;
             PadreHervir = null;
@@ -262,12 +353,49 @@ public class InteractuarCounter : MonoBehaviour
         {
             basura = false;
             Counter = null;
+            BasuraE.gameObject.SetActive(false);
         }
 
         if (collision.gameObject.name == "EmpezarTurno")
         {
             Empezarturno = false;
             Counter = null;
+            EmpezarTurnoE.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaCarne")
+        {
+            CajaCarneE.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaPescado")
+        {
+            CajaPescadoE.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaEspecias")
+        {
+            CajaEspeciasE.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaPan")
+        {
+            CajaPanE.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaVerdura")
+        {
+            CajaVegetalesE.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "Encimera")
+        {
+            EncimeraE.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "Encimera2")
+        {
+            Encimera2E.gameObject.SetActive(false);
         }
     }
 }
