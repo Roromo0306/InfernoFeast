@@ -242,7 +242,7 @@ public class MultiRayOccluder : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("Main Menu");
         }
     }
     void SetupRenderer(Renderer r)
