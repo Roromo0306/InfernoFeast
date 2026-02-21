@@ -50,13 +50,19 @@ public class InteractuarClientes : MonoBehaviour
         if(EmpezarTurnoCounter == null)
         {
             EmpezarTurnoCounter = GameObject.Find("EmpezarTurno");
-            clienteManager = GameObject.Find("ClienteManager");
-            StartCoroutine(InicioCuentaAtras());
         }
-        else
+
+        if(clienteManager == null)
+        {
+            clienteManager = GameObject.Find("ClienteManager");
+        }
+
+        if(EmpezarTurnoCounter == null)
         {
             Debug.LogWarning("Counter no encontrado");
         }
+
+        StartCoroutine(InicioCuentaAtras());
     }
 
     private void Update()
@@ -135,6 +141,7 @@ public class InteractuarClientes : MonoBehaviour
         //Inicia cuenta atrás
         Atendido = true;
         AtendidoCuent = true;
+        tiempoPasado = 0f;
     }
 
     //Comanda de los VIP
@@ -150,6 +157,7 @@ public class InteractuarClientes : MonoBehaviour
         //Inicia cuenta atrás
         Atendido = true;
         AtendidoCuent = true;
+        tiempoPasado = 0f;
     }
 
 
@@ -218,41 +226,52 @@ public class InteractuarClientes : MonoBehaviour
         ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
-        float tiempo = 0f; //Creo la variable tiempo (por mi la hubiera creado directamente en el if pero daba error)
-
-        if (!Atendido) //Si no se ha atendido al cliente el tiempo es 45
+        while (true)
         {
-            tiempo = 45f;
-        }
-        else //Si se ha atendido al cliente el tiempo es 90
-        {
-            tiempo = 90f;
-            Atendido = false; 
+            // Determina duración según si se ha atendido
+            float tiempo = Atendido ? 90f : 45f;
+            // Consumimos el flag Atendido (lo usamos para decidir la duración)
+            Atendido = false;
 
-        }
+            float contador = tiempo;
 
-        while (tiempo > 0) //Cuenta atras
-        {
-            tiempo -= Time.deltaTime;
-
-            if(tiempo <= 2)
+            // Loop de cuenta atrás
+            while (contador > 0f)
             {
-                FadeOut(0.5f);
+                contador -= Time.deltaTime;
+
+                if (contador <= 2f)
+                {
+                    FadeOut(0.5f);
+                }
+
+                // Si se atiende de nuevo mientras contamos, salimos para reiniciar el bucle
+                if (Atendido)
+                {
+                    // Se ha atendido (nuevo pedido), reiniciamos la cuenta desde el principio
+                    break;
+                }
+
+                yield return null;
             }
 
-            if (Atendido) //Si se ha atendido al cliente para la corrutina y la inicia de nuevo
+            // Si Atendido está true significa que se reinició por un nuevo pedido -> continuamos el while para recalcular tiempo
+            if (Atendido)
             {
-                //Debug.Log("Se ha atendido al cliente");
-                StopAllCoroutines();
-                StartCoroutine(InicioCuentaAtras());
+                continue;
             }
 
-            yield return null;
+            // Llegamos aquí sólo si se agotó el tiempo y no se atendió
+            if (pedido >= 0 && em != null)
+            {
+                if (pedido < em.cantidadCom.Count)
+                    em.cantidadCom[pedido]--;
+            }
+
+            VariablesFinDia();
+            CM.ClienteAdios(this.gameObject);
+            yield break; // terminamos la corrutina del cliente (se marcha)
         }
-        
-        em.cantidadCom[pedido]--;
-        VariablesFinDia();
-        CM.ClienteAdios(this.gameObject);
     }
 
     private void VariablesFinDia()

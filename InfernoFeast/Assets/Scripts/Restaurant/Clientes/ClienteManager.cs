@@ -224,28 +224,6 @@ public class ClienteManager : MonoBehaviour
 
             cliente.SendMessage("OnSitted", SendMessageOptions.DontRequireReceiver);
         }
-
-        // Cliente se queda un tiempo (definido en el ScriptableObject)
-        yield return new WaitForSeconds(data.tiempoEnMesa);
-
-        // Antes de irse, restaurar visual si es necesario
-        if (visual != null && visualOriginalLocalPos.TryGetValue(cliente, out Vector3 orig))
-        {
-            visual.localPosition = orig;
-            visualOriginalLocalPos.Remove(cliente);
-        }
-
-        // Cliente se va
-        if (clienteMesa.TryGetValue(cliente, out int idx))
-        {
-            if (idx >= 0 && idx < mesas.Length)
-                mesas[idx].ocupada = false;
-            clienteMesa.Remove(cliente);
-        }
-
-        clientesActivos.Remove(cliente);
-        if (cliente != null)
-            Destroy(cliente);
     }
 
     // Busca la silla más cercana por TAG "SillaDe" o "SillaIz" alrededor de 'pos' dentro de 'radius'.
