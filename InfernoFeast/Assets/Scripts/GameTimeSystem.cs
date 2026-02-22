@@ -23,6 +23,17 @@ public class GameTimeSystem : MonoBehaviour
 
     void Start()
     {
+        // Cargar el día actual desde PlayerPrefs
+        int selectedSlot = PlayerPrefs.GetInt("SelectedSlot", -1);
+        if (selectedSlot != -1)
+        {
+            currentDayIndex = PlayerPrefs.GetInt($"SaveSlot{selectedSlot}_Day", 0); // Día lunes por defecto
+        }
+        else
+        {
+            currentDayIndex = 0;
+        }
+
         gameTimeInSeconds = 6 * 3600;
         lastGameTimeInSeconds = gameTimeInSeconds;
         panelFinalDia.SetActive(false);
@@ -85,6 +96,14 @@ public class GameTimeSystem : MonoBehaviour
     {
         StartNewDayAutomatic();
         esperandoNuevoDia = false;
+
+        // Guardar el día actual en PlayerPrefs usando el slot seleccionado
+        int selectedSlot = PlayerPrefs.GetInt("SelectedSlot", -1);
+        if (selectedSlot != -1)
+        {
+            PlayerPrefs.SetInt($"SaveSlot{selectedSlot}_Day", currentDayIndex);
+            PlayerPrefs.Save();
+        }
     }
 
     public void CerrarPanel() { panelFinalDia.SetActive(false); }

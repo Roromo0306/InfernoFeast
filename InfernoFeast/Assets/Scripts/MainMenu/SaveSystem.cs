@@ -7,6 +7,7 @@ public class SaveSystem : MonoBehaviour
     public Button[] saveSlotButtons;
     public InputField nameInputField;
     public GameObject namePopup;
+    public string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
     private int selectedSlot = -1;
 
@@ -25,7 +26,7 @@ public class SaveSystem : MonoBehaviour
             string displayText = saveName;
             if (saveName != "Empty Save" && savedDay > 0)
             {
-                displayText += $" (Día {savedDay})";
+                displayText += " (" + days[savedDay % days.Length] + ")"; // Mostrar el día actual
             }
 
             saveSlotButtons[i].GetComponentInChildren<Text>().text = displayText;
@@ -38,7 +39,7 @@ public class SaveSystem : MonoBehaviour
         PlayerPrefs.SetInt("SelectedSlot", slot);
 
         string saveName = PlayerPrefs.GetString($"SaveSlot{slot}_Name", "Empty Save");
-        int savedDay = PlayerPrefs.GetInt($"SaveSlot{slot}_Day", 1); // Día 1 por defecto
+        int savedDay = PlayerPrefs.GetInt($"SaveSlot{slot}_Day", 1); // Día lunes por defecto
 
         if (saveName == "Empty Save")
         {
