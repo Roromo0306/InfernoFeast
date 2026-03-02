@@ -13,6 +13,13 @@ public class GameTimeSystem : MonoBehaviour
     public GameObject panelFinalDia;
     public TMP_Text horaText;
     public TMP_Text diaText;
+    public GameObject Stats;
+    public TMP_Text StatDinero;
+    public TMP_Text StatReputacion;
+
+    [Header("Manager fin del dia")]
+    public GameObject Managerfindia;
+    public GameObject Cama;
 
     private float gameTimeInSeconds = 0f;
     private float lastGameTimeInSeconds = 0f;
@@ -69,8 +76,10 @@ public class GameTimeSystem : MonoBehaviour
     public void Dormir() { ActivarFinDeDia(); }
 
     
-    private void StartNewDayAutomatic()
+    public void StartNewDayAutomatic()
     {
+        Dormir don = Cama.GetComponent<Dormir>();
+
         currentDayIndex = (currentDayIndex + 1) % 7;
       
         gameTimeInSeconds = 6 * 3600;
@@ -78,12 +87,19 @@ public class GameTimeSystem : MonoBehaviour
         if (panelFinalDia != null) panelFinalDia.SetActive(false);
        
         lastGameTimeInSeconds = gameTimeInSeconds;
+        Stats.gameObject.SetActive(false);
+        don.nuevoDia = false;
     }
 
     // llamado por el botón (mantiene compatibilidad con tu UI)
     public void ComenzarNuevoDia()
     {
-        StartNewDayAutomatic();
+        ManagerFinDia man = Managerfindia.GetComponent<ManagerFinDia>();
+
+        StatDinero.text = man.dinero.ToString("F2");
+        StatReputacion.text = man.reputacion.ToString("F2");
+
+        Stats.gameObject.SetActive(true);
         esperandoNuevoDia = false;
     }
 

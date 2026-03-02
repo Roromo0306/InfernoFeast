@@ -19,9 +19,4 @@ public class ManagerFinDia : MonoBehaviour
         }
         else Destroy(gameObject);
     }
-
-    private void FinDelDia()
-    {
-
-    }
 }
