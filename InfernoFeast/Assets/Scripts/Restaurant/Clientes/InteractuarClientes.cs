@@ -17,7 +17,7 @@ public class InteractuarClientes : MonoBehaviour
     public GameObject clienteManager;
 
     public bool Elegido = false;
-    
+
     //Variables para controlar si se ha sentado
     public bool Sentado = false; //Bool para saber si se ha sentado
     private Vector3 ultimaPos;
@@ -43,23 +43,48 @@ public class InteractuarClientes : MonoBehaviour
     private int modo = 0; //El modo indica la recompensa que se obtendra del cliente. Leyenda: 0-Nunca llego el plato o nunca se atendio al cliente, 1-Plato correcto y a tiempo, 2-Plato correcto pero a destiempo, 3-Plato incorrecto
 
     [HideInInspector] public int pedido;
+
+    [Header("UI Slider")]
+    public Slider slider; //Referencia al slider
+
+    // --- NUEVAS VARIABLES para sincronizar slider con las cuentas ---
+    private float tiempoRestanteSalida = 0f; // tiempo restante para que se marche el cliente (se actualiza desde InicioCuentaAtras)
+    private float tiempoMaxSalida = 1f; // max del slider para la salida
+    private bool usandoCuentaSalida = false;
+
+    private float tiempoMaxPedido = 75f; // límite que usas para decidir "a tiempo" / "tarde"
+    private bool usandoCuentaPedido = false; // true mientras AtendidoCuent == true (pedido activo)
+    // -----------------------------------------------------------------
+
     private void Start()
     {
         ultimaPos = transform.position;
 
-        if(EmpezarTurnoCounter == null)
+        if (EmpezarTurnoCounter == null)
         {
             EmpezarTurnoCounter = GameObject.Find("EmpezarTurno");
         }
 
-        if(clienteManager == null)
+        if (clienteManager == null)
         {
             clienteManager = GameObject.Find("ClienteManager");
         }
 
-        if(EmpezarTurnoCounter == null)
+        if (EmpezarTurnoCounter == null)
         {
             Debug.LogWarning("Counter no encontrado");
+        }
+
+        // Slider: asegurarnos de que tenga valores razonables
+        if (slider != null)
+        {
+            slider.minValue = 0f;
+            slider.value = 0f;
+            slider.gameObject.SetActive(false); // oculto por defecto
+        }
+        else
+        {
+            Debug.LogWarning("Slider no asignado en InteractuarClientes.");
         }
 
         StartCoroutine(InicioCuentaAtras());
@@ -67,19 +92,56 @@ public class InteractuarClientes : MonoBehaviour
 
     private void Update()
     {
-
         //Si se ha sentado y no lo han antendido muestra el sprite de take order
-        if(Sentado && !Elegido)
+        if (Sentado && !Elegido)
         {
             comanda.sprite = ListoPedir;
             canvas.enabled = true;
         }
 
-        //Cuenta atras para saber cuanto tiempo tarda el cliente en llevar un plato
+        //Cuenta atras para saber cuanto tiempo tarda el cliente en llevar un plato (reloj "pedido")
         if (AtendidoCuent)
         {
             tiempoPasado += Time.deltaTime;
         }
+
+        // --- Actualización del slider cada frame ---
+        if (slider == null) return;
+
+        // Prioridad: mostrar timer de pedido si está activo
+        if (AtendidoCuent || usandoCuentaPedido)
+        {
+            usingPedidoOnSlider();
+        }
+        else if (usandoCuentaSalida)
+        {
+            usingSalidaOnSlider();
+        }
+        else
+        {
+            // Si no hay ninguna cuenta activa, ocultamos slider
+            if (slider.gameObject.activeSelf) slider.gameObject.SetActive(false);
+        }
+    }
+
+    private void usingPedidoOnSlider()
+    {
+        // Habilitar slider
+        if (!slider.gameObject.activeSelf) slider.gameObject.SetActive(true);
+
+        // Establecemos max y valor según tiempo de pedido
+        slider.maxValue = tiempoMaxPedido;
+        float restantePedido = Mathf.Clamp(tiempoMaxPedido - tiempoPasado, 0f, tiempoMaxPedido);
+        slider.value = restantePedido;
+        usandoCuentaPedido = true;
+    }
+
+    private void usingSalidaOnSlider()
+    {
+        if (!slider.gameObject.activeSelf) slider.gameObject.SetActive(true);
+
+        slider.maxValue = tiempoMaxSalida;
+        slider.value = Mathf.Clamp(tiempoRestanteSalida, 0f, tiempoMaxSalida);
     }
 
     public void OnSitted()
@@ -93,38 +155,39 @@ public class InteractuarClientes : MonoBehaviour
 
         if (em.empezado)
         {
-            if (Input.GetKey(KeyCode.E)) { 
-
-           //Clientes normales cuando no se les ha atendido
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido && Sentado) 
+            if (Input.GetKey(KeyCode.E))
             {
-                ElegirComandaN();
-                Elegido = true;
-            }
 
-            //Clientes VIP cuando no se les ha atendido
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido && Sentado)
-            {
-                ElegirComandaV();
-                Elegido = true;
-            }
+                //Clientes normales cuando no se les ha atendido
+                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido && Sentado)
+                {
+                    ElegirComandaN();
+                    Elegido = true;
+                }
 
-            //Clientes normales atendidos
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && Elegido && Sentado)
-            {
-                GameObject Colisionado = collision.gameObject;
-                RevisarComanda(Colisionado);
-            }
+                //Clientes VIP cuando no se les ha atendido
+                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido && Sentado)
+                {
+                    ElegirComandaV();
+                    Elegido = true;
+                }
+
+                //Clientes normales atendidos
+                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && Elegido && Sentado)
+                {
+                    GameObject Colisionado = collision.gameObject;
+                    RevisarComanda(Colisionado);
+                }
 
 
-            //Clientes VIP atendidos
-            if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && Elegido && Sentado)
-            {
-                GameObject Colisionado = collision.gameObject;
-                RevisarComanda(Colisionado);
+                //Clientes VIP atendidos
+                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && Elegido && Sentado)
+                {
+                    GameObject Colisionado = collision.gameObject;
+                    RevisarComanda(Colisionado);
+                }
+
             }
-            
-        }
         }
     }
 
@@ -138,10 +201,15 @@ public class InteractuarClientes : MonoBehaviour
         comanda.sprite = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
 
-        //Inicia cuenta atrás
+        //Inicia cuenta atrás (pedido)
         Atendido = true;
         AtendidoCuent = true;
         tiempoPasado = 0f;
+
+        // Activamos la cuenta del pedido en el slider
+        tiempoMaxPedido = 75f; // si quieres que sea otro valor, cámbialo aquí
+        usandoCuentaPedido = true;
+        if (slider != null) { slider.gameObject.SetActive(true); slider.maxValue = tiempoMaxPedido; slider.value = tiempoMaxPedido; }
     }
 
     //Comanda de los VIP
@@ -154,10 +222,15 @@ public class InteractuarClientes : MonoBehaviour
         comanda.sprite = em.NombresComandas[pedido];
         em.cantidadCom[pedido]++;
 
-        //Inicia cuenta atrás
+        //Inicia cuenta atrás (pedido)
         Atendido = true;
         AtendidoCuent = true;
         tiempoPasado = 0f;
+
+        // Activamos la cuenta del pedido en el slider
+        tiempoMaxPedido = 75f;
+        usandoCuentaPedido = true;
+        if (slider != null) { slider.gameObject.SetActive(true); slider.maxValue = tiempoMaxPedido; slider.value = tiempoMaxPedido; }
     }
 
 
@@ -167,24 +240,25 @@ public class InteractuarClientes : MonoBehaviour
         EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
 
         AtendidoCuent = false;
+        usandoCuentaPedido = false; // parar la visualización del timer de pedido
 
         GameObject sujetarOb = Player.transform.GetChild(2).gameObject;
 
         if (sujetarOb.transform.childCount <= 0)
         {
-           // Debug.Log("No tiene plato");
+            // Debug.Log("No tiene plato");
         }
         else
         {
             GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
-            
-            if(Plato.name == em.NombresComandas[pedido].name) //Has acertado
+
+            if (Plato.name == em.NombresComandas[pedido].name) //Has acertado
             {
                 Destroy(Plato);
                 //Debug.Log("Has acertado");
                 em.cantidadCom[pedido]--;
-                
-                if(tiempoPasado < 75)
+
+                if (tiempoPasado < 75)
                 {
                     comanda.sprite = Feliz;
                     modo = 1;
@@ -215,6 +289,9 @@ public class InteractuarClientes : MonoBehaviour
         ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
         VariablesFinDia();
 
+        // ocultamos slider cuando se vaya del cliente (espera 3s y se marcha)
+        if (slider != null) slider.gameObject.SetActive(false);
+
         yield return new WaitForSeconds(3f);
         canvas.enabled = false;
         CM.ClienteAdios(this.gameObject);
@@ -235,10 +312,16 @@ public class InteractuarClientes : MonoBehaviour
 
             float contador = tiempo;
 
+            // Preparamos valores para el slider (cuenta de salida)
+            tiempoMaxSalida = tiempo;
+            tiempoRestanteSalida = contador;
+            usandoCuentaSalida = true;
+
             // Loop de cuenta atrás
             while (contador > 0f)
             {
                 contador -= Time.deltaTime;
+                tiempoRestanteSalida = contador; // actualizamos la variable visible
 
                 if (contador <= 2f)
                 {
@@ -249,6 +332,7 @@ public class InteractuarClientes : MonoBehaviour
                 if (Atendido)
                 {
                     // Se ha atendido (nuevo pedido), reiniciamos la cuenta desde el principio
+                    usandoCuentaSalida = false; // dejamos de mostrar la cuenta de salida
                     break;
                 }
 
@@ -268,7 +352,12 @@ public class InteractuarClientes : MonoBehaviour
                     em.cantidadCom[pedido]--;
             }
 
+            // El cliente se marcha por tiempo agotado
             VariablesFinDia();
+
+            // ocultamos slider antes de avisar manager
+            if (slider != null) slider.gameObject.SetActive(false);
+
             CM.ClienteAdios(this.gameObject);
             yield break; // terminamos la corrutina del cliente (se marcha)
         }
@@ -320,7 +409,7 @@ public class InteractuarClientes : MonoBehaviour
     {
         float start = comanda.color.a;
 
-        for(float t = 0; t < time; t += Time.deltaTime)
+        for (float t = 0; t < time; t += Time.deltaTime)
         {
             float a = Mathf.Lerp(start, target, t / time);
             comanda.color = new Color(comanda.color.r, comanda.color.g, comanda.color.b, a);
