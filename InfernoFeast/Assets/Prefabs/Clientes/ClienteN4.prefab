@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5053865631093831531}
   - component: {fileID: 5657411481294537048}
   - component: {fileID: 5455082817694360217}
+  - component: {fileID: 8128250812454151175}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -365,6 +366,8 @@ MonoBehaviour:
   Neutral: {fileID: 21300000, guid: 645c7bbda3ff0c14da08c8d0e05e2429, type: 3}
   Enfadado: {fileID: 21300000, guid: e97325098c92b4a4983beb7e16c1f08d, type: 3}
   canvas: {fileID: 7750020101197277669}
+  dineroCli: 0
+  reputacionCli: 0
   pedido: 0
 --- !u!136 &1972564137892070560
 CapsuleCollider:
@@ -445,5 +448,20 @@ PrefabInstance:
     - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7528884360860963196, guid: 248ab16eb956ff44da0ca86aafe41c15, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8128250812454151175}
   m_SourcePrefab: {fileID: 100100000, guid: 248ab16eb956ff44da0ca86aafe41c15, type: 3}
+--- !u!114 &8128250812454151175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842127477080545789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af858c0a29a03c4c8c6165bb8e92621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
