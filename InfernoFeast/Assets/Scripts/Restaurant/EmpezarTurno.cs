@@ -24,6 +24,11 @@ public class EmpezarTurno : MonoBehaviour
     public TextMeshProUGUI cant2;
     public TextMeshProUGUI cant3;
 
+    [Header("Referencia a la UI de abierto o cerrado")]
+    public Sprite abierto;
+    public Sprite cerrado;
+    public Image AbCer;
+
    [HideInInspector] public bool empezado = false;
 
     [Header("Variables dinero y reputacion")]
@@ -81,6 +86,9 @@ public class EmpezarTurno : MonoBehaviour
 
         //Aparecer comandas
         empezado = true;
+
+        //Cambiamos el cartel a abierto
+        AbCer.sprite = abierto;
     }
 
     private void CuentaAtras()
@@ -109,6 +117,7 @@ public class EmpezarTurno : MonoBehaviour
         Cuenta.text = "00:00";
         inte.turnoEmpezado = false;
         empezado = false;
+        AbCer.sprite = cerrado;
         FinDeDiaVariables();
     }
 
