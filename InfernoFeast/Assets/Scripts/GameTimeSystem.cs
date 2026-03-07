@@ -48,9 +48,9 @@ public class GameTimeSystem : MonoBehaviour
             gameTimeInSeconds -= 24f * 60f * 60f;
 
         
-        if (prev < 6f * 3600f && gameTimeInSeconds >= 6f * 3600f)
+        if (prev < 2f * 3600f && gameTimeInSeconds >= 2f * 3600f)
         {
-            StartNewDayAutomatic();
+            ComenzarNuevoDia();
         }
 
         if (horaText != null) horaText.text = GetFormattedTime();

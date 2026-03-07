@@ -35,6 +35,9 @@ public class EmpezarTurno : MonoBehaviour
     public int dineroTurno;
     public int reputacionTurno;
 
+    [Header("Sonido")]
+    public AudioSource audio;
+
     private void Update()
     {
         //Textos de la primera comanda
@@ -89,6 +92,9 @@ public class EmpezarTurno : MonoBehaviour
 
         //Cambiamos el cartel a abierto
         AbCer.sprite = abierto;
+
+        //Iniciamos el sonido
+        audio.Play();
     }
 
     private void CuentaAtras()
