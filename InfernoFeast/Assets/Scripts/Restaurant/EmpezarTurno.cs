@@ -24,6 +24,10 @@ public class EmpezarTurno : MonoBehaviour
     public TextMeshProUGUI cant2;
     public TextMeshProUGUI cant3;
 
+    [Header("Componentes UI Comandas")]
+    public Image prefabImagen;
+    public List<Sprite> ListaComandas;
+
     [Header("Referencia a la UI de abierto o cerrado")]
     public Sprite abierto;
     public Sprite cerrado;
@@ -150,5 +154,42 @@ public class EmpezarTurno : MonoBehaviour
         //Reseteo el dinero
         dineroTurno = 0;
         reputacionTurno = 0;
+    }
+
+    public void ComandaUI(string nombre)
+    {
+        for (int i = 0; i < NombresComandas.Count; i++)         
+        {
+            if (ListaComandas[i].name == nombre)
+            {
+                prefabImagen.sprite = ListaComandas[i];
+
+                StartCoroutine(Animacion());
+
+
+                return; 
+            }
+        }
+    }
+
+    IEnumerator Animacion()
+    {
+        Animator anim = prefabImagen.GetComponent<Animator>();
+
+        anim.enabled = true;
+        anim.Play("animacionComandas");
+
+        yield return new WaitForSeconds(0.25f);
+
+        FijarPosicionFinal();
+        anim.enabled = false;
+
+        yield break;
+    }
+
+    void FijarPosicionFinal()
+    {
+        RectTransform rt = prefabImagen.rectTransform;
+        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 419);
     }
 }

@@ -199,6 +199,7 @@ public class InteractuarClientes : MonoBehaviour
         pedido = Random.Range(0, 3);
 
         comanda.sprite = em.NombresComandas[pedido];
+        em.ComandaUI(em.NombresComandas[pedido].name);
         em.cantidadCom[pedido]++;
 
         //Inicia cuenta atrás (pedido)
@@ -220,6 +221,8 @@ public class InteractuarClientes : MonoBehaviour
         pedido = Random.Range(0, 3);
 
         comanda.sprite = em.NombresComandas[pedido];
+        em.ComandaUI(em.NombresComandas[pedido].name);
+
         em.cantidadCom[pedido]++;
 
         //Inicia cuenta atrás (pedido)
