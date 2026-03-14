@@ -437,6 +437,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6691859409372975585}
+  - {fileID: 8968970901364337875}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &3480655170742904658
@@ -488,6 +489,7 @@ MonoBehaviour:
   reputacionCli: 0
   pedido: 0
   slider: {fileID: 2213672069489316485}
+  platoI: {fileID: 8307762098772870707}
 --- !u!136 &3392524734393510272
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -691,6 +693,37 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &8307762098772870707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8968970901364337875}
+  m_Layer: 0
+  m_Name: Plato
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8968970901364337875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8307762098772870707}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.70582527, y: 0.042551927, z: 0.042551927, w: 0.70582527}
+  m_LocalPosition: {x: 0.034, y: 2.464, z: 1.68}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2314667658348121091}
+  m_LocalEulerAnglesHint: {x: -90, y: 6.9, z: 0}
 --- !u!1 &9169318267658909280
 GameObject:
   m_ObjectHideFlags: 0

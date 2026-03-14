@@ -47,14 +47,17 @@ public class InteractuarClientes : MonoBehaviour
     [Header("UI Slider")]
     public Slider slider; //Referencia al slider
 
-    // --- NUEVAS VARIABLES para sincronizar slider con las cuentas ---
+    [Header("Variables slider")]
     private float tiempoRestanteSalida = 0f; // tiempo restante para que se marche el cliente (se actualiza desde InicioCuentaAtras)
     private float tiempoMaxSalida = 1f; // max del slider para la salida
     private bool usandoCuentaSalida = false;
 
     private float tiempoMaxPedido = 75f; // límite que usas para decidir "a tiempo" / "tarde"
     private bool usandoCuentaPedido = false; // true mientras AtendidoCuent == true (pedido activo)
-    // -----------------------------------------------------------------
+
+    [Header("Gameobject plato")]
+    public GameObject platoI; //Sitio donde instanciare el plato
+    
 
     private void Start()
     {
@@ -177,6 +180,9 @@ public class InteractuarClientes : MonoBehaviour
                 {
                     GameObject Colisionado = collision.gameObject;
                     RevisarComanda(Colisionado);
+
+                    InstanciarPlato(Colisionado);
+
                 }
 
 
@@ -185,6 +191,8 @@ public class InteractuarClientes : MonoBehaviour
                 {
                     GameObject Colisionado = collision.gameObject;
                     RevisarComanda(Colisionado);
+
+                    InstanciarPlato(Colisionado);
                 }
 
             }
@@ -421,5 +429,23 @@ public class InteractuarClientes : MonoBehaviour
             yield return null;
         }
         comanda.color = new Color(comanda.color.r, comanda.color.g, comanda.color.b, target);
+    }
+
+    private void InstanciarPlato(GameObject Player)
+    {
+        GameObject sujetarOb = Player.transform.GetChild(2).gameObject;
+
+        if (sujetarOb.transform.childCount <= 0)
+        {
+            // Debug.Log("No tiene plato");
+        }
+        else
+        {
+            GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
+
+            Instantiate(Plato, platoI.transform.position, platoI.transform.rotation, platoI.transform);
+
+            Destroy(sujetarOb.transform.GetChild(0).gameObject);
+        }
     }
 }
