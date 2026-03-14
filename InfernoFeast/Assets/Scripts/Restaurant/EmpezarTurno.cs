@@ -192,4 +192,10 @@ public class EmpezarTurno : MonoBehaviour
         RectTransform rt = prefabImagen.rectTransform;
         rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 419);
     }
+
+    public void PosicionEntregarPlato()
+    {
+        RectTransform rt = prefabImagen.rectTransform;
+        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 752);
+    }
 }

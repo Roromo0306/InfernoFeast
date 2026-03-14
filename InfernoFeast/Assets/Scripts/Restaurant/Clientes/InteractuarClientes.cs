@@ -271,6 +271,7 @@ public class InteractuarClientes : MonoBehaviour
                     comanda.sprite = Neutral;
                     modo = 2;
                 }
+                em.PosicionEntregarPlato();
                 FadeOut(0.5f); //Activamos el fade out
                 StartCoroutine(Adios());
 
@@ -279,8 +280,9 @@ public class InteractuarClientes : MonoBehaviour
             {
                 Destroy(Plato);
                 //Debug.Log("No has acertado");
-                comanda.sprite = Enfadado;
+                comanda.sprite = Enfadado; //Sprite de enfadado
                 modo = 3;
+                em.PosicionEntregarPlato();
                 FadeOut(0.5f); //Activamos el fade out
                 StartCoroutine(Adios()); //Corrutina que finaliza todo
             }
