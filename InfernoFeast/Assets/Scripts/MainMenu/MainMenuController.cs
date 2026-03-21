@@ -5,14 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    //private GameObject settingsPanel;
+    public GameObject settingsPanel;
     //private GameObject creditsPanel;
 
     // Start is called before the first frame update
     void Start()
     {
-        //settingsPanel = GameObject.Find("Settings Panel");
-        //settingsPanel.SetActive(false);
+        settingsPanel.SetActive(false);
 
         //creditsPanel = GameObject.Find("Credits Panel");
         //creditsPanel.SetActive(false);
@@ -25,7 +24,7 @@ public class MainMenuController : MonoBehaviour
 
     public void Settings()
     {
-        //settingsPanel.SetActive(true);
+        settingsPanel.SetActive(true);
     }
 
     public void Credits()

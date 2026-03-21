@@ -33,9 +33,21 @@ public class SettingsManager : MonoBehaviour
         if (availableResolutions == null || availableResolutions.Length == 0)
             availableResolutions = Screen.resolutions.Distinct().ToArray();
 
+        // Lógica para aplicar la resolución actual del sistema si no hay nada guardado
+        if (!PlayerPrefs.HasKey("resolutionIndex"))
+        {
+            settingsData.resolutionIndex = GetClosestResolutionIndex(Screen.currentResolution);
+            settingsData.fullscreen = true;
+        }
+
         LoadSettings();
+    }
+
+    private void Start()
+    {
         ApplyAll();
     }
+
     // Aplicar todas las opciones guardadas a la sesión actual
     public void ApplyAll()
     {
@@ -73,6 +85,21 @@ public class SettingsManager : MonoBehaviour
         SaveInt("fullscreen", isFullscreen ? 1 : 0);
     }
 
+    int GetClosestResolutionIndex(Resolution targetRes)
+    {
+        for (int i = 0; i < availableResolutions.Length; i++)
+        {
+            // Se busca coincidencia exacta de ancho y alto
+            if (availableResolutions[i].width == targetRes.width &&
+                availableResolutions[i].height == targetRes.height)
+            {
+                return i;
+            }
+        }
+        // Si no se encuentra nada, devuelve la resolución más alta (última del array)
+        return availableResolutions.Length - 1;
+    }
+
     // GUARDADO/CARGADO simple con PlayerPrefs
     void SaveFloat(string key, float v) => PlayerPrefs.SetFloat(key, v);
     void SaveInt(string key, int v) => PlayerPrefs.SetInt(key, v);
@@ -88,12 +115,15 @@ public class SettingsManager : MonoBehaviour
     // Restaurar defaults desde el ScriptableObject original 
     public void RestoreDefaults()
     {
-       
-        ApplyAll();
-       
         PlayerPrefs.DeleteKey("musicVolume");
         PlayerPrefs.DeleteKey("resolutionIndex");
         PlayerPrefs.DeleteKey("fullscreen");
+
+        settingsData.musicVolume = 0.8f;
+        settingsData.resolutionIndex = availableResolutions.Length - 1;
+        settingsData.fullscreen = true;
+
+        ApplyAll();
     }
 }
 
