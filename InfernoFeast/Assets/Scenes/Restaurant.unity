@@ -537,6 +537,7 @@ GameObject:
   - component: {fileID: 30486252}
   - component: {fileID: 30486251}
   - component: {fileID: 30486250}
+  - component: {fileID: 30486253}
   m_Layer: 0
   m_Name: Silla (8)
   m_TagString: SillaDe
@@ -630,6 +631,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 30486248}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &30486253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30486248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: dad7980adc6160c44b271c1f01a70bdb, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &38852771
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +703,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.030295469, g: 0.0728116, b: 0.13962269, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1176,6 +1208,7 @@ GameObject:
   - component: {fileID: 47191061}
   - component: {fileID: 47191060}
   - component: {fileID: 47191059}
+  - component: {fileID: 47191062}
   m_Layer: 0
   m_Name: Silla (6)
   m_TagString: SillaDe
@@ -1269,6 +1302,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47191057}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &47191062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47191057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: cda0414476c8b154f9ab995fd1cf2c61, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &51982007
 GameObject:
   m_ObjectHideFlags: 0
@@ -2907,7 +2971,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (4)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2920,7 +2984,7 @@ Transform:
   m_GameObject: {fileID: 139609796}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.11, y: 0, z: 5.8}
+  m_LocalPosition: {x: 4.04, y: 0, z: 5.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7181,37 +7245,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 404849115}
   m_CullTransparentMesh: 1
---- !u!1 &405323019
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 405323020}
-  m_Layer: 0
-  m_Name: Mesa_01 (13)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &405323020
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 405323019}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.7, y: 0, z: -11.48}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 406791033}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &406791032
 GameObject:
   m_ObjectHideFlags: 0
@@ -7248,15 +7281,17 @@ Transform:
   - {fileID: 2142995480}
   - {fileID: 1133432272}
   - {fileID: 2050797653}
-  - {fileID: 405323020}
   - {fileID: 1250873586}
   - {fileID: 729956662}
   - {fileID: 1572337715}
+  - {fileID: 1605064558}
   - {fileID: 1546766524}
   - {fileID: 1575457102}
+  - {fileID: 1439615940}
   - {fileID: 432923089}
   - {fileID: 874947636}
   - {fileID: 1312423376}
+  - {fileID: 1320408462}
   m_Father: {fileID: 1166924414}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &411727828
@@ -7553,7 +7588,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (8)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -10412,7 +10447,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (6)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -10425,7 +10460,7 @@ Transform:
   m_GameObject: {fileID: 581352974}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.51, y: 0, z: 10.25}
+  m_LocalPosition: {x: 4.09, y: 0, z: 10.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12196,7 +12231,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (15)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -12209,7 +12244,7 @@ Transform:
   m_GameObject: {fileID: 729956661}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.11, y: 0, z: -6.84}
+  m_LocalPosition: {x: 6.58, y: 0, z: -6.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15055,7 +15090,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (9)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -17236,6 +17271,7 @@ GameObject:
   - component: {fileID: 982367318}
   - component: {fileID: 982367317}
   - component: {fileID: 982367316}
+  - component: {fileID: 982367319}
   m_Layer: 0
   m_Name: Silla (2)
   m_TagString: SillaDe
@@ -17329,6 +17365,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982367314}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &982367319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982367314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: c9a3ab0f0121a43468c7ce79df9b8b94, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &983438635
 GameObject:
   m_ObjectHideFlags: 0
@@ -17857,7 +17924,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (5)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -17870,7 +17937,7 @@ Transform:
   m_GameObject: {fileID: 1023874078}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.11, y: 0, z: 10.25}
+  m_LocalPosition: {x: -0.35, y: 0, z: 10.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18207,6 +18274,7 @@ GameObject:
   - component: {fileID: 1043872380}
   - component: {fileID: 1043872379}
   - component: {fileID: 1043872378}
+  - component: {fileID: 1043872381}
   m_Layer: 0
   m_Name: Silla (9)
   m_TagString: SillaDe
@@ -18300,6 +18368,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043872376}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1043872381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043872376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 4ed09beff963d4b4c99a6e7d54085825, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1048850383
 GameObject:
   m_ObjectHideFlags: 0
@@ -20056,7 +20155,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (2)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -20069,7 +20168,7 @@ Transform:
   m_GameObject: {fileID: 1133432271}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.11, y: 0, z: -11.29}
+  m_LocalPosition: {x: 3.39, y: 0, z: -9.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20087,6 +20186,7 @@ GameObject:
   - component: {fileID: 1143945768}
   - component: {fileID: 1143945767}
   - component: {fileID: 1143945766}
+  - component: {fileID: 1143945769}
   m_Layer: 0
   m_Name: SillaIz
   m_TagString: Untagged
@@ -20180,6 +20280,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1143945764}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1143945769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143945764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 0ffde50c18fd9604f8bef29f9789e20c, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1152160132
 GameObject:
   m_ObjectHideFlags: 0
@@ -21483,7 +21614,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (14)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -21496,7 +21627,7 @@ Transform:
   m_GameObject: {fileID: 1250873585}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.51, y: 0, z: -6.84}
+  m_LocalPosition: {x: 9.09, y: 0, z: -9.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22985,7 +23116,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (10)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -22998,7 +23129,38 @@ Transform:
   m_GameObject: {fileID: 1312423375}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.3599997, y: 0, z: 10.25}
+  m_LocalPosition: {x: -10.36, y: 0, z: 9.12}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 406791033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1320408461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1320408462}
+  m_Layer: 0
+  m_Name: Mesa_01 (17)
+  m_TagString: Untagged
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1320408462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320408461}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.36, y: 0, z: 7.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24313,7 +24475,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -24326,7 +24488,7 @@ Transform:
   m_GameObject: {fileID: 1391176203}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.57, y: 0, z: 5.8}
+  m_LocalPosition: {x: -0.25, y: 0, z: 5.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24344,6 +24506,7 @@ GameObject:
   - component: {fileID: 1394424196}
   - component: {fileID: 1394424195}
   - component: {fileID: 1394424194}
+  - component: {fileID: 1394424197}
   m_Layer: 0
   m_Name: SillaIz (1)
   m_TagString: Untagged
@@ -24437,6 +24600,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1394424192}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1394424197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1394424192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 5cd139fc924e4834b8a12b8dea5e580c, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1394719519
 GameObject:
   m_ObjectHideFlags: 0
@@ -25451,6 +25645,7 @@ GameObject:
   - component: {fileID: 1414876883}
   - component: {fileID: 1414876882}
   - component: {fileID: 1414876881}
+  - component: {fileID: 1414876884}
   m_Layer: 0
   m_Name: SillaDe
   m_TagString: Untagged
@@ -25544,6 +25739,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1414876879}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1414876884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414876879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: a2592bfff8dc20f49a3e2a6dabc5d801, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1415102201
 GameObject:
   m_ObjectHideFlags: 0
@@ -26465,6 +26691,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431012870}
   m_CullTransparentMesh: 1
+--- !u!1 &1439615939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1439615940}
+  m_Layer: 0
+  m_Name: Mesa_01 (16)
+  m_TagString: Untagged
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1439615940
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439615939}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.45, y: 0, z: 7.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 406791033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1442706502
 GameObject:
   m_ObjectHideFlags: 0
@@ -26618,6 +26875,7 @@ GameObject:
   - component: {fileID: 1458959168}
   - component: {fileID: 1458959167}
   - component: {fileID: 1458959166}
+  - component: {fileID: 1458959169}
   m_Layer: 0
   m_Name: Silla (5)
   m_TagString: SillaDe
@@ -26711,6 +26969,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1458959164}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1458959169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458959164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 1d451eaeecda1a842a6840a9ea67705d, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1459744357
 GameObject:
   m_ObjectHideFlags: 0
@@ -27095,6 +27384,7 @@ GameObject:
   - component: {fileID: 1501046640}
   - component: {fileID: 1501046639}
   - component: {fileID: 1501046638}
+  - component: {fileID: 1501046641}
   m_Layer: 0
   m_Name: Silla (1)
   m_TagString: SillaDe
@@ -27188,6 +27478,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1501046636}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1501046641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501046636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 6552901e241cdfa47bf61ff2a9e90908, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1503180565
 GameObject:
   m_ObjectHideFlags: 0
@@ -27200,6 +27521,7 @@ GameObject:
   - component: {fileID: 1503180569}
   - component: {fileID: 1503180568}
   - component: {fileID: 1503180567}
+  - component: {fileID: 1503180570}
   m_Layer: 0
   m_Name: SillaDe (1)
   m_TagString: Untagged
@@ -27293,6 +27615,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1503180565}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1503180570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503180565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 14863cbc507559345ab1f2151947a5d7, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1503347285
 GameObject:
   m_ObjectHideFlags: 0
@@ -27982,7 +28335,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (11)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -27995,7 +28348,7 @@ Transform:
   m_GameObject: {fileID: 1546766523}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.51, y: 0, z: -6.84}
+  m_LocalPosition: {x: -4.56, y: 0, z: -7.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28848,7 +29201,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (3)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -28861,7 +29214,7 @@ Transform:
   m_GameObject: {fileID: 1572337714}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.11, y: 0, z: -6.84}
+  m_LocalPosition: {x: -8.52, y: 0, z: -7.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28946,7 +29299,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (7)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -28959,7 +29312,7 @@ Transform:
   m_GameObject: {fileID: 1575457101}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.3, y: 0, z: 5.8}
+  m_LocalPosition: {x: -6.39, y: 0, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29124,6 +29477,7 @@ GameObject:
   - component: {fileID: 1583964438}
   - component: {fileID: 1583964437}
   - component: {fileID: 1583964436}
+  - component: {fileID: 1583964439}
   m_Layer: 0
   m_Name: SillaIz
   m_TagString: Untagged
@@ -29217,6 +29571,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583964434}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1583964439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583964434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 913a6cdc9c7197a4c905c17b995bcfcb, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1583994296
 GameObject:
   m_ObjectHideFlags: 0
@@ -29425,6 +29810,7 @@ GameObject:
   - component: {fileID: 1591334524}
   - component: {fileID: 1591334523}
   - component: {fileID: 1591334522}
+  - component: {fileID: 1591334525}
   m_Layer: 0
   m_Name: Silla
   m_TagString: SillaDe
@@ -29518,6 +29904,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591334520}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1591334525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591334520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: d29486116ceaa8b44a69676be8d0b2c1, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1598090445
 GameObject:
   m_ObjectHideFlags: 0
@@ -29714,6 +30131,37 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1605064557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1605064558}
+  m_Layer: 0
+  m_Name: Mesa_01 (18)
+  m_TagString: Untagged
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1605064558
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605064557}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.52, y: 0, z: -9.89}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 406791033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1607844733
 GameObject:
   m_ObjectHideFlags: 0
@@ -30499,6 +30947,7 @@ GameObject:
   - component: {fileID: 1647651335}
   - component: {fileID: 1647651334}
   - component: {fileID: 1647651333}
+  - component: {fileID: 1647651336}
   m_Layer: 0
   m_Name: Silla (4)
   m_TagString: SillaDe
@@ -30592,6 +31041,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1647651331}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1647651336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647651331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 0c0d2064ee5150c4dbe977b8ef95131d, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1649896395
 GameObject:
   m_ObjectHideFlags: 0
@@ -33907,6 +34387,7 @@ GameObject:
   - component: {fileID: 1824513927}
   - component: {fileID: 1824513926}
   - component: {fileID: 1824513925}
+  - component: {fileID: 1824513928}
   m_Layer: 0
   m_Name: Silla
   m_TagString: SillaDe
@@ -34000,6 +34481,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824513923}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1824513928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824513923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 3136d6b6f770a0045b60a181d721f128, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1829723252
 GameObject:
   m_ObjectHideFlags: 0
@@ -34922,7 +35434,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a124e0e11e3ead44780bac6c64790626, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2098205581}
   m_SourcePrefab: {fileID: 100100000, guid: a124e0e11e3ead44780bac6c64790626, type: 3}
 --- !u!1 &1902493406
 GameObject:
@@ -35406,7 +35921,7 @@ MonoBehaviour:
     ocupada: 0
   - posicion: {fileID: 2050797653}
     ocupada: 0
-  - posicion: {fileID: 405323020}
+  - posicion: {fileID: 0}
     ocupada: 0
   - posicion: {fileID: 1250873586}
     ocupada: 0
@@ -37001,6 +37516,7 @@ GameObject:
   - component: {fileID: 1984393209}
   - component: {fileID: 1984393208}
   - component: {fileID: 1984393207}
+  - component: {fileID: 1984393210}
   m_Layer: 0
   m_Name: Silla (3)
   m_TagString: SillaDe
@@ -37094,6 +37610,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984393205}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &1984393210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984393205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 7992d8c541bacd24fbd5218b93dbfeac, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1987340700
 GameObject:
   m_ObjectHideFlags: 0
@@ -37763,7 +38310,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (12)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -37776,7 +38323,7 @@ Transform:
   m_GameObject: {fileID: 2050797652}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.18, y: 0, z: -11.45}
+  m_LocalPosition: {x: 6.45, y: 0, z: -11.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -38321,6 +38868,7 @@ GameObject:
   - component: {fileID: 2090455124}
   - component: {fileID: 2090455123}
   - component: {fileID: 2090455122}
+  - component: {fileID: 2090455125}
   m_Layer: 0
   m_Name: Silla (10)
   m_TagString: SillaDe
@@ -38414,6 +38962,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090455120}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &2090455125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090455120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 2f56612f1fc261a46ad4d819ac5a7cd9, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &2090642365
 GameObject:
   m_ObjectHideFlags: 0
@@ -38674,6 +39253,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098004418}
   m_CullTransparentMesh: 1
+--- !u!1 &2098205577 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a124e0e11e3ead44780bac6c64790626, type: 3}
+  m_PrefabInstance: {fileID: 1894376546}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2098205581
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098205577}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.4154536, y: 1.4145365, z: 0.9926194}
+  m_Center: {x: 0, y: 0, z: 0.49937433}
 --- !u!1 &2110741412
 GameObject:
   m_ObjectHideFlags: 0
@@ -39017,6 +39622,7 @@ GameObject:
   - component: {fileID: 2122726009}
   - component: {fileID: 2122726008}
   - component: {fileID: 2122726007}
+  - component: {fileID: 2122726010}
   m_Layer: 0
   m_Name: Silla (7)
   m_TagString: SillaDe
@@ -39110,6 +39716,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2122726005}
   m_Mesh: {fileID: -9085179732658399188, guid: 305f9011259a6d24c9f0f627cc55cc4e, type: 3}
+--- !u!114 &2122726010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122726005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: ad3c9f6f49bad9948bacba75e01fd0ce, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &2128639098
 GameObject:
   m_ObjectHideFlags: 0
@@ -39544,7 +40181,7 @@ GameObject:
   m_Layer: 0
   m_Name: Mesa_01 (1)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -39557,7 +40194,7 @@ Transform:
   m_GameObject: {fileID: 2142995479}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.57, y: 0, z: -11.29}
+  m_LocalPosition: {x: -4.63, y: 0, z: -10.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41630,6 +42267,7 @@ GameObject:
   - component: {fileID: 3787282549366792791}
   - component: {fileID: 7609180550397051145}
   - component: {fileID: 7609180550397051146}
+  - component: {fileID: 7609180550397051147}
   m_Layer: 0
   m_Name: SillaDe
   m_TagString: Untagged
@@ -42568,6 +43206,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8, y: 2.5420501, z: 5.4338202}
   m_Center: {x: 0.0026158094, y: -0.32992056, z: -0.16335307}
+--- !u!114 &7609180550397051147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205038479353920415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 2
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 9ab96aeea92aa3d45a29cbd4bbe328ad, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &7661526286959262872
 GameObject:
   m_ObjectHideFlags: 0
