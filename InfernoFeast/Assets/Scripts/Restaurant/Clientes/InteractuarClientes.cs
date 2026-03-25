@@ -268,6 +268,7 @@ public class InteractuarClientes : MonoBehaviour
                 Destroy(Plato);
                 //Debug.Log("Has acertado");
                 em.cantidadCom[pedido]--;
+                em.EliminarComanda(em.NombresComandas[pedido].name);
 
                 if (tiempoPasado < 75)
                 {
@@ -279,7 +280,7 @@ public class InteractuarClientes : MonoBehaviour
                     comanda.sprite = Neutral;
                     modo = 2;
                 }
-                em.PosicionEntregarPlato();
+                //em.PosicionEntregarPlato();
                 FadeOut(0.5f); //Activamos el fade out
                 StartCoroutine(Adios());
 
@@ -290,7 +291,7 @@ public class InteractuarClientes : MonoBehaviour
                 //Debug.Log("No has acertado");
                 comanda.sprite = Enfadado; //Sprite de enfadado
                 modo = 3;
-                em.PosicionEntregarPlato();
+                //em.PosicionEntregarPlato();
                 FadeOut(0.5f); //Activamos el fade out
                 StartCoroutine(Adios()); //Corrutina que finaliza todo
             }

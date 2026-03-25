@@ -25,7 +25,6 @@ public class EmpezarTurno : MonoBehaviour
     public TextMeshProUGUI cant3;
 
     [Header("Componentes UI Comandas")]
-    public Image prefabImagen;
     public List<Sprite> ListaComandas;
 
     [Header("Referencia a la UI de abierto o cerrado")]
@@ -41,6 +40,15 @@ public class EmpezarTurno : MonoBehaviour
 
     [Header("Sonido")]
     public AudioSource audio;
+
+    [Header("UI Lista Comandas (nuevo sistema)")]
+    public Transform contenedorComandas;
+    public GameObject prefabComandaUI;
+    public int maxComandas = 4;
+    public float separacionY = 90f;
+    public float desplazamientoEntrada = 500f;
+
+    private List<ComandaActiva> comandasActivas = new List<ComandaActiva>();
 
     private void Update()
     {
@@ -158,36 +166,119 @@ public class EmpezarTurno : MonoBehaviour
 
     public void ComandaUI(string nombre)
     {
-        for (int i = 0; i < NombresComandas.Count; i++)         
+        if (comandasActivas.Count >= maxComandas)
+            return;
+
+        Sprite sprite = null;
+
+        for (int i = 0; i < ListaComandas.Count; i++)
         {
             if (ListaComandas[i].name == nombre)
             {
-                prefabImagen.sprite = ListaComandas[i];
+                sprite = ListaComandas[i];
+                break;
+            }
+        }
 
-                StartCoroutine(Animacion());
+        if (sprite == null)
+        {
+            Debug.LogWarning("No se encontró el sprite de la comanda: " + nombre);
+            return;
+        }
 
+        GameObject nueva = Instantiate(prefabComandaUI, contenedorComandas);
+        nueva.name = "Comanda_" + nombre + "_" + comandasActivas.Count;
 
-                return; 
+        Image img = nueva.GetComponent<Image>();
+        if (img == null)
+        {
+            Debug.LogError("El prefabComandaUI no tiene componente Image.");
+            Destroy(nueva);
+            return;
+        }
+
+        img.sprite = sprite;
+
+        RectTransform rt = nueva.GetComponent<RectTransform>();
+        float targetY = -comandasActivas.Count * separacionY;
+
+        rt.anchoredPosition = new Vector2(desplazamientoEntrada, targetY);
+
+        comandasActivas.Add(new ComandaActiva
+        {
+            objeto = nueva,
+            nombre = nombre
+        });
+
+        StartCoroutine(AnimarEntrada(rt, targetY));
+    }
+
+    /* IEnumerator Animacion()
+     {
+         Animator anim = prefabImagen.GetComponent<Animator>();
+
+         anim.enabled = true;
+         anim.Play("animacionComandas");
+
+         yield return new WaitForSeconds(0.25f);
+
+         FijarPosicionFinal();
+         anim.enabled = false;
+
+         yield break;
+     }*/
+
+    IEnumerator AnimarEntrada(RectTransform rt, float targetY)
+    {
+        Vector2 start = new Vector2(desplazamientoEntrada, targetY);
+        Vector2 end = new Vector2(0f, targetY);
+
+        float t = 0f;
+        float duracion = 0.25f;
+
+        while (t < duracion)
+        {
+            t += Time.deltaTime;
+            rt.anchoredPosition = Vector2.Lerp(start, end, t / duracion);
+            yield return null;
+        }
+
+        rt.anchoredPosition = end;
+    }
+
+    void ReordenarComandas()
+    {
+        for (int i = 0; i < comandasActivas.Count; i++)
+        {
+            if (comandasActivas[i].objeto == null) continue;
+
+            RectTransform rt = comandasActivas[i].objeto.GetComponent<RectTransform>();
+            rt.anchoredPosition = new Vector2(0f, -i * separacionY);
+        }
+    }
+
+    public void EliminarComanda(string nombre)
+    {
+        for (int i = 0; i < comandasActivas.Count; i++)
+        {
+            if (comandasActivas[i].nombre == nombre)
+            {
+                Destroy(comandasActivas[i].objeto);
+                comandasActivas.RemoveAt(i);
+                ReordenarComandas();
+                return;
             }
         }
     }
 
-    IEnumerator Animacion()
+    [System.Serializable]
+    public class ComandaActiva
     {
-        Animator anim = prefabImagen.GetComponent<Animator>();
-
-        anim.enabled = true;
-        anim.Play("animacionComandas");
-
-        yield return new WaitForSeconds(0.25f);
-
-        FijarPosicionFinal();
-        anim.enabled = false;
-
-        yield break;
+        public GameObject objeto;
+        public string nombre;
     }
 
-    void FijarPosicionFinal()
+    /*void FijarPosicionFinal()
     {
         RectTransform rt = prefabImagen.rectTransform;
         rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 419);
@@ -197,5 +288,5 @@ public class EmpezarTurno : MonoBehaviour
     {
         RectTransform rt = prefabImagen.rectTransform;
         rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 752);
-    }
+    }*/
 }
