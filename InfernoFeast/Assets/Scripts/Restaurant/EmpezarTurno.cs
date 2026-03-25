@@ -213,21 +213,6 @@ public class EmpezarTurno : MonoBehaviour
         StartCoroutine(AnimarEntrada(rt, targetY));
     }
 
-    /* IEnumerator Animacion()
-     {
-         Animator anim = prefabImagen.GetComponent<Animator>();
-
-         anim.enabled = true;
-         anim.Play("animacionComandas");
-
-         yield return new WaitForSeconds(0.25f);
-
-         FijarPosicionFinal();
-         anim.enabled = false;
-
-         yield break;
-     }*/
-
     IEnumerator AnimarEntrada(RectTransform rt, float targetY)
     {
         Vector2 start = new Vector2(desplazamientoEntrada, targetY);

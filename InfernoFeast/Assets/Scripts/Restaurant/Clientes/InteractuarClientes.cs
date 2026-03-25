@@ -125,6 +125,16 @@ public class InteractuarClientes : MonoBehaviour
             // Si no hay ninguna cuenta activa, ocultamos slider
             if (slider.gameObject.activeSelf) slider.gameObject.SetActive(false);
         }
+
+        //Controlamos que si se acaba el turno los clientes se vayan
+        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+        ClienteManager CM = clienteManager.GetComponent<ClienteManager>();
+
+        if (!em.empezado)
+        {
+            StopAllCoroutines();
+            CM.ClienteAdios(this.gameObject);
+        }
     }
 
     private void usingPedidoOnSlider()
@@ -215,8 +225,8 @@ public class InteractuarClientes : MonoBehaviour
         AtendidoCuent = true;
         tiempoPasado = 0f;
 
-        // Activamos la cuenta del pedido en el slider
-        tiempoMaxPedido = 75f; // si quieres que sea otro valor, cámbialo aquí
+        //Activamos la cuenta del pedido en el slider
+        tiempoMaxPedido = 100f; //Valor de la cuenta atrás
         usandoCuentaPedido = true;
         if (slider != null) { slider.gameObject.SetActive(true); slider.maxValue = tiempoMaxPedido; slider.value = tiempoMaxPedido; }
     }
@@ -239,7 +249,7 @@ public class InteractuarClientes : MonoBehaviour
         tiempoPasado = 0f;
 
         // Activamos la cuenta del pedido en el slider
-        tiempoMaxPedido = 75f;
+        tiempoMaxPedido = 100f;
         usandoCuentaPedido = true;
         if (slider != null) { slider.gameObject.SetActive(true); slider.maxValue = tiempoMaxPedido; slider.value = tiempoMaxPedido; }
     }
@@ -270,7 +280,7 @@ public class InteractuarClientes : MonoBehaviour
                 em.cantidadCom[pedido]--;
                 em.EliminarComanda(em.NombresComandas[pedido].name);
 
-                if (tiempoPasado < 75)
+                if (tiempoPasado < 100)
                 {
                     comanda.sprite = Feliz;
                     modo = 1;
@@ -320,7 +330,7 @@ public class InteractuarClientes : MonoBehaviour
         while (true)
         {
             // Determina duración según si se ha atendido
-            float tiempo = Atendido ? 90f : 45f;
+            float tiempo = Atendido ? 120f : 100f;
             // Consumimos el flag Atendido (lo usamos para decidir la duración)
             Atendido = false;
 
