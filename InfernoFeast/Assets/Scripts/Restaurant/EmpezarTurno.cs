@@ -15,14 +15,8 @@ public class EmpezarTurno : MonoBehaviour
     [Header("Lista Comandas")]
     public List<Sprite> NombresComandas; //Estos son los nombres de las comandas que pueden aparecer
     public List<int> cantidadCom; //Esta es la cantidad de comandas de un mismo plato que se han pedido
+    public int comandasCount = 0;
 
-    [Header("Componentes UI Comandas")]
-    public GameObject comanda1; //Estos hacen referencia a la imagen de la comanda que va a aparecer
-    public GameObject comanda2;
-    public GameObject comanda3;
-    public TextMeshProUGUI cant1; //Estos textos hacen referencia a la cantidad que se ha pedido de esa comanda
-    public TextMeshProUGUI cant2;
-    public TextMeshProUGUI cant3;
 
     [Header("Componentes UI Comandas")]
     public List<Sprite> ListaComandas;
@@ -52,47 +46,7 @@ public class EmpezarTurno : MonoBehaviour
 
     private void Update()
     {
-        //Textos de la primera comanda
-        if (cantidadCom[0] > 0)
-        {
-            comanda1.gameObject.SetActive(true);
-            cant1.gameObject.SetActive(true);
 
-            cant1.text = "X"+cantidadCom[0];
-        }
-        else
-        {
-            comanda1.gameObject.SetActive(false);
-            cant1.gameObject.SetActive(false);
-        }
-
-        //Textos de la segunda comanda
-        if (cantidadCom[1] > 0)
-        {
-            comanda2.gameObject.SetActive(true);
-            cant2.gameObject.SetActive(true);
-
-            cant2.text = "X" + cantidadCom[1];
-        }
-        else
-        {
-            comanda2.gameObject.SetActive(false);
-            cant2.gameObject.SetActive(false);
-        }
-
-        //Textos de la tercera comanda
-        if (cantidadCom[2] > 0)
-        {
-            comanda3.gameObject.SetActive(true);
-            cant3.gameObject.SetActive(true);
-
-            cant3.text = "X" + cantidadCom[2];
-        }
-        else
-        {
-            comanda3.gameObject.SetActive(false);
-            cant3.gameObject.SetActive(false);
-        }
     }
     public void TurnoStart()
     {

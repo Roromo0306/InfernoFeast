@@ -2095,6 +2095,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &74497851
 BoxCollider:
@@ -6280,6 +6281,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &262701167
 BoxCollider:
@@ -29192,6 +29194,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &1417996122
 BoxCollider:
@@ -34253,6 +34256,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &1632565516
 BoxCollider:
@@ -41617,6 +41621,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &1951322312
 BoxCollider:
@@ -46144,6 +46149,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &2073441821045489240
 BoxCollider:
@@ -47259,6 +47265,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!4 &5413316898729716376
 Transform:
@@ -48899,6 +48906,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &8513636847878766118
 BoxCollider:
@@ -49154,6 +49162,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!33 &8920206165941010771
 MeshFilter:
@@ -49191,6 +49200,7 @@ MonoBehaviour:
   - {fileID: 1633555405}
   - {fileID: 783519134}
   - {fileID: 2002872580}
+  cogerObjeto: {fileID: 1935621807}
   canvascajas: {fileID: 1687816005}
 --- !u!65 &8920206165941010773
 BoxCollider:

@@ -12,13 +12,16 @@ public class Caja : MonoBehaviour
     public List<Image> Botones;
     public List<TextMeshProUGUI> textos;
 
+    [Header("Padre del player para coger objetos")]
+    public GameObject cogerObjeto;
+
     public CanvasCajas canvascajas;
 
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKey(KeyCode.E) && cogerObjeto.transform.childCount <= 0)
             {
                 //Con esto desactivamos en el caso de que nos sobre un boton
                 if (ImagenesUI.Count < Botones.Count)

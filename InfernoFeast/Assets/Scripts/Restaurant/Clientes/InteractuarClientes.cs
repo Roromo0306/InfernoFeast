@@ -172,14 +172,14 @@ public class InteractuarClientes : MonoBehaviour
             {
 
                 //Clientes normales cuando no se les ha atendido
-                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido && Sentado)
+                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido && Sentado && em.comandasCount <4)
                 {
                     ElegirComandaN();
                     Elegido = true;
                 }
 
                 //Clientes VIP cuando no se les ha atendido
-                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido && Sentado)
+                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido && Sentado && em.comandasCount < 4)
                 {
                     ElegirComandaV();
                     Elegido = true;
@@ -218,6 +218,7 @@ public class InteractuarClientes : MonoBehaviour
 
         comanda.sprite = em.NombresComandas[pedido];
         em.ComandaUI(em.NombresComandas[pedido].name);
+        em.comandasCount++;
         em.cantidadCom[pedido]++;
 
         //Inicia cuenta atrás (pedido)
@@ -240,6 +241,7 @@ public class InteractuarClientes : MonoBehaviour
 
         comanda.sprite = em.NombresComandas[pedido];
         em.ComandaUI(em.NombresComandas[pedido].name);
+        em.comandasCount++;
 
         em.cantidadCom[pedido]++;
 
@@ -279,6 +281,7 @@ public class InteractuarClientes : MonoBehaviour
                 //Debug.Log("Has acertado");
                 em.cantidadCom[pedido]--;
                 em.EliminarComanda(em.NombresComandas[pedido].name);
+                em.comandasCount--;
 
                 if (tiempoPasado < 100)
                 {
@@ -290,7 +293,7 @@ public class InteractuarClientes : MonoBehaviour
                     comanda.sprite = Neutral;
                     modo = 2;
                 }
-                //em.PosicionEntregarPlato();
+ 
                 FadeOut(0.5f); //Activamos el fade out
                 StartCoroutine(Adios());
 
@@ -298,10 +301,12 @@ public class InteractuarClientes : MonoBehaviour
             else //No has acertado
             {
                 Destroy(Plato);
-                //Debug.Log("No has acertado");
+
                 comanda.sprite = Enfadado; //Sprite de enfadado
                 modo = 3;
-                //em.PosicionEntregarPlato();
+                em.cantidadCom[pedido]--;
+                em.EliminarComanda(em.NombresComandas[pedido].name);
+                em.comandasCount--;
                 FadeOut(0.5f); //Activamos el fade out
                 StartCoroutine(Adios()); //Corrutina que finaliza todo
             }
@@ -373,7 +378,12 @@ public class InteractuarClientes : MonoBehaviour
             if (pedido >= 0 && em != null)
             {
                 if (pedido < em.cantidadCom.Count)
+                {
                     em.cantidadCom[pedido]--;
+                    em.EliminarComanda(em.NombresComandas[pedido].name);
+                    em.comandasCount--;
+                }
+
             }
 
             // El cliente se marcha por tiempo agotado
