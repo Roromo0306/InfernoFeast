@@ -124,11 +124,12 @@ public class BakeCounter : MonoBehaviour
 
             if(slider.value >= 0.9 && !haSonado2)
             {
+                audio.Stop();
                 audioQuemado.Play();
                 haSonado2 = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.E) && counterInt.Hornear)
+            if (Input.GetKeyDown(KeyCode.E) && counterInt.Hornear || counterInt.Hornear2)
             {
                 if (PadrePlayer.transform.childCount <= 0)
                 {
@@ -158,8 +159,8 @@ public class BakeCounter : MonoBehaviour
         //Completa el bake
         quemado = true;
         QuemadoImage.enabled = true;
-        audio.loop = true;
-        audio.Play();
+        //audio.loop = true;
+        //audio.Play();
 
         corrutina = null;
         yield break;

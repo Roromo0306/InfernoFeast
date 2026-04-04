@@ -2389,7 +2389,7 @@ GameObject:
   - component: {fileID: 85428867}
   - component: {fileID: 85428866}
   m_Layer: 0
-  m_Name: Cortar2 (1)
+  m_Name: Cortar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5153,7 +5153,7 @@ Transform:
   m_GameObject: {fileID: 177689426}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.010779389, y: 1.0094515, z: 0.15668307}
+  m_LocalPosition: {x: -0.01, y: 1.13, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8797,7 +8797,7 @@ GameObject:
   - component: {fileID: 404183793}
   - component: {fileID: 404183792}
   m_Layer: 0
-  m_Name: Hervir2 (1)
+  m_Name: Hervir2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13903,6 +13903,7 @@ MonoBehaviour:
   Cortar: 0
   Pelar: 0
   Hornear: 0
+  Hornear2: 0
   Hervir: 0
   Hervir2: 0
   Freir: 0
@@ -13916,15 +13917,16 @@ MonoBehaviour:
   PadreFreir: {fileID: 0}
   PadreHorno: {fileID: 0}
   PadreHervir: {fileID: 0}
-  CortarE: {fileID: 0}
+  CortarE: {fileID: 647017087}
   Cortar2E: {fileID: 404810029}
   HornearE: {fileID: 1198779901}
-  HervirE: {fileID: 0}
-  Hervir2E: {fileID: 1269934733}
+  Hornear2E: {fileID: 170901184}
+  HervirE: {fileID: 1269934733}
+  Hervir2E: {fileID: 1567881649}
   FreirE: {fileID: 350325292}
   Freir2E: {fileID: 1254921157}
   BatirE: {fileID: 791426579}
-  Batir2E: {fileID: 0}
+  Batir2E: {fileID: 1121388107}
   BasuraE: {fileID: 1607844733}
   EmpezarTurnoE: {fileID: 1893610573}
   CajaCarneE: {fileID: 2113443217}
@@ -14639,7 +14641,7 @@ GameObject:
   - component: {fileID: 741865409}
   - component: {fileID: 741865408}
   m_Layer: 0
-  m_Name: Batir (1)
+  m_Name: Batir2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22670,7 +22672,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -832, y: 440}
+  m_AnchoredPosition: {x: -560.6, y: 434.1}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1114042147
@@ -26970,7 +26972,7 @@ GameObject:
   - component: {fileID: 1364073541}
   - component: {fileID: 1364073540}
   m_Layer: 0
-  m_Name: Horno (1)
+  m_Name: Horno2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42245,7 +42247,7 @@ GameObject:
   - component: {fileID: 1981020350}
   - component: {fileID: 1981020354}
   m_Layer: 0
-  m_Name: Hervir2
+  m_Name: Hervir
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

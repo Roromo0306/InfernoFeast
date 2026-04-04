@@ -125,6 +125,13 @@ public class MixCounter : MonoBehaviour
             Indice = 0;
             ObjetoEncontrado = false;
         }
+        else
+        {
+            GameObject nuevoObjeto = Instantiate(HijoMix, PadrePlayer.transform.position, HijoMix.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
+            nuevoObjeto.name = HijoMix.name; //Me aseguro que el nombre sea el correcto
+
+            Destroy(HijoMix); //Destruyo el objeto que estaba encima del counter
+        }
 
         isInteracting = false;
         progressBar.gameObject.SetActive(false);

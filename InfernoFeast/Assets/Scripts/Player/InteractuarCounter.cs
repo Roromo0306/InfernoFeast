@@ -6,14 +6,14 @@ public class InteractuarCounter : MonoBehaviour
 {
     public GameObject Padre;
 
-    [HideInInspector] public bool Hold, Cortar, Pelar, Hornear, Hervir, Hervir2, Freir, Freir2, Batir, basura, Empezarturno, ObjetoDejado;
+    [HideInInspector] public bool Hold, Cortar, Pelar, Hornear, Hornear2, Hervir, Hervir2, Freir, Freir2, Batir, basura, Empezarturno, ObjetoDejado;
 
     [HideInInspector] public bool turnoEmpezado = false;
 
     [HideInInspector] public GameObject Counter, PadreFreir, PadreHorno, PadreHervir;
 
     [Header("Imagenes E")]
-    public GameObject CortarE, Cortar2E, HornearE, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E;
+    public GameObject CortarE, Cortar2E, HornearE, Hornear2E, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E;
     private void Update()
     {
         Hold = Padre.transform.childCount > 0;
@@ -36,7 +36,17 @@ public class InteractuarCounter : MonoBehaviour
                 }
             }
 
-            if(Hervir && Input.GetKeyDown(KeyCode.E))
+            if (Hornear2 && Input.GetKeyDown(KeyCode.E))
+            {
+                BakeCounter bake = Counter.GetComponent<BakeCounter>();
+
+                if (!ObjetoDejado)
+                {
+                    bake.Hornear();
+                }
+            }
+
+            if (Hervir && Input.GetKeyDown(KeyCode.E))
             {
                 PotCounter pot = Counter.GetComponent<PotCounter>();
                
@@ -139,6 +149,19 @@ public class InteractuarCounter : MonoBehaviour
 
             PadreHorno = Counter.transform.GetChild(0).gameObject;
             if(PadreHorno.transform.childCount > 0)
+            {
+                ObjetoDejado = true;
+            }
+        }
+
+        if (collision.gameObject.name == "Horno2")
+        {
+            Hornear2 = true;
+            Counter = collision.gameObject;
+            Hornear2E.gameObject.SetActive(true);
+
+            PadreHorno = Counter.transform.GetChild(0).gameObject;
+            if (PadreHorno.transform.childCount > 0)
             {
                 ObjetoDejado = true;
             }
@@ -289,6 +312,16 @@ public class InteractuarCounter : MonoBehaviour
             Hornear = false;
             Counter = null;
             HornearE.gameObject.SetActive(false);
+
+            ObjetoDejado = false;
+            PadreHorno = null;
+        }
+
+        if (collision.gameObject.name == "Horno2")
+        {
+            Hornear2 = false;
+            Counter = null;
+            Hornear2E.gameObject.SetActive(false);
 
             ObjetoDejado = false;
             PadreHorno = null;

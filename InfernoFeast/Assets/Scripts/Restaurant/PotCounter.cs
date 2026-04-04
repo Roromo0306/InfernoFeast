@@ -126,6 +126,7 @@ public class PotCounter : MonoBehaviour
 
                 if (slider.value >= 0.9 && !haSonado2)
                 {
+                    audio.Stop();
                     audioQuemado.Play();
                     haSonado2 = true;
                 }
@@ -166,6 +167,7 @@ public class PotCounter : MonoBehaviour
 
                 if (slider.value >= 0.9 && !haSonado2)
                 {
+                    audio.Stop();
                     audioQuemado.Play();
                     haSonado2 = true;
                 }
@@ -202,8 +204,8 @@ public class PotCounter : MonoBehaviour
         //Completa el bake
         quemado = true;
         QuemadoImage.enabled = true;
-        audio.loop = true;
-        audio.Play();
+        //audio.loop = true;
+        //audio.Play();
 
         corrutina = null;
         yield break;

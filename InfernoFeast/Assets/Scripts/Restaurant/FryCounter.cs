@@ -131,6 +131,7 @@ public class FryCounter : MonoBehaviour
 
                 if (slider.value >= 0.9 && !haSonado2)
                 {
+                    audio.Stop();
                     audioQuemado.Play();
                     haSonado2 = true;
                 }
@@ -140,6 +141,15 @@ public class FryCounter : MonoBehaviour
                     if (PadrePlayer.transform.childCount <= 0)
                     {
                         //Se cancela
+
+                        if(slider.value <= 0.6)
+                        {
+                            slider.gameObject.SetActive(false);
+                            slider.value = 0f;
+                            Instanciar(objetoFreidora);
+                            yield break;
+
+                        }
 
                         if (slider.value >= 0.6 && slider.value <= 0.9f)
                         {
@@ -177,6 +187,7 @@ public class FryCounter : MonoBehaviour
 
                 if (slider.value >= 0.9 && !haSonado2)
                 {
+                    audio.Stop();
                     audioQuemado.Play();
                     haSonado2 = true;
                 }
@@ -186,6 +197,15 @@ public class FryCounter : MonoBehaviour
                     if (PadrePlayer.transform.childCount <= 0)
                     {
                         //Se cancela
+
+                        if (slider.value <= 0.6)
+                        {
+                            slider.gameObject.SetActive(false);
+                            slider.value = 0f;
+                            Instanciar(objetoFreidora);
+                            yield break;
+
+                        }
 
                         if (slider.value >= 0.6 && slider.value <= 0.9f)
                         {
@@ -217,8 +237,8 @@ public class FryCounter : MonoBehaviour
         //Completa el bake
         quemado = true;
         QuemadoImage.enabled = true;
-        audio.loop = true;
-        audio.Play();
+        //audio.loop = true;
+        //audio.Play();
 
         corrutina = null;
         yield break;
