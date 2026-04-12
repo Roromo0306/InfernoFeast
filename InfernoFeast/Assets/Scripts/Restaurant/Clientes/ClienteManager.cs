@@ -222,6 +222,17 @@ public class ClienteManager : MonoBehaviour
             // Subir la Y local suavemente
             yield return StartCoroutine(SitDown(visual, sitYOffset, sitLerpDuration));
 
+            yield return new WaitForSeconds(0.1f);
+
+            // Hacemos el cambio de Agente a Obstáculo
+            if (agent != null) agent.enabled = false;
+
+            NavMeshObstacle obstacle = cliente.GetComponent<NavMeshObstacle>();
+            if (obstacle != null)
+            {
+                obstacle.enabled = true;
+            }
+
             cliente.SendMessage("OnSitted", SendMessageOptions.DontRequireReceiver);
         }
     }

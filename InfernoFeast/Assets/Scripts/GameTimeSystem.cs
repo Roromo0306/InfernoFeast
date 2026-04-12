@@ -9,6 +9,10 @@ public class GameTimeSystem : MonoBehaviour
     public float secondsPerGameDay = 480f;
     public string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
+    [Header("Configuración Fade")]
+    public CanvasGroup fadeCanvasGroup;
+    public float fadeDuration = 1.0f;
+
     [Header("UI")]
     public GameObject panelFinalDia;
     public TMP_Text horaText;
@@ -75,32 +79,69 @@ public class GameTimeSystem : MonoBehaviour
     public void ActivarFinDeDia() { if (panelFinalDia != null) panelFinalDia.SetActive(true); }
     public void Dormir() { ActivarFinDeDia(); }
 
-    
     public void StartNewDayAutomatic()
     {
-        Dormir don = Cama.GetComponent<Dormir>();
+        StartCoroutine(SequenceStartNewDay());
+    }
 
-        currentDayIndex = (currentDayIndex + 1) % 7;
-      
-        gameTimeInSeconds = 6 * 3600;
-      
-        if (panelFinalDia != null) panelFinalDia.SetActive(false);
-       
-        lastGameTimeInSeconds = gameTimeInSeconds;
+    private IEnumerator SequenceStartNewDay()
+    {
         Stats.gameObject.SetActive(false);
+
+        // Hacemos el fade hacia transparente (esclarecer)
+        yield return StartCoroutine(DoFade(0f));
+
+        Dormir don = Cama.GetComponent<Dormir>();
+        currentDayIndex = (currentDayIndex + 1) % 7;
+        gameTimeInSeconds = 6 * 3600;
+
+        if (panelFinalDia != null) panelFinalDia.SetActive(false);
+
+        lastGameTimeInSeconds = gameTimeInSeconds;
         don.nuevoDia = false;
     }
 
     // llamado por el botón (mantiene compatibilidad con tu UI)
     public void ComenzarNuevoDia()
     {
-        ManagerFinDia man = Managerfindia.GetComponent<ManagerFinDia>();
+        StartCoroutine(SequenceComenzarNuevoDia());
+    }
 
+    private IEnumerator SequenceComenzarNuevoDia()
+    {
+        // 1. Primero oscurecemos el fondo
+        yield return StartCoroutine(DoFade(1f));
+
+        // 2. Luego mostramos las estadísticas
+        ManagerFinDia man = Managerfindia.GetComponent<ManagerFinDia>();
         StatDinero.text = man.dinero.ToString("F2");
         StatReputacion.text = man.reputacion.ToString("F2");
 
+        panelFinalDia.SetActive(false);
         Stats.gameObject.SetActive(true);
         esperandoNuevoDia = false;
+    }
+
+    // Función auxiliar para el fade
+    private IEnumerator DoFade(float targetAlpha)
+    {
+        float startAlpha = fadeCanvasGroup.alpha;
+        float timer = 0;
+
+        // Si vamos a oscurecer, bloqueamos raycasts para que no se pulse nada por error
+        if (targetAlpha > 0) fadeCanvasGroup.blocksRaycasts = true;
+
+        while (timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+            fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / fadeDuration);
+            yield return null;
+        }
+
+        fadeCanvasGroup.alpha = targetAlpha;
+
+        // Si terminamos de aclarar, dejamos de bloquear raycasts
+        if (targetAlpha <= 0) fadeCanvasGroup.blocksRaycasts = false;
     }
 
     public void CerrarPanel() { panelFinalDia.SetActive(false); }

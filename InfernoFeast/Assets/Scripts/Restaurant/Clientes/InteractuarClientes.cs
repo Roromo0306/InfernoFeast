@@ -294,7 +294,7 @@ public class InteractuarClientes : MonoBehaviour
                     modo = 2;
                 }
  
-                FadeOut(0.5f); //Activamos el fade out
+                FadeOut(2.5f); //Activamos el fade out
                 StartCoroutine(Adios());
 
             }
@@ -307,7 +307,7 @@ public class InteractuarClientes : MonoBehaviour
                 em.cantidadCom[pedido]--;
                 em.EliminarComanda(em.NombresComandas[pedido].name);
                 em.comandasCount--;
-                FadeOut(0.5f); //Activamos el fade out
+                FadeOut(2.5f); //Activamos el fade out
                 StartCoroutine(Adios()); //Corrutina que finaliza todo
             }
         }
