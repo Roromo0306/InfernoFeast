@@ -13910,8 +13910,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d163dd86fede0234fa0117074b8e040e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  sprintMultiplier: 1.8
+  moveSpeed: 5
+  sprintMultiplier: 2
   rb: {fileID: 672688993}
   sprintDuration: 5
   sprintRechargeRate: 1
