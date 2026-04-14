@@ -13,7 +13,7 @@ public class InteractuarCounter : MonoBehaviour
     [HideInInspector] public GameObject Counter, PadreFreir, PadreHorno, PadreHervir;
 
     [Header("Imagenes E")]
-    public GameObject CortarE, Cortar2E, HornearE, Hornear2E, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E;
+    public GameObject CortarE, Cortar2E, HornearE, Hornear2E, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E, CajaCarne2E, CajaPescado2E, CajaEspecias2E, CajaPan2E, CajaVegetales2E;
     private void Update()
     {
         Hold = Padre.transform.childCount > 0;
@@ -23,6 +23,7 @@ public class InteractuarCounter : MonoBehaviour
             if (Cortar && Input.GetKeyDown(KeyCode.E))
             {
                 CutCounter cut = Counter.GetComponent<CutCounter>();
+                Debug.Log("Cortar Activado");
                 cut.cortar();
             }
 
@@ -126,7 +127,6 @@ public class InteractuarCounter : MonoBehaviour
             if(collision.gameObject.name == "Cortar")
             {
                 CortarE.gameObject.SetActive(true);
-                Debug.Log("Hola2");
             }
             else
             {
@@ -282,6 +282,31 @@ public class InteractuarCounter : MonoBehaviour
         {
             Encimera2E.gameObject.SetActive(true);
         }
+
+        if (collision.gameObject.name == "CajaCarne2")
+        {
+            CajaCarne2E.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaPescado2")
+        {
+            CajaPescado2E.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaEspecias2")
+        {
+            CajaEspecias2E.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaPan2")
+        {
+            CajaPan2E.gameObject.SetActive(true);
+        }
+
+        if (collision.gameObject.name == "CajaVerdura2")
+        {
+            CajaVegetales2E.gameObject.SetActive(true);
+        }
     }
 
     //Salida de la colision
@@ -429,6 +454,31 @@ public class InteractuarCounter : MonoBehaviour
         if (collision.gameObject.name == "Encimera2")
         {
             Encimera2E.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaCarne2")
+        {
+            CajaCarne2E.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaPescado2")
+        {
+            CajaPescado2E.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaEspecias2")
+        {
+            CajaEspecias2E.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaPan2")
+        {
+            CajaPan2E.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "CajaVerdura2")
+        {
+            CajaVegetales2E.gameObject.SetActive(false);
         }
     }
 }

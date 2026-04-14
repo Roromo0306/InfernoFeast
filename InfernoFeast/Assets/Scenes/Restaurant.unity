@@ -2119,7 +2119,7 @@ GameObject:
   - component: {fileID: 74497851}
   - component: {fileID: 74497850}
   m_Layer: 0
-  m_Name: CajaVerdura (1)
+  m_Name: CajaVerdura2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6307,7 +6307,7 @@ GameObject:
   - component: {fileID: 262701167}
   - component: {fileID: 262701166}
   m_Layer: 0
-  m_Name: CajaEspecias (1)
+  m_Name: CajaEspecias2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14012,6 +14012,11 @@ MonoBehaviour:
   CajaVegetalesE: {fileID: 948029996}
   EncimeraE: {fileID: 786836620}
   Encimera2E: {fileID: 1734321765}
+  CajaCarne2E: {fileID: 79822949}
+  CajaPescado2E: {fileID: 1964711021}
+  CajaEspecias2E: {fileID: 1503347285}
+  CajaPan2E: {fileID: 352891865}
+  CajaVegetales2E: {fileID: 474064154}
 --- !u!1 &685659123
 GameObject:
   m_ObjectHideFlags: 0
@@ -29361,7 +29366,7 @@ GameObject:
   - component: {fileID: 1417996122}
   - component: {fileID: 1417996121}
   m_Layer: 0
-  m_Name: CajaPan (1)
+  m_Name: CajaPan2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34421,7 +34426,7 @@ GameObject:
   - component: {fileID: 1632565516}
   - component: {fileID: 1632565515}
   m_Layer: 0
-  m_Name: CajaCarne (1)
+  m_Name: CajaCarne2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41790,7 +41795,7 @@ GameObject:
   - component: {fileID: 1951322312}
   - component: {fileID: 1951322311}
   m_Layer: 0
-  m_Name: CajaPescado (1)
+  m_Name: CajaPescado2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
