@@ -354,7 +354,7 @@ public class ClienteManager : MonoBehaviour
 
         // Detener agente si lo tiene
         NavMeshAgent a = cliente.GetComponentInChildren<NavMeshAgent>();
-        if (a != null)
+        if (a != null && a.isOnNavMesh)
         {
             a.isStopped = true;
             a.ResetPath();
