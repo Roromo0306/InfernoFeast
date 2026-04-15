@@ -65,4 +65,9 @@ public class ExitRestaurant : MonoBehaviour
     {
         SceneManager.LoadScene("Farm");
     }
+
+    public void CedriksRoom()
+    {
+        SceneFadeManager.Instance.LoadSceneWithFade("CedrikRoom");
+    }
 }
