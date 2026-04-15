@@ -6,15 +6,28 @@ using UnityEngine.SceneManagement;
 public class MainMenuController : MonoBehaviour
 {
     public GameObject settingsPanel;
-    //private GameObject creditsPanel;
+    public GameObject creditsPanel;
 
     // Start is called before the first frame update
     void Start()
     {
         settingsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+    }
 
-        //creditsPanel = GameObject.Find("Credits Panel");
-        //creditsPanel.SetActive(false);
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (settingsPanel.activeSelf)
+            {
+                settingsPanel.SetActive(false);
+            }
+            else if (creditsPanel.activeSelf)
+            {
+                creditsPanel.SetActive(false);
+            }
+        }
     }
 
     public void NewGame()
@@ -29,7 +42,7 @@ public class MainMenuController : MonoBehaviour
 
     public void Credits()
     {
-        //creditsPanel.SetActive(true);
+        creditsPanel.SetActive(true);
     }
 
     public void ExitGame()
