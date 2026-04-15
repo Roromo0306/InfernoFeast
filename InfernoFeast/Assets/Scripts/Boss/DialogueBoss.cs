@@ -32,7 +32,11 @@ public class DialogueBoss : MonoBehaviour
 
     public void StartDialog(List<string> newLines)
     {
-        lines = newLines;
+        if (newLines != null && newLines.Count > 0)
+        {
+            lines = newLines;
+        }
+
         index = 0;
         dialogPanel.SetActive(true);
         StartCoroutine(AnimatePanel(true));

@@ -51,9 +51,12 @@ public class VideoCinematic : MonoBehaviour
         // Empezamos el diálogo
         List<string> dialogo = new List<string>()
         {
-            "Bienvenido seas Cedrik!",
-            "Espero que disfrutes la experiencia.",
-            "¡Demuestra de lo que eres capaz!"
+             "Welcome to my restaurant, Cedrik... I do hope you prove worthy of my standards.",
+            "You will prepare my most exquisite creation: the Eternal Love Scallops.",
+             "Press Q… and hold it as long as you dare, to present your dish.",
+            "Take care where you aim… I would hate to be disappointed.",
+            "Now… impress me."
+
         };
 
         dialogueBoss.StartDialog(dialogo);
