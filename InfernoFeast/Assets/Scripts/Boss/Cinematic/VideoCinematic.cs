@@ -52,7 +52,7 @@ public class VideoCinematic : MonoBehaviour
         List<string> dialogo = new List<string>()
         {
              "Welcome to my restaurant, Cedrik... I do hope you prove worthy of my standards.",
-            "You will prepare my most exquisite creation: the Eternal Love Scallops.",
+            "You will prepare my most exquisite creation: the Scallops of Eternal Love",
              "Press Q… and hold it as long as you dare, to present your dish.",
             "Take care where you aim… I would hate to be disappointed.",
             "Now… impress me."
