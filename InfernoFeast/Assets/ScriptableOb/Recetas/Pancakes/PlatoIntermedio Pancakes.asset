@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2717d58d79a144baf6632fff41c3e2, type: 3}
   m_Name: PlatoIntermedio Pancakes
   m_EditorClassIdentifier: 
-  prefabIngrediente: {fileID: 1814119773594975965, guid: 5f7ae17651f5d204da128ae344eb4c96, type: 3}
+  prefabIngrediente: {fileID: 7231265495000205793, guid: fcf7c9d039c74ae4aa060979d2e1db04, type: 3}
