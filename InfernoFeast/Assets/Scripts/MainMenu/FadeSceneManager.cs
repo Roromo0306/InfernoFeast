@@ -37,6 +37,7 @@ public class SceneFadeManager : MonoBehaviour
     void Start()
     {
         // Empezamos siempre en negro
+
         canvasGroup.alpha = 1f;
     }
 

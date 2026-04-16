@@ -2529,7 +2529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Padre: {fileID: 622068784}
-  animator: {fileID: 0}
+  animator: {fileID: 1236817766}
   Hold: 0
   Cortar: 0
   Pelar: 0
@@ -2591,7 +2591,7 @@ MonoBehaviour:
   Hold: 0
   EncimeraSoltar: 0
   EncimeraCoger: 0
-  animator: {fileID: 0}
+  animator: {fileID: 1236817766}
 --- !u!114 &1374230787
 MonoBehaviour:
   m_ObjectHideFlags: 0
