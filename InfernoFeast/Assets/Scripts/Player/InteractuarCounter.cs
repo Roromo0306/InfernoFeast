@@ -5,6 +5,7 @@ using UnityEngine;
 public class InteractuarCounter : MonoBehaviour
 {
     public GameObject Padre;
+    public Animator animator;
 
     [HideInInspector] public bool Hold, Cortar, Pelar, Hornear, Hornear2, Hervir, Hervir2, Freir, Freir2, Batir, basura, Empezarturno, ObjetoDejado;
 
@@ -23,6 +24,7 @@ public class InteractuarCounter : MonoBehaviour
             if (Cortar && Input.GetKeyDown(KeyCode.E))
             {
                 CutCounter cut = Counter.GetComponent<CutCounter>();
+                animator.SetTrigger("isCutting");
                 Debug.Log("Cortar Activado");
                 cut.cortar();
             }
@@ -91,6 +93,7 @@ public class InteractuarCounter : MonoBehaviour
             if (Batir && Input.GetKeyDown(KeyCode.E))
             {
                 MixCounter mix = Counter.GetComponent<MixCounter>();
+                animator.SetTrigger("isMixing");
                 mix.StartMixing();
             }
 
@@ -121,6 +124,7 @@ public class InteractuarCounter : MonoBehaviour
         if (collision.gameObject.name == "Cortar" || collision.gameObject.name == "Cortar2")
         {
             Cortar = true;
+
             Counter = collision.gameObject;
             Debug.Log("Hola");
 
