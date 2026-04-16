@@ -9592,6 +9592,7 @@ MonoBehaviour:
   CajaEspecias2E: {fileID: 0}
   CajaPan2E: {fileID: 0}
   CajaVegetales2E: {fileID: 0}
+  CamaE: {fileID: 0}
 --- !u!1 &1451184262
 GameObject:
   m_ObjectHideFlags: 0
@@ -13796,7 +13797,7 @@ Transform:
   m_GameObject: {fileID: 2126567356}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.44, z: -1.53}
+  m_LocalPosition: {x: -0.062, y: 1.44, z: -0.956}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
