@@ -392,11 +392,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rounds:
   - name: Round 1
-    duration: 30
-  - name: Round 2
-    duration: 60
-  - name: Round 3
     duration: 90
+  - name: Round 2
+    duration: 180
+  - name: Round 3
+    duration: 360
   maxStrikes: 3
   currentStrikes: 0
   strikeSound: {fileID: 8300000, guid: d522a7f21cf8de347aaee79b930f8483, type: 3}

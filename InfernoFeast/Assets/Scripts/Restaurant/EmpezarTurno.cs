@@ -74,7 +74,7 @@ public class EmpezarTurno : MonoBehaviour
 
         ElegirComandas();
 
-        float tiempo = 180f;
+        float tiempo = 420f;
         while (tiempo > 0)
         {
             int minutos = (int)(tiempo / 60f);
