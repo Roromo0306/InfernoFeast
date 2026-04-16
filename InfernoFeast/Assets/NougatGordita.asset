@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Nougat-ExtraBlack SDF
+  m_Name: NougatGordita
   m_EditorClassIdentifier: 
-  hashCode: -602543353
+  hashCode: -1096174588
   material: {fileID: 86823783590343943}
-  materialHashCode: 1439376199
+  materialHashCode: -736735196
   m_Version: 1.1.0
   m_SourceFontFileGUID: 91f8b2a706783ab41b624a8434a3d544
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 91f8b2a706783ab41b624a8434a3d544, type: 3}
@@ -2643,7 +2643,7 @@ Material:
     - _ColorMask: 15
     - _CullMode: 0
     - _Diffuse: 0.5
-    - _FaceDilate: -0.63
+    - _FaceDilate: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
     - _GlowInner: 0.05
@@ -2657,12 +2657,12 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.164
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
-    - _ScaleRatioB: 1.2020833
-    - _ScaleRatioC: 1.2020833
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
