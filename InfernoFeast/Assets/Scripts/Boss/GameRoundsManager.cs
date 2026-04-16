@@ -121,7 +121,7 @@ public class GameRoundsManager : MonoBehaviour
         {
             dialogueBoss.timer = timer;
             dialogueBoss.StartDialog(
-                new List<string> { $"Ronda {roundIndex + 1}: ¡A cocinar!" }
+                new List<string> { $"Round {roundIndex + 1}: ¡Let's begin!" }
             );
         }
         else
