@@ -20,8 +20,8 @@ public class CogerSoltarObjeto : MonoBehaviour
     private void Update()
     {
         Hold = Padre.transform.childCount > 0; //Hold sera true si Padre tiene hijos
-
-        if(EncimeraSoltar && Input.GetKeyDown(KeyCode.E))
+        animator.SetBool("HasObject", Hold);
+        if (EncimeraSoltar && Input.GetKeyDown(KeyCode.E))
         {
             SoltarObjeto(EncimeraCounter);
             
@@ -40,14 +40,14 @@ public class CogerSoltarObjeto : MonoBehaviour
         if(Hold && collision.gameObject.CompareTag("Encimera"))
         {
             EncimeraSoltar = true;
-            animator.SetBool("HasObject", false);
+            
             EncimeraCounter = collision.gameObject;
         }
 
         if(!Hold && collision.gameObject.CompareTag("Encimera"))
         {
             EncimeraCoger = true;
-            animator.SetBool("HasObject", true);
+            
             EncimeraCounter = collision.gameObject;
         }
     }
