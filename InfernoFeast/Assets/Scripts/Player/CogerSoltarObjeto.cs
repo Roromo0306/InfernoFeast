@@ -14,7 +14,9 @@ public class CogerSoltarObjeto : MonoBehaviour
     public bool Hold, EncimeraSoltar, EncimeraCoger;
 
     private GameObject EncimeraCounter;
+    public Animator animator;
 
+   
     private void Update()
     {
         Hold = Padre.transform.childCount > 0; //Hold sera true si Padre tiene hijos
@@ -22,11 +24,13 @@ public class CogerSoltarObjeto : MonoBehaviour
         if(EncimeraSoltar && Input.GetKeyDown(KeyCode.E))
         {
             SoltarObjeto(EncimeraCounter);
+            
         }
 
         if(EncimeraCoger && Input.GetKeyDown(KeyCode.E))
         {
             CogerObjeto(EncimeraCounter);
+            
         }
     }
 
@@ -36,12 +40,14 @@ public class CogerSoltarObjeto : MonoBehaviour
         if(Hold && collision.gameObject.CompareTag("Encimera"))
         {
             EncimeraSoltar = true;
+            animator.SetBool("HasObject", false);
             EncimeraCounter = collision.gameObject;
         }
 
         if(!Hold && collision.gameObject.CompareTag("Encimera"))
         {
             EncimeraCoger = true;
+            animator.SetBool("HasObject", true);
             EncimeraCounter = collision.gameObject;
         }
     }
@@ -75,6 +81,7 @@ public class CogerSoltarObjeto : MonoBehaviour
 
             if (PadreEncimera.transform.childCount == 0)
             {
+                
                 GameObject newObj = Instantiate(objeto, PadreEncimera.transform.position, objeto.transform.rotation, PadreEncimera.transform);
                 newObj.name = newObj.name.Replace("(Clone)", "").Trim();
 
@@ -115,6 +122,7 @@ public class CogerSoltarObjeto : MonoBehaviour
         if (PadreEncimera.transform.childCount > 0)
         {
             Debug.Log("Cogido");
+            
             GameObject objeto = PadreEncimera.transform.GetChild(0).gameObject;
 
             GameObject newObj = Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform);
