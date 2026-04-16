@@ -787,7 +787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 02000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 128759646}
   client: {fileID: 1308596118}
   table: {fileID: 987976458}
@@ -2727,7 +2727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 0100000002000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 1680188456}
   client: {fileID: 217607933}
   table: {fileID: 2031576371}
@@ -3147,7 +3147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 0100000002000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 1387763712}
   client: {fileID: 335110836}
   table: {fileID: 1063422067}
@@ -10219,7 +10219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 000000000100000002000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 682232214}
   client: {fileID: 12287373}
   table: {fileID: 1846314449}
@@ -10946,7 +10946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 02000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 1922305528}
   client: {fileID: 1462276045}
   table: {fileID: 670127168}
@@ -11442,7 +11442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 02000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 911617654}
   client: {fileID: 195231414}
   table: {fileID: 774981713}
@@ -12757,7 +12757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 000000000100000002000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 105248241}
   client: {fileID: 36994987}
   table: {fileID: 8250983774290561953}
@@ -13668,7 +13668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundsAvailable: 02000000
-  requiredDish: {fileID: 11400000, guid: 71fc43e43c7a1d24192a04b74f23feac, type: 2}
+  requiredDish: {fileID: 11400000, guid: d8ba7a218206e23479996cdffe2e09a9, type: 2}
   snapPoint: {fileID: 609189653}
   client: {fileID: 1571013128}
   table: {fileID: 1994794463}

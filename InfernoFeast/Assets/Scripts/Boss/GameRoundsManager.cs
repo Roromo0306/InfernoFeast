@@ -142,6 +142,7 @@ public class GameRoundsManager : MonoBehaviour
         if (group.served) return;
 
         bool correct = plate.dish == group.requiredDish;
+        Debug.Log($"Plato entregado: {plate.dish} | Plato requerido: {group.requiredDish} | Mesa: {group.name}");
 
         if (correct)
         {
