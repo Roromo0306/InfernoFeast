@@ -94,12 +94,12 @@ public class GameTimeSystem : MonoBehaviour
         Dormir don = Cama.GetComponent<Dormir>();
         currentDayIndex = (currentDayIndex + 1) % 7;
         gameTimeInSeconds = 6 * 3600;
-        
-        if (panelFinalDia != null) panelFinalDia.SetActive(false);
-
         lastGameTimeInSeconds = gameTimeInSeconds;
         don.nuevoDia = false;
         SceneManager.LoadScene("Restaurant");
+        if (panelFinalDia != null) panelFinalDia.SetActive(false);
+
+       
     }
 
     // llamado por el botón (mantiene compatibilidad con tu UI)
