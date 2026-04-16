@@ -14,7 +14,7 @@ public class InteractuarCounter : MonoBehaviour
     [HideInInspector] public GameObject Counter, PadreFreir, PadreHorno, PadreHervir;
 
     [Header("Imagenes E")]
-    public GameObject CortarE, Cortar2E, HornearE, Hornear2E, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E, CajaCarne2E, CajaPescado2E, CajaEspecias2E, CajaPan2E, CajaVegetales2E;
+    public GameObject CortarE, Cortar2E, HornearE, Hornear2E, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E, CajaCarne2E, CajaPescado2E, CajaEspecias2E, CajaPan2E, CajaVegetales2E, CamaE;
     private void Update()
     {
         Hold = Padre.transform.childCount > 0;
@@ -311,6 +311,11 @@ public class InteractuarCounter : MonoBehaviour
         {
             CajaVegetales2E.gameObject.SetActive(true);
         }
+
+        if (collision.gameObject.name == "Cama")
+        {
+            CamaE.gameObject.SetActive(true);
+        }
     }
 
     //Salida de la colision
@@ -483,6 +488,11 @@ public class InteractuarCounter : MonoBehaviour
         if (collision.gameObject.name == "CajaVerdura2")
         {
             CajaVegetales2E.gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.name == "Cama")
+        {
+            CamaE.gameObject.SetActive(false);
         }
     }
 }

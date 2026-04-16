@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameTimeSystem : MonoBehaviour
 {
     [Header("Duración de los días y semana")]
@@ -94,11 +94,12 @@ public class GameTimeSystem : MonoBehaviour
         Dormir don = Cama.GetComponent<Dormir>();
         currentDayIndex = (currentDayIndex + 1) % 7;
         gameTimeInSeconds = 6 * 3600;
-
+        
         if (panelFinalDia != null) panelFinalDia.SetActive(false);
 
         lastGameTimeInSeconds = gameTimeInSeconds;
         don.nuevoDia = false;
+        SceneManager.LoadScene("Restaurant");
     }
 
     // llamado por el botón (mantiene compatibilidad con tu UI)
