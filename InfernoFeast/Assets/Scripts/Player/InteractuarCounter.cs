@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractuarCounter : MonoBehaviour
@@ -15,486 +13,497 @@ public class InteractuarCounter : MonoBehaviour
 
     [Header("Imagenes E")]
     public GameObject CortarE, Cortar2E, HornearE, Hornear2E, HervirE, Hervir2E, FreirE, Freir2E, BatirE, Batir2E, BasuraE, EmpezarTurnoE, CajaCarneE, CajaPescadoE, CajaEspeciasE, CajaPanE, CajaVegetalesE, EncimeraE, Encimera2E, CajaCarne2E, CajaPescado2E, CajaEspecias2E, CajaPan2E, CajaVegetales2E, CamaE;
+
+    private CutCounter currentCutCounter;
+    private BakeCounter currentBakeCounter;
+    private PotCounter currentPotCounter;
+    private FryCounter currentFryCounter;
+    private MixCounter currentMixCounter;
+    private Basura currentBasura;
+    private EmpezarTurno currentEmpezarTurno;
+
     private void Update()
     {
-        Hold = Padre.transform.childCount > 0;
+        Hold = Padre != null && Padre.transform.childCount > 0;
 
-        if (Hold)
+        if (!Input.GetKeyDown(KeyCode.E))
+            return;
+
+        if (Empezarturno)
         {
-            if (Cortar && Input.GetKeyDown(KeyCode.E))
-            {
-                CutCounter cut = Counter.GetComponent<CutCounter>();
-                animator.SetTrigger("isCutting");
-                Debug.Log("Cortar Activado");
-                cut.cortar();
-            }
-
-            if(Hornear && Input.GetKeyDown(KeyCode.E))
-            {
-                BakeCounter bake = Counter.GetComponent<BakeCounter>();
-
-                if (!ObjetoDejado)
-                {
-                    bake.Hornear();
-                }
-            }
-
-            if (Hornear2 && Input.GetKeyDown(KeyCode.E))
-            {
-                BakeCounter bake = Counter.GetComponent<BakeCounter>();
-
-                if (!ObjetoDejado)
-                {
-                    bake.Hornear();
-                }
-            }
-
-            if (Hervir && Input.GetKeyDown(KeyCode.E))
-            {
-                PotCounter pot = Counter.GetComponent<PotCounter>();
-               
-                if (!ObjetoDejado)
-                {
-                    pot.Hervir();
-                }
-            }
-
-            if (Hervir2 && Input.GetKeyDown(KeyCode.E))
-            {
-                PotCounter pot = Counter.GetComponent<PotCounter>();
-
-                if (!ObjetoDejado)
-                {
-                    pot.Hervir();
-                }
-            }
-
-            if (Freir && Input.GetKeyDown(KeyCode.E))
-            {
-                FryCounter fry = Counter.GetComponent<FryCounter>();
-
-                if (!ObjetoDejado)
-                {
-                    fry.Freir();
-                }
-            }
-
-            if (Freir2 && Input.GetKeyDown(KeyCode.E))
-            {
-                FryCounter fry = Counter.GetComponent<FryCounter>();
-
-                if (!ObjetoDejado)
-                {
-                    fry.Freir();
-                }
-
-            }
-
-            if (Batir && Input.GetKeyDown(KeyCode.E))
-            {
-                MixCounter mix = Counter.GetComponent<MixCounter>();
-                animator.SetTrigger("isMixing");
-                mix.StartMixing();
-            }
-
-            if(basura && Input.GetKeyDown(KeyCode.E))
-            {
-                Basura bas = Counter.GetComponent<Basura>();
-                bas.Eliminar();
-            }
+            TryStartTurno();
+            return;
         }
 
-        if (Empezarturno && Input.GetKeyDown(KeyCode.E))
-        {
-            if (!turnoEmpezado)
-            {
-                EmpezarTurno em = Counter.GetComponent<EmpezarTurno>();
-                em.TurnoStart();
-                turnoEmpezado = true;
-            }
+        if (!Hold)
+            return;
 
-        }
-
+        TryInteractWithCurrentCounter();
     }
 
-    //Entrada de la colision
+    private void TryInteractWithCurrentCounter()
+    {
+        if (Counter == null)
+            return;
+
+        if (Cortar)
+        {
+            if (currentCutCounter == null)
+                currentCutCounter = Counter.GetComponent<CutCounter>();
+
+            if (currentCutCounter == null)
+                return;
+
+            if (animator != null)
+                animator.SetTrigger("isCutting");
+
+            currentCutCounter.cortar();
+            return;
+        }
+
+        if (Hornear || Hornear2)
+        {
+            if (currentBakeCounter == null)
+                currentBakeCounter = Counter.GetComponent<BakeCounter>();
+
+            if (currentBakeCounter == null)
+                return;
+
+            ObjetoDejado = HasObjectInside(PadreHorno);
+            if (!ObjetoDejado)
+                currentBakeCounter.Hornear();
+
+            return;
+        }
+
+        if (Hervir || Hervir2)
+        {
+            if (currentPotCounter == null)
+                currentPotCounter = Counter.GetComponent<PotCounter>();
+
+            if (currentPotCounter == null)
+                return;
+
+            ObjetoDejado = HasObjectInside(PadreHervir);
+            if (!ObjetoDejado)
+                currentPotCounter.Hervir();
+
+            return;
+        }
+
+        if (Freir || Freir2)
+        {
+            if (currentFryCounter == null)
+                currentFryCounter = Counter.GetComponent<FryCounter>();
+
+            if (currentFryCounter == null)
+                return;
+
+            ObjetoDejado = HasObjectInside(PadreFreir);
+            if (!ObjetoDejado)
+                currentFryCounter.Freir();
+
+            return;
+        }
+
+        if (Batir)
+        {
+            if (currentMixCounter == null)
+                currentMixCounter = Counter.GetComponent<MixCounter>();
+
+            if (currentMixCounter == null)
+                return;
+
+            if (animator != null)
+                animator.SetTrigger("isMixing");
+
+            currentMixCounter.StartMixing();
+            return;
+        }
+
+        if (basura)
+        {
+            if (currentBasura == null)
+                currentBasura = Counter.GetComponent<Basura>();
+
+            if (currentBasura != null)
+                currentBasura.Eliminar();
+        }
+    }
+
+    private void TryStartTurno()
+    {
+        if (turnoEmpezado)
+            return;
+
+        if (Counter == null)
+            return;
+
+        if (currentEmpezarTurno == null)
+            currentEmpezarTurno = Counter.GetComponent<EmpezarTurno>();
+
+        if (currentEmpezarTurno == null)
+            return;
+
+        currentEmpezarTurno.TurnoStart();
+        turnoEmpezado = true;
+    }
+
+    private bool HasObjectInside(GameObject parent)
+    {
+        return parent != null && parent.transform.childCount > 0;
+    }
+
+    private GameObject GetFirstChild(GameObject parent)
+    {
+        if (parent == null || parent.transform.childCount <= 0)
+            return null;
+
+        return parent.transform.GetChild(0).gameObject;
+    }
+
+    private void SetPrompt(GameObject prompt, bool active)
+    {
+        if (prompt != null)
+            prompt.SetActive(active);
+    }
+
+    private void CacheCounter(GameObject counter)
+    {
+        Counter = counter;
+        currentCutCounter = null;
+        currentBakeCounter = null;
+        currentPotCounter = null;
+        currentFryCounter = null;
+        currentMixCounter = null;
+        currentBasura = null;
+        currentEmpezarTurno = null;
+    }
+
+    private void ClearCounter(GameObject counter)
+    {
+        if (Counter != counter)
+            return;
+
+        Counter = null;
+        currentCutCounter = null;
+        currentBakeCounter = null;
+        currentPotCounter = null;
+        currentFryCounter = null;
+        currentMixCounter = null;
+        currentBasura = null;
+        currentEmpezarTurno = null;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Cortar" || collision.gameObject.name == "Cortar2")
+        GameObject other = collision.gameObject;
+        string objectName = other.name;
+
+        switch (objectName)
         {
-            Cortar = true;
+            case "Cortar":
+                Cortar = true;
+                CacheCounter(other);
+                currentCutCounter = other.GetComponent<CutCounter>();
+                SetPrompt(CortarE, true);
+                break;
 
-            Counter = collision.gameObject;
-            Debug.Log("Hola");
+            case "Cortar2":
+                Cortar = true;
+                CacheCounter(other);
+                currentCutCounter = other.GetComponent<CutCounter>();
+                SetPrompt(Cortar2E, true);
+                break;
 
-            if(collision.gameObject.name == "Cortar")
-            {
-                CortarE.gameObject.SetActive(true);
-            }
-            else
-            {
-                Cortar2E.gameObject.SetActive(true);
-            }
-            
-        }
+            case "Pelar":
+                Pelar = true;
+                CacheCounter(other);
+                break;
 
-        if (collision.gameObject.name == "Pelar")
-        {
-            Pelar = true;
-            Counter = collision.gameObject;
-        }
+            case "Horno":
+                Hornear = true;
+                CacheCounter(other);
+                currentBakeCounter = other.GetComponent<BakeCounter>();
+                SetPrompt(HornearE, true);
+                PadreHorno = GetFirstChild(other);
+                ObjetoDejado = HasObjectInside(PadreHorno);
+                break;
 
-        if (collision.gameObject.name == "Horno")
-        {
-            Hornear = true;
-            Counter = collision.gameObject;
-            HornearE.gameObject.SetActive(true);
+            case "Horno2":
+                Hornear2 = true;
+                CacheCounter(other);
+                currentBakeCounter = other.GetComponent<BakeCounter>();
+                SetPrompt(Hornear2E, true);
+                PadreHorno = GetFirstChild(other);
+                ObjetoDejado = HasObjectInside(PadreHorno);
+                break;
 
-            PadreHorno = Counter.transform.GetChild(0).gameObject;
-            if(PadreHorno.transform.childCount > 0)
-            {
-                ObjetoDejado = true;
-            }
-        }
+            case "Batir":
+                Batir = true;
+                CacheCounter(other);
+                currentMixCounter = other.GetComponent<MixCounter>();
+                SetPrompt(BatirE, true);
+                break;
 
-        if (collision.gameObject.name == "Horno2")
-        {
-            Hornear2 = true;
-            Counter = collision.gameObject;
-            Hornear2E.gameObject.SetActive(true);
+            case "Batir2":
+                Batir = true;
+                CacheCounter(other);
+                currentMixCounter = other.GetComponent<MixCounter>();
+                SetPrompt(Batir2E, true);
+                break;
 
-            PadreHorno = Counter.transform.GetChild(0).gameObject;
-            if (PadreHorno.transform.childCount > 0)
-            {
-                ObjetoDejado = true;
-            }
-        }
+            case "Freir":
+                Freir = true;
+                CacheCounter(other);
+                currentFryCounter = other.GetComponent<FryCounter>();
+                SetPrompt(FreirE, true);
+                PadreFreir = GetFirstChild(other);
+                ObjetoDejado = HasObjectInside(PadreFreir);
+                break;
 
-        if (collision.gameObject.name == "Batir" || collision.gameObject.name == "Batir2")
-        {
-            Batir = true;
-            Counter = collision.gameObject;
+            case "Freir2":
+                Freir2 = true;
+                CacheCounter(other);
+                currentFryCounter = other.GetComponent<FryCounter>();
+                SetPrompt(Freir2E, true);
+                PadreFreir = GetFirstChild(other);
+                ObjetoDejado = HasObjectInside(PadreFreir);
+                break;
 
-            if (collision.gameObject.name == "Batir")
-            {
-                BatirE.gameObject.SetActive(true);
-            }
-            else
-            {
-                Batir2E.gameObject.SetActive(true);
-            }
-        }
+            case "Hervir":
+                Hervir = true;
+                CacheCounter(other);
+                currentPotCounter = other.GetComponent<PotCounter>();
+                SetPrompt(HervirE, true);
+                PadreHervir = GetFirstChild(other);
+                ObjetoDejado = HasObjectInside(PadreHervir);
+                break;
 
-        if (collision.gameObject.name == "Freir")
-        {
-            Freir = true;
-            Counter = collision.gameObject;
-            FreirE.gameObject.SetActive(true);
+            case "Hervir2":
+                Hervir2 = true;
+                CacheCounter(other);
+                currentPotCounter = other.GetComponent<PotCounter>();
+                SetPrompt(Hervir2E, true);
+                PadreHervir = GetFirstChild(other);
+                ObjetoDejado = HasObjectInside(PadreHervir);
+                break;
 
-            PadreFreir = Counter.transform.GetChild(0).gameObject;
-            if (PadreFreir.transform.childCount > 0)
-            {
-                ObjetoDejado = true;
-            }
-        }
+            case "Basura":
+                basura = true;
+                CacheCounter(other);
+                currentBasura = other.GetComponent<Basura>();
+                SetPrompt(BasuraE, true);
+                break;
 
-        if (collision.gameObject.name == "Freir2")
-        {
-            Freir2 = true;
-            Counter = collision.gameObject;
-            Freir2E.gameObject.SetActive(true);
+            case "EmpezarTurno":
+                Empezarturno = true;
+                CacheCounter(other);
+                currentEmpezarTurno = other.GetComponent<EmpezarTurno>();
+                SetPrompt(EmpezarTurnoE, true);
+                break;
 
-            PadreFreir = Counter.transform.GetChild(0).gameObject;
-            if (PadreFreir.transform.childCount > 0)
-            {
-                ObjetoDejado = true;
-            }
-        }
+            case "CajaCarne":
+                SetPrompt(CajaCarneE, true);
+                break;
 
-        if (collision.gameObject.name == "Hervir")
-        {
-            Hervir = true;
-            Counter = collision.gameObject;
-            HervirE.gameObject.SetActive(true);
+            case "CajaPescado":
+                SetPrompt(CajaPescadoE, true);
+                break;
 
-            PadreHervir = Counter.transform.GetChild(0).gameObject;
-            if (PadreHervir.transform.childCount > 0)
-            {
-                ObjetoDejado = true;
-            }
-        }
+            case "CajaEspecias":
+                SetPrompt(CajaEspeciasE, true);
+                break;
 
-        if (collision.gameObject.name == "Hervir2")
-        {
-            Hervir2 = true;
-            Counter = collision.gameObject;
-            Hervir2E.gameObject.SetActive(true);
+            case "CajaPan":
+                SetPrompt(CajaPanE, true);
+                break;
 
-            PadreHervir = Counter.transform.GetChild(0).gameObject;
-            if (PadreHervir.transform.childCount > 0)
-            {
-                ObjetoDejado = true;
-            }
-        }
+            case "CajaVerdura":
+                SetPrompt(CajaVegetalesE, true);
+                break;
 
-        if (collision.gameObject.name == "Basura")
-        {
-            basura = true;
-            Counter = collision.gameObject;
-            BasuraE.gameObject.SetActive(true);
-        }
+            case "Encimera":
+                SetPrompt(EncimeraE, true);
+                break;
 
-        if (collision.gameObject.name == "EmpezarTurno")
-        {
-            Empezarturno = true;
-            Counter = collision.gameObject;
-            EmpezarTurnoE.gameObject.SetActive(true);
-        }
+            case "Encimera2":
+                SetPrompt(Encimera2E, true);
+                break;
 
-        if(collision.gameObject.name == "CajaCarne")
-        {
-            CajaCarneE.gameObject.SetActive(true);
-        }
+            case "CajaCarne2":
+                SetPrompt(CajaCarne2E, true);
+                break;
 
-        if (collision.gameObject.name == "CajaPescado")
-        {
-            CajaPescadoE.gameObject.SetActive(true);
-        }
+            case "CajaPescado2":
+                SetPrompt(CajaPescado2E, true);
+                break;
 
-        if (collision.gameObject.name == "CajaEspecias")
-        {
-            CajaEspeciasE.gameObject.SetActive(true);
-        }
+            case "CajaEspecias2":
+                SetPrompt(CajaEspecias2E, true);
+                break;
 
-        if (collision.gameObject.name == "CajaPan")
-        {
-            CajaPanE.gameObject.SetActive(true);
-        }
+            case "CajaPan2":
+                SetPrompt(CajaPan2E, true);
+                break;
 
-        if (collision.gameObject.name == "CajaVerdura")
-        {
-            CajaVegetalesE.gameObject.SetActive(true);
-        }
+            case "CajaVerdura2":
+                SetPrompt(CajaVegetales2E, true);
+                break;
 
-        if (collision.gameObject.name == "Encimera")
-        {
-            EncimeraE.gameObject.SetActive(true);
-        }
-
-        if (collision.gameObject.name == "Encimera2")
-        {
-            Encimera2E.gameObject.SetActive(true);
-        }
-
-        if (collision.gameObject.name == "CajaCarne2")
-        {
-            CajaCarne2E.gameObject.SetActive(true);
-        }
-
-        if (collision.gameObject.name == "CajaPescado2")
-        {
-            CajaPescado2E.gameObject.SetActive(true);
-        }
-
-        if (collision.gameObject.name == "CajaEspecias2")
-        {
-            CajaEspecias2E.gameObject.SetActive(true);
-        }
-
-        if (collision.gameObject.name == "CajaPan2")
-        {
-            CajaPan2E.gameObject.SetActive(true);
-        }
-
-        if (collision.gameObject.name == "CajaVerdura2")
-        {
-            CajaVegetales2E.gameObject.SetActive(true);
-        }
-
-        if (collision.gameObject.name == "Cama")
-        {
-            CamaE.gameObject.SetActive(true);
+            case "Cama":
+                SetPrompt(CamaE, true);
+                break;
         }
     }
 
-    //Salida de la colision
     private void OnCollisionExit(Collision collision)
     {
-        if(collision.gameObject.name == "Cortar" || collision.gameObject.name == "Cortar2")
+        GameObject other = collision.gameObject;
+        string objectName = other.name;
+
+        switch (objectName)
         {
-            Cortar = false;
-            Counter = null;
-            if (collision.gameObject.name == "Cortar")
-            {
-                CortarE.gameObject.SetActive(false);
-            }
-            else
-            {
-                Cortar2E.gameObject.SetActive(false);
-            }
-        }
+            case "Cortar":
+                Cortar = false;
+                ClearCounter(other);
+                SetPrompt(CortarE, false);
+                break;
 
-        if (collision.gameObject.name == "Pelar")
-        {
-            Pelar = false;
-            Counter = null;
-        }
+            case "Cortar2":
+                Cortar = false;
+                ClearCounter(other);
+                SetPrompt(Cortar2E, false);
+                break;
 
-        if (collision.gameObject.name == "Horno")
-        {
-            Hornear = false;
-            Counter = null;
-            HornearE.gameObject.SetActive(false);
+            case "Pelar":
+                Pelar = false;
+                ClearCounter(other);
+                break;
 
-            ObjetoDejado = false;
-            PadreHorno = null;
-        }
+            case "Horno":
+                Hornear = false;
+                ClearCounter(other);
+                SetPrompt(HornearE, false);
+                ObjetoDejado = false;
+                PadreHorno = null;
+                break;
 
-        if (collision.gameObject.name == "Horno2")
-        {
-            Hornear2 = false;
-            Counter = null;
-            Hornear2E.gameObject.SetActive(false);
+            case "Horno2":
+                Hornear2 = false;
+                ClearCounter(other);
+                SetPrompt(Hornear2E, false);
+                ObjetoDejado = false;
+                PadreHorno = null;
+                break;
 
-            ObjetoDejado = false;
-            PadreHorno = null;
-        }
+            case "Batir":
+                Batir = false;
+                ClearCounter(other);
+                SetPrompt(BatirE, false);
+                break;
 
-        if (collision.gameObject.name == "Batir" || collision.gameObject.name == "Batir2")
-        {
-            Batir = false;
-            Counter = null;
+            case "Batir2":
+                Batir = false;
+                ClearCounter(other);
+                SetPrompt(Batir2E, false);
+                break;
 
-            if (collision.gameObject.name == "Batir")
-            {
-                BatirE.gameObject.SetActive(false);
-            }
-            else
-            {
-                Batir2E.gameObject.SetActive(false);
-            }
-        }
+            case "Freir":
+                Freir = false;
+                ClearCounter(other);
+                SetPrompt(FreirE, false);
+                ObjetoDejado = false;
+                PadreFreir = null;
+                break;
 
-        if (collision.gameObject.name == "Freir")
-        {
-            Freir = false;
-            Counter = null;
-            FreirE.gameObject.SetActive(false);
+            case "Freir2":
+                Freir2 = false;
+                ClearCounter(other);
+                SetPrompt(Freir2E, false);
+                ObjetoDejado = false;
+                PadreFreir = null;
+                break;
 
-            ObjetoDejado = false;
-            PadreFreir = null;
-        }
+            case "Hervir":
+                Hervir = false;
+                ClearCounter(other);
+                SetPrompt(HervirE, false);
+                ObjetoDejado = false;
+                PadreHervir = null;
+                break;
 
-        if (collision.gameObject.name == "Freir2")
-        {
-            Freir2 = false;
-            Counter = null;
-            Freir2E.gameObject.SetActive(false);
+            case "Hervir2":
+                Hervir2 = false;
+                ClearCounter(other);
+                SetPrompt(Hervir2E, false);
+                ObjetoDejado = false;
+                PadreHervir = null;
+                break;
 
-            ObjetoDejado = false;
-            PadreFreir = null;
-        }
+            case "Basura":
+                basura = false;
+                ClearCounter(other);
+                SetPrompt(BasuraE, false);
+                break;
 
-        if (collision.gameObject.name == "Hervir")
-        {
-            Hervir = false;
-            Counter = null;
-            HervirE.gameObject.SetActive(false);
+            case "EmpezarTurno":
+                Empezarturno = false;
+                ClearCounter(other);
+                SetPrompt(EmpezarTurnoE, false);
+                break;
 
-            ObjetoDejado = false;
-            PadreHervir = null;
-        }
+            case "CajaCarne":
+                SetPrompt(CajaCarneE, false);
+                break;
 
-        if (collision.gameObject.name == "Hervir2")
-        {
-            Hervir2 = false;
-            Counter = null;
-            Hervir2E.gameObject.SetActive(false);
+            case "CajaPescado":
+                SetPrompt(CajaPescadoE, false);
+                break;
 
-            ObjetoDejado = false;
-            PadreHervir = null;
-        }
+            case "CajaEspecias":
+                SetPrompt(CajaEspeciasE, false);
+                break;
 
-        if (collision.gameObject.name == "Basura")
-        {
-            basura = false;
-            Counter = null;
-            BasuraE.gameObject.SetActive(false);
-        }
+            case "CajaPan":
+                SetPrompt(CajaPanE, false);
+                break;
 
-        if (collision.gameObject.name == "EmpezarTurno")
-        {
-            Empezarturno = false;
-            Counter = null;
-            EmpezarTurnoE.gameObject.SetActive(false);
-        }
+            case "CajaVerdura":
+                SetPrompt(CajaVegetalesE, false);
+                break;
 
-        if (collision.gameObject.name == "CajaCarne")
-        {
-            CajaCarneE.gameObject.SetActive(false);
-        }
+            case "Encimera":
+                SetPrompt(EncimeraE, false);
+                break;
 
-        if (collision.gameObject.name == "CajaPescado")
-        {
-            CajaPescadoE.gameObject.SetActive(false);
-        }
+            case "Encimera2":
+                SetPrompt(Encimera2E, false);
+                break;
 
-        if (collision.gameObject.name == "CajaEspecias")
-        {
-            CajaEspeciasE.gameObject.SetActive(false);
-        }
+            case "CajaCarne2":
+                SetPrompt(CajaCarne2E, false);
+                break;
 
-        if (collision.gameObject.name == "CajaPan")
-        {
-            CajaPanE.gameObject.SetActive(false);
-        }
+            case "CajaPescado2":
+                SetPrompt(CajaPescado2E, false);
+                break;
 
-        if (collision.gameObject.name == "CajaVerdura")
-        {
-            CajaVegetalesE.gameObject.SetActive(false);
-        }
+            case "CajaEspecias2":
+                SetPrompt(CajaEspecias2E, false);
+                break;
 
-        if (collision.gameObject.name == "Encimera")
-        {
-            EncimeraE.gameObject.SetActive(false);
-        }
+            case "CajaPan2":
+                SetPrompt(CajaPan2E, false);
+                break;
 
-        if (collision.gameObject.name == "Encimera2")
-        {
-            Encimera2E.gameObject.SetActive(false);
-        }
+            case "CajaVerdura2":
+                SetPrompt(CajaVegetales2E, false);
+                break;
 
-        if (collision.gameObject.name == "CajaCarne2")
-        {
-            CajaCarne2E.gameObject.SetActive(false);
-        }
-
-        if (collision.gameObject.name == "CajaPescado2")
-        {
-            CajaPescado2E.gameObject.SetActive(false);
-        }
-
-        if (collision.gameObject.name == "CajaEspecias2")
-        {
-            CajaEspecias2E.gameObject.SetActive(false);
-        }
-
-        if (collision.gameObject.name == "CajaPan2")
-        {
-            CajaPan2E.gameObject.SetActive(false);
-        }
-
-        if (collision.gameObject.name == "CajaVerdura2")
-        {
-            CajaVegetales2E.gameObject.SetActive(false);
-        }
-
-        if (collision.gameObject.name == "Cama")
-        {
-            CamaE.gameObject.SetActive(false);
+            case "Cama":
+                SetPrompt(CamaE, false);
+                break;
         }
     }
 }
-
-

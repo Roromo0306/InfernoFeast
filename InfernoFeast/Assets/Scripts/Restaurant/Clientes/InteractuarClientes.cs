@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +6,7 @@ public class InteractuarClientes : MonoBehaviour
 {
     public GameObject EmpezarTurnoCounter;
 
-    public int ClienteTipo = 0; //Tipo 1 = normal. Tipo 2 = VIP;
+    public int ClienteTipo = 0; // Tipo 1 = normal. Tipo 2 = VIP.
 
     [Header("Canvas Propio")]
     public Image comanda;
@@ -18,12 +16,12 @@ public class InteractuarClientes : MonoBehaviour
 
     public bool Elegido = false;
 
-    //Variables para controlar si se ha sentado
-    public bool Sentado = false; //Bool para saber si se ha sentado
+    [Header("Estado del cliente")]
+    public bool Sentado = false;
     private Vector3 ultimaPos;
-    private float tiempoSinMoverse = 0f; //Calcula el tiempo que esta sin moverse
-    private float tiempoParaSentarse = 0.2f; //Tiempo de referencia para saber si se ha sentado
-    public Sprite ListoPedir; //Sprite que indica que está listo para pedir
+    private float tiempoSinMoverse = 0f;
+    private float tiempoParaSentarse = 0.2f;
+    public Sprite ListoPedir;
 
     [Header("Reacciones")]
     public Sprite Feliz;
@@ -32,86 +30,117 @@ public class InteractuarClientes : MonoBehaviour
 
     public Canvas canvas;
 
-    private bool Atendido = false; //Este bool controlara si se ha atendido al cliente.
-
+    private bool Atendido = false;
     private bool AtendidoCuent = false;
     private float tiempoPasado;
 
     [Header("Variables fin del dia")]
     public int dineroCli;
     public int reputacionCli;
-    private int modo = 0; //El modo indica la recompensa que se obtendra del cliente. Leyenda: 0-Nunca llego el plato o nunca se atendio al cliente, 1-Plato correcto y a tiempo, 2-Plato correcto pero a destiempo, 3-Plato incorrecto
+    private int modo = 0;
 
-    [HideInInspector] public int pedido;
+    [HideInInspector] public int pedido = -1;
 
     [Header("UI Slider")]
-    public Slider slider; //Referencia al slider
+    public Slider slider;
 
     [Header("Variables slider")]
-    private float tiempoRestanteSalida = 0f; // tiempo restante para que se marche el cliente (se actualiza desde InicioCuentaAtras)
-    private float tiempoMaxSalida = 1f; // max del slider para la salida
+    private float tiempoRestanteSalida = 0f;
+    private float tiempoMaxSalida = 1f;
     private bool usandoCuentaSalida = false;
 
-    private float tiempoMaxPedido = 75f; // límite que usas para decidir "a tiempo" / "tarde"
-    private bool usandoCuentaPedido = false; // true mientras AtendidoCuent == true (pedido activo)
+    private float tiempoMaxPedido = 75f;
+    private bool usandoCuentaPedido = false;
 
     [Header("Gameobject plato")]
-    public GameObject platoI; //Sitio donde instanciare el plato
-    
+    public GameObject platoI;
+
+    private EmpezarTurno empezarTurno;
+    private ClienteManager clienteManagerComponent;
+    private GameObject playerInRange;
+    private Coroutine cuentaAtrasCoroutine;
+    private Coroutine adiosCoroutine;
+    private bool marchando = false;
 
     private void Start()
     {
         ultimaPos = transform.position;
+        pedido = -1;
 
-        if (EmpezarTurnoCounter == null)
-        {
-            EmpezarTurnoCounter = GameObject.Find("EmpezarTurno");
-        }
+        CacheReferences();
+        PrepareSlider();
 
-        if (clienteManager == null)
-        {
-            clienteManager = GameObject.Find("ClienteManager");
-        }
-
-        if (EmpezarTurnoCounter == null)
-        {
-            Debug.LogWarning("Counter no encontrado");
-        }
-
-        // Slider: asegurarnos de que tenga valores razonables
-        if (slider != null)
-        {
-            slider.minValue = 0f;
-            slider.value = 0f;
-            slider.gameObject.SetActive(false); // oculto por defecto
-        }
-        else
-        {
-            Debug.LogWarning("Slider no asignado en InteractuarClientes.");
-        }
-
-        StartCoroutine(InicioCuentaAtras());
+        cuentaAtrasCoroutine = StartCoroutine(InicioCuentaAtras());
     }
 
     private void Update()
     {
-        //Si se ha sentado y no lo han antendido muestra el sprite de take order
+        if (marchando)
+            return;
+
         if (Sentado && !Elegido)
         {
-            comanda.sprite = ListoPedir;
-            canvas.enabled = true;
+            SetComandaSprite(ListoPedir);
+            SetCanvasVisible(true);
         }
 
-        //Cuenta atras para saber cuanto tiempo tarda el cliente en llevar un plato (reloj "pedido")
         if (AtendidoCuent)
-        {
             tiempoPasado += Time.deltaTime;
+
+        UpdateSliderState();
+
+        if (empezarTurno == null || clienteManagerComponent == null)
+            CacheReferences();
+
+        if (empezarTurno != null && !empezarTurno.empezado)
+        {
+            LeaveImmediately();
+            return;
         }
 
-        // --- Actualización del slider cada frame ---
-        if (slider == null) return;
+        if (Input.GetKeyDown(KeyCode.E))
+            TryInteractWithPlayer();
+    }
 
-        // Prioridad: mostrar timer de pedido si está activo
+    private void CacheReferences()
+    {
+        if (EmpezarTurnoCounter == null)
+            EmpezarTurnoCounter = GameObject.Find("EmpezarTurno");
+
+        if (EmpezarTurnoCounter != null && empezarTurno == null)
+            empezarTurno = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+
+        if (clienteManager == null)
+            clienteManager = GameObject.Find("ClienteManager");
+
+        if (clienteManager != null && clienteManagerComponent == null)
+            clienteManagerComponent = clienteManager.GetComponent<ClienteManager>();
+
+        if (EmpezarTurnoCounter == null)
+            Debug.LogWarning("[InteractuarClientes] No se ha encontrado EmpezarTurno.");
+
+        if (clienteManager == null)
+            Debug.LogWarning("[InteractuarClientes] No se ha encontrado ClienteManager.");
+    }
+
+    private void PrepareSlider()
+    {
+        if (slider == null)
+        {
+            Debug.LogWarning("[InteractuarClientes] Slider no asignado.");
+            return;
+        }
+
+        slider.minValue = 0f;
+        slider.value = 0f;
+        slider.gameObject.SetActive(false);
+    }
+
+    private void UpdateSliderState()
+    {
+        if (slider == null)
+            return;
+
         if (AtendidoCuent || usandoCuentaPedido)
         {
             usingPedidoOnSlider();
@@ -120,29 +149,20 @@ public class InteractuarClientes : MonoBehaviour
         {
             usingSalidaOnSlider();
         }
-        else
+        else if (slider.gameObject.activeSelf)
         {
-            // Si no hay ninguna cuenta activa, ocultamos slider
-            if (slider.gameObject.activeSelf) slider.gameObject.SetActive(false);
-        }
-
-        //Controlamos que si se acaba el turno los clientes se vayan
-        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
-        ClienteManager CM = clienteManager.GetComponent<ClienteManager>();
-
-        if (!em.empezado)
-        {
-            StopAllCoroutines();
-            CM.ClienteAdios(this.gameObject);
+            slider.gameObject.SetActive(false);
         }
     }
 
     private void usingPedidoOnSlider()
     {
-        // Habilitar slider
-        if (!slider.gameObject.activeSelf) slider.gameObject.SetActive(true);
+        if (slider == null)
+            return;
 
-        // Establecemos max y valor según tiempo de pedido
+        if (!slider.gameObject.activeSelf)
+            slider.gameObject.SetActive(true);
+
         slider.maxValue = tiempoMaxPedido;
         float restantePedido = Mathf.Clamp(tiempoMaxPedido - tiempoPasado, 0f, tiempoMaxPedido);
         slider.value = restantePedido;
@@ -151,7 +171,11 @@ public class InteractuarClientes : MonoBehaviour
 
     private void usingSalidaOnSlider()
     {
-        if (!slider.gameObject.activeSelf) slider.gameObject.SetActive(true);
+        if (slider == null)
+            return;
+
+        if (!slider.gameObject.activeSelf)
+            slider.gameObject.SetActive(true);
 
         slider.maxValue = tiempoMaxSalida;
         slider.value = Mathf.Clamp(tiempoRestanteSalida, 0f, tiempoMaxSalida);
@@ -162,311 +186,339 @@ public class InteractuarClientes : MonoBehaviour
         Sentado = true;
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+        if (collision.gameObject.CompareTag("Player"))
+            playerInRange = collision.gameObject;
+    }
 
-        if (em.empezado)
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject == playerInRange)
+            playerInRange = null;
+    }
+
+    private void TryInteractWithPlayer()
+    {
+        if (playerInRange == null)
+            return;
+
+        if (empezarTurno == null || !empezarTurno.empezado)
+            return;
+
+        if (!Sentado)
+            return;
+
+        if (!Elegido)
         {
-            if (Input.GetKey(KeyCode.E))
-            {
+            if (empezarTurno.comandasCount >= 4)
+                return;
 
-                //Clientes normales cuando no se les ha atendido
-                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && !Elegido && Sentado && em.comandasCount <4)
-                {
-                    ElegirComandaN();
-                    Elegido = true;
-                }
+            ElegirComanda();
+            Elegido = true;
+            return;
+        }
 
-                //Clientes VIP cuando no se les ha atendido
-                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && !Elegido && Sentado && em.comandasCount < 4)
-                {
-                    ElegirComandaV();
-                    Elegido = true;
-                }
+        TryDeliverPlate(playerInRange);
+    }
 
-                //Clientes normales atendidos
-                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 1 && Elegido && Sentado)
-                {
-                    GameObject Colisionado = collision.gameObject;
-                    RevisarComanda(Colisionado);
+    private void ElegirComanda()
+    {
+        if (empezarTurno == null)
+            return;
 
-                    InstanciarPlato(Colisionado);
+        if (empezarTurno.NombresComandas == null || empezarTurno.NombresComandas.Count == 0)
+        {
+            Debug.LogWarning("[InteractuarClientes] No hay comandas disponibles para elegir.");
+            return;
+        }
 
-                }
+        pedido = Random.Range(0, empezarTurno.NombresComandas.Count);
+        Sprite spritePedido = empezarTurno.NombresComandas[pedido];
 
+        SetComandaSprite(spritePedido);
+        empezarTurno.ComandaUI(spritePedido.name);
+        empezarTurno.comandasCount++;
 
-                //Clientes VIP atendidos
-                if (collision.gameObject.CompareTag("Player") && ClienteTipo == 2 && Elegido && Sentado)
-                {
-                    GameObject Colisionado = collision.gameObject;
-                    RevisarComanda(Colisionado);
+        if (empezarTurno.cantidadCom != null && pedido >= 0 && pedido < empezarTurno.cantidadCom.Count)
+            empezarTurno.cantidadCom[pedido]++;
 
-                    InstanciarPlato(Colisionado);
-                }
+        Atendido = true;
+        AtendidoCuent = true;
+        tiempoPasado = 0f;
 
-            }
+        tiempoMaxPedido = 100f;
+        usandoCuentaPedido = true;
+
+        if (slider != null)
+        {
+            slider.gameObject.SetActive(true);
+            slider.maxValue = tiempoMaxPedido;
+            slider.value = tiempoMaxPedido;
         }
     }
 
-    //Comanda de los clientes nomales
-    private void ElegirComandaN()
+    private void TryDeliverPlate(GameObject player)
     {
-        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+        if (player == null || empezarTurno == null || pedido < 0)
+            return;
 
-        pedido = Random.Range(0, 3);
-
-        comanda.sprite = em.NombresComandas[pedido];
-        em.ComandaUI(em.NombresComandas[pedido].name);
-        em.comandasCount++;
-        em.cantidadCom[pedido]++;
-
-        //Inicia cuenta atrás (pedido)
-        Atendido = true;
-        AtendidoCuent = true;
-        tiempoPasado = 0f;
-
-        //Activamos la cuenta del pedido en el slider
-        tiempoMaxPedido = 100f; //Valor de la cuenta atrás
-        usandoCuentaPedido = true;
-        if (slider != null) { slider.gameObject.SetActive(true); slider.maxValue = tiempoMaxPedido; slider.value = tiempoMaxPedido; }
-    }
-
-    //Comanda de los VIP
-    private void ElegirComandaV()
-    {
-        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
-
-        pedido = Random.Range(0, 3);
-
-        comanda.sprite = em.NombresComandas[pedido];
-        em.ComandaUI(em.NombresComandas[pedido].name);
-        em.comandasCount++;
-
-        em.cantidadCom[pedido]++;
-
-        //Inicia cuenta atrás (pedido)
-        Atendido = true;
-        AtendidoCuent = true;
-        tiempoPasado = 0f;
-
-        // Activamos la cuenta del pedido en el slider
-        tiempoMaxPedido = 100f;
-        usandoCuentaPedido = true;
-        if (slider != null) { slider.gameObject.SetActive(true); slider.maxValue = tiempoMaxPedido; slider.value = tiempoMaxPedido; }
-    }
-
-
-    //Scrip para revisar que le traes el plato correcto
-    private void RevisarComanda(GameObject Player)
-    {
-        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+        GameObject heldPlate = GetHeldPlate(player);
+        if (heldPlate == null)
+            return;
 
         AtendidoCuent = false;
-        usandoCuentaPedido = false; // parar la visualización del timer de pedido
+        usandoCuentaPedido = false;
 
-        GameObject sujetarOb = Player.transform.GetChild(2).gameObject;
+        string expectedName = empezarTurno.NombresComandas[pedido].name;
+        bool correctPlate = heldPlate.name == expectedName;
 
-        if (sujetarOb.transform.childCount <= 0)
+        InstantiatePlateOnTable(heldPlate);
+        Destroy(heldPlate);
+
+        RemovePendingOrder();
+
+        if (correctPlate)
         {
-            // Debug.Log("No tiene plato");
+            if (tiempoPasado < 100f)
+            {
+                SetComandaSprite(Feliz);
+                modo = 1;
+            }
+            else
+            {
+                SetComandaSprite(Neutral);
+                modo = 2;
+            }
         }
         else
         {
-            GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
-
-            if (Plato.name == em.NombresComandas[pedido].name) //Has acertado
-            {
-                Destroy(Plato);
-                //Debug.Log("Has acertado");
-                em.cantidadCom[pedido]--;
-                em.EliminarComanda(em.NombresComandas[pedido].name);
-                em.comandasCount--;
-
-                if (tiempoPasado < 100)
-                {
-                    comanda.sprite = Feliz;
-                    modo = 1;
-                }
-                else
-                {
-                    comanda.sprite = Neutral;
-                    modo = 2;
-                }
- 
-                FadeOut(2.5f); //Activamos el fade out
-                StartCoroutine(Adios());
-
-            }
-            else //No has acertado
-            {
-                Destroy(Plato);
-
-                comanda.sprite = Enfadado; //Sprite de enfadado
-                modo = 3;
-                em.cantidadCom[pedido]--;
-                em.EliminarComanda(em.NombresComandas[pedido].name);
-                em.comandasCount--;
-                FadeOut(2.5f); //Activamos el fade out
-                StartCoroutine(Adios()); //Corrutina que finaliza todo
-            }
+            SetComandaSprite(Enfadado);
+            modo = 3;
         }
+
+        FadeOut(2.5f);
+        BeginLeavingAfterDelay(3f);
     }
 
-    IEnumerator Adios()
+    private GameObject GetHeldPlate(GameObject player)
     {
-        ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
-        VariablesFinDia();
+        if (player == null || player.transform.childCount <= 2)
+            return null;
 
-        // ocultamos slider cuando se vaya del cliente (espera 3s y se marcha)
-        if (slider != null) slider.gameObject.SetActive(false);
+        Transform holdPoint = player.transform.GetChild(2);
+        if (holdPoint == null || holdPoint.childCount <= 0)
+            return null;
 
-        yield return new WaitForSeconds(3f);
-        canvas.enabled = false;
-        CM.ClienteAdios(this.gameObject);
+        return holdPoint.GetChild(0).gameObject;
     }
 
-    //Corrutina que controla la cuenta atras hasta que se marche el cliente
-    IEnumerator InicioCuentaAtras()
+    private void InstantiatePlateOnTable(GameObject plate)
     {
-        ClienteManager CM = clienteManager.GetComponent<ClienteManager>(); //Referencia a cliente Manager
-        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+        if (plate == null || platoI == null)
+            return;
 
+        Instantiate(plate, platoI.transform.position, platoI.transform.rotation, platoI.transform);
+    }
+
+    private void RemovePendingOrder()
+    {
+        if (empezarTurno == null || pedido < 0)
+            return;
+
+        if (empezarTurno.cantidadCom != null && pedido < empezarTurno.cantidadCom.Count)
+            empezarTurno.cantidadCom[pedido]--;
+
+        if (empezarTurno.NombresComandas != null && pedido < empezarTurno.NombresComandas.Count)
+            empezarTurno.EliminarComanda(empezarTurno.NombresComandas[pedido].name);
+
+        empezarTurno.comandasCount = Mathf.Max(0, empezarTurno.comandasCount - 1);
+    }
+
+    private IEnumerator InicioCuentaAtras()
+    {
         while (true)
         {
-            // Determina duración según si se ha atendido
             float tiempo = Atendido ? 120f : 100f;
-            // Consumimos el flag Atendido (lo usamos para decidir la duración)
             Atendido = false;
 
             float contador = tiempo;
-
-            // Preparamos valores para el slider (cuenta de salida)
             tiempoMaxSalida = tiempo;
             tiempoRestanteSalida = contador;
             usandoCuentaSalida = true;
 
-            // Loop de cuenta atrás
             while (contador > 0f)
             {
                 contador -= Time.deltaTime;
-                tiempoRestanteSalida = contador; // actualizamos la variable visible
+                tiempoRestanteSalida = contador;
 
                 if (contador <= 2f)
-                {
                     FadeOut(0.5f);
-                }
 
-                // Si se atiende de nuevo mientras contamos, salimos para reiniciar el bucle
                 if (Atendido)
                 {
-                    // Se ha atendido (nuevo pedido), reiniciamos la cuenta desde el principio
-                    usandoCuentaSalida = false; // dejamos de mostrar la cuenta de salida
+                    usandoCuentaSalida = false;
                     break;
                 }
 
                 yield return null;
             }
 
-            // Si Atendido está true significa que se reinició por un nuevo pedido -> continuamos el while para recalcular tiempo
             if (Atendido)
-            {
                 continue;
-            }
 
-            // Llegamos aquí sólo si se agotó el tiempo y no se atendió
-            if (pedido >= 0 && em != null)
-            {
-                if (pedido < em.cantidadCom.Count)
-                {
-                    em.cantidadCom[pedido]--;
-                    em.EliminarComanda(em.NombresComandas[pedido].name);
-                    em.comandasCount--;
-                }
+            if (pedido >= 0)
+                RemovePendingOrder();
 
-            }
-
-            // El cliente se marcha por tiempo agotado
             VariablesFinDia();
 
-            // ocultamos slider antes de avisar manager
-            if (slider != null) slider.gameObject.SetActive(false);
+            if (slider != null)
+                slider.gameObject.SetActive(false);
 
-            CM.ClienteAdios(this.gameObject);
-            yield break; // terminamos la corrutina del cliente (se marcha)
+            NotifyManagerAndDestroy();
+            yield break;
         }
     }
 
     private void VariablesFinDia()
     {
-        EmpezarTurno em = EmpezarTurnoCounter.GetComponent<EmpezarTurno>();
+        if (empezarTurno == null)
+            return;
 
-        if (modo == 0)
+        switch (modo)
         {
-            dineroCli = 0;
-            reputacionCli = -2;
+            case 1:
+                dineroCli = 2;
+                reputacionCli = 2;
+                break;
+
+            case 2:
+                dineroCli = 2;
+                reputacionCli = 1;
+                break;
+
+            case 3:
+                dineroCli = -1;
+                reputacionCli = 1;
+                break;
+
+            default:
+                dineroCli = 0;
+                reputacionCli = -2;
+                break;
         }
 
-        if (modo == 1)
-        {
-            dineroCli = 2;
-            reputacionCli = 2;
-        }
-
-        if (modo == 2)
-        {
-            dineroCli = 2;
-            reputacionCli = 1;
-
-        }
-
-        if (modo == 3)
-        {
-            dineroCli = -1;
-            reputacionCli = 1;
-        }
-
-        //Se annade el dinero y la reputacion al manager de turno
-        em.dineroTurno += dineroCli;
-        em.reputacionTurno += reputacionCli;
+        empezarTurno.dineroTurno += dineroCli;
+        empezarTurno.reputacionTurno += reputacionCli;
 
         modo = 0;
     }
 
-    //Funicones relacionadas con el fade out
     private void FadeOut(float duracion)
     {
+        if (comanda == null)
+            return;
+
         StartCoroutine(FadeO(0f, duracion));
     }
 
-    IEnumerator FadeO(float target, float time)
+    private IEnumerator FadeO(float target, float time)
     {
+        if (comanda == null)
+            yield break;
+
         float start = comanda.color.a;
 
-        for (float t = 0; t < time; t += Time.deltaTime)
+        if (time <= 0f)
+        {
+            SetComandaAlpha(target);
+            yield break;
+        }
+
+        for (float t = 0f; t < time; t += Time.deltaTime)
         {
             float a = Mathf.Lerp(start, target, t / time);
-            comanda.color = new Color(comanda.color.r, comanda.color.g, comanda.color.b, a);
+            SetComandaAlpha(a);
             yield return null;
         }
-        comanda.color = new Color(comanda.color.r, comanda.color.g, comanda.color.b, target);
+
+        SetComandaAlpha(target);
     }
 
-    private void InstanciarPlato(GameObject Player)
+    private void SetComandaAlpha(float alpha)
     {
-        GameObject sujetarOb = Player.transform.GetChild(2).gameObject;
+        if (comanda == null)
+            return;
 
-        if (sujetarOb.transform.childCount <= 0)
+        Color color = comanda.color;
+        color.a = alpha;
+        comanda.color = color;
+    }
+
+    private void SetComandaSprite(Sprite sprite)
+    {
+        if (comanda == null || sprite == null)
+            return;
+
+        comanda.sprite = sprite;
+        SetComandaAlpha(1f);
+    }
+
+    private void SetCanvasVisible(bool visible)
+    {
+        if (canvas != null)
+            canvas.enabled = visible;
+    }
+
+    private void BeginLeavingAfterDelay(float delay)
+    {
+        if (marchando)
+            return;
+
+        marchando = true;
+        VariablesFinDia();
+
+        if (slider != null)
+            slider.gameObject.SetActive(false);
+
+        if (cuentaAtrasCoroutine != null)
         {
-            // Debug.Log("No tiene plato");
+            StopCoroutine(cuentaAtrasCoroutine);
+            cuentaAtrasCoroutine = null;
+        }
+
+        adiosCoroutine = StartCoroutine(Adios(delay));
+    }
+
+    private IEnumerator Adios(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SetCanvasVisible(false);
+        NotifyManagerAndDestroy();
+    }
+
+    private void LeaveImmediately()
+    {
+        if (marchando)
+            return;
+
+        marchando = true;
+        StopAllCoroutines();
+        NotifyManagerAndDestroy();
+    }
+
+    private void NotifyManagerAndDestroy()
+    {
+        if (clienteManagerComponent == null)
+            CacheReferences();
+
+        if (clienteManagerComponent != null)
+        {
+            clienteManagerComponent.ClienteAdios(gameObject);
         }
         else
         {
-            GameObject Plato = sujetarOb.transform.GetChild(0).gameObject;
-
-            Instantiate(Plato, platoI.transform.position, platoI.transform.rotation, platoI.transform);
-
-            Destroy(sujetarOb.transform.GetChild(0).gameObject);
+            Destroy(gameObject);
         }
     }
 }
