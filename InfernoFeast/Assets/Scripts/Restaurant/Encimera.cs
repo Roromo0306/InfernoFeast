@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,65 +7,151 @@ public class Encimera : MonoBehaviour
     public GameObject PadreEncimera, objeto1, objeto2 = null;
     public TipoIngrediente mezcla;
     public bool TieneObjeto = false, EncontradoPareja = true;
-    void Update()
+
+    private void Update()
     {
-        if (PadreEncimera.transform.childCount == 1) //Verifica si tiene un objeto
+        UpdateObjectState();
+
+        if (objeto2 != null && objeto1 != null)
+        {
+            Recetas();
+        }
+    }
+
+    public bool TryAddSecondObject(GameObject secondObject)
+    {
+        if (secondObject == null)
+            return false;
+
+        UpdateObjectState();
+
+        if (objeto1 == null)
+            return false;
+
+        objeto2 = secondObject;
+        Recetas();
+        return true;
+    }
+
+    private void UpdateObjectState()
+    {
+        if (PadreEncimera == null)
+        {
+            objeto1 = null;
+            TieneObjeto = false;
+            return;
+        }
+
+        if (PadreEncimera.transform.childCount > 0)
         {
             objeto1 = PadreEncimera.transform.GetChild(0).gameObject;
             TieneObjeto = true;
         }
-
-        if(PadreEncimera.transform.childCount <= 0) //Verifica si no tiene objetos
+        else
         {
             objeto1 = null;
             TieneObjeto = false;
         }
-
-        if(objeto2 != null && objeto1 != null) //Verifica si ya va a haber dos objetos y por ende, hay que fusionarlos
-        {
-            Recetas();
-        }
-       
     }
 
     private void Recetas()
     {
+        if (objeto1 == null || objeto2 == null)
+            return;
 
-        for(int i = 0; i < recetas.Count; i++)
+        EncontradoPareja = false;
+
+        if (recetas != null)
         {
-            /*Debug.Log("Nombre objeto 1: " + objeto1.name);
-            Debug.Log("Nombre objeto 2: " + objeto2.name);
-            Debug.Log("Nombre Ingrediente 1: " + recetas[i].Ingrediente1.name);
-            Debug.Log("Nombre Ingrediente 2: " + recetas[i].Ingrediente2.name);*/
-            if (recetas[i].Ingrediente1.name == objeto1.name && recetas[i].Ingrediente2.name == objeto2.name) //Accede a scriptable object para verificar que los dos gameobjects son compatibles para fusionarse
+            for (int i = 0; i < recetas.Count; i++)
             {
-                Debug.Log("Encontrado");
-                Destroy(objeto1);
-                Destroy(objeto2);
+                if (recetas[i] == null)
+                    continue;
 
-                GameObject Instanciado = Instantiate(recetas[i].Resultado.prefabIngrediente, PadreEncimera.transform.position, recetas[i].Resultado.prefabIngrediente.transform.rotation, PadreEncimera.transform);
-                Instanciado.name = recetas[i].Resultado.prefabIngrediente.name; //Esto lo que hace es eliminar la palabara clone de su nombre
+                if (recetas[i].Ingrediente1 == null || recetas[i].Ingrediente2 == null || recetas[i].Resultado == null)
+                    continue;
 
-                objeto1 = objeto2 = null;
-                EncontradoPareja = true;
-                break;
-            }
-            else
-            {
-                EncontradoPareja = false;
+                if (recetas[i].Ingrediente1.name == objeto1.name && recetas[i].Ingrediente2.name == objeto2.name)
+                {
+                    GameObject resultPrefab = recetas[i].Resultado.prefabIngrediente;
+                    Quaternion resultRotation = resultPrefab != null ? resultPrefab.transform.rotation : Quaternion.identity;
+
+                    Destroy(objeto1);
+                    Destroy(objeto2);
+
+                    InstantiateResult(resultPrefab, resultRotation);
+
+                    objeto1 = null;
+                    objeto2 = null;
+                    EncontradoPareja = true;
+                    return;
+                }
             }
         }
 
-        if (!EncontradoPareja) //Esto sucede en caso de que los objetos no concuerden
+        if (!EncontradoPareja)
         {
-            Debug.Log("No Encontrado");
             Destroy(objeto1);
             Destroy(objeto2);
 
-            Instantiate(mezcla.prefabIngrediente, PadreEncimera.transform.position, PadreEncimera.transform.rotation, PadreEncimera.transform); //Instancia el objeto mezcla
-            PadreEncimera.transform.GetChild(0).name = PadreEncimera.transform.GetChild(0).name.Replace("(Clone)", "").Trim(); //Esto lo que hace es eliminar la palabara clone de su nombre
+            if (mezcla != null && mezcla.prefabIngrediente != null)
+            {
+                Quaternion mixRotation = PadreEncimera != null ? PadreEncimera.transform.rotation : Quaternion.identity;
+                InstantiateResult(mezcla.prefabIngrediente, mixRotation);
+            }
 
-            objeto1 = objeto2 = null;
+            objeto1 = null;
+            objeto2 = null;
         }
+    }
+
+    private void InstantiateResult(GameObject prefab, Quaternion rotation)
+    {
+        if (prefab == null || PadreEncimera == null)
+            return;
+
+        Vector3 prefabWorldScale = prefab.transform.lossyScale;
+
+        GameObject instantiated = Instantiate(prefab, PadreEncimera.transform.position, rotation);
+        instantiated.name = prefab.name;
+
+        instantiated.transform.SetParent(PadreEncimera.transform, true);
+        SetWorldScale(instantiated.transform, prefabWorldScale);
+        PrepareRigidbody(instantiated);
+    }
+
+    private void PrepareRigidbody(GameObject target)
+    {
+        if (target == null)
+            return;
+
+        Rigidbody rb = target.GetComponent<Rigidbody>();
+        if (rb == null)
+            return;
+
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    private void SetWorldScale(Transform target, Vector3 worldScale)
+    {
+        if (target == null)
+            return;
+
+        if (target.parent == null)
+        {
+            target.localScale = worldScale;
+            return;
+        }
+
+        Vector3 parentScale = target.parent.lossyScale;
+
+        target.localScale = new Vector3(
+            parentScale.x != 0f ? worldScale.x / parentScale.x : worldScale.x,
+            parentScale.y != 0f ? worldScale.y / parentScale.y : worldScale.y,
+            parentScale.z != 0f ? worldScale.z / parentScale.z : worldScale.z
+        );
     }
 }
