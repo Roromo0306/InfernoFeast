@@ -7,16 +7,15 @@ using UnityEngine.UI;
 public class EmpezarTurno : MonoBehaviour
 {
     [Header("Texto Cuenta Atras")]
-    public TextMeshProUGUI Cuenta; //Referencia al texto de la cuenta atras
+    public TextMeshProUGUI Cuenta;
 
     [Header("Player")]
     public GameObject Player;
 
     [Header("Lista Comandas")]
-    public List<Sprite> NombresComandas; //Estos son los nombres de las comandas que pueden aparecer
-    public List<int> cantidadCom; //Esta es la cantidad de comandas de un mismo plato que se han pedido
+    public List<Sprite> NombresComandas;
+    public List<int> cantidadCom;
     public int comandasCount = 0;
-
 
     [Header("Componentes UI Comandas")]
     public List<Sprite> ListaComandas;
@@ -26,7 +25,7 @@ public class EmpezarTurno : MonoBehaviour
     public Sprite cerrado;
     public Image AbCer;
 
-   [HideInInspector] public bool empezado = false;
+    [HideInInspector] public bool empezado = false;
 
     [Header("Variables dinero y reputacion")]
     public int dineroTurno;
@@ -35,108 +34,234 @@ public class EmpezarTurno : MonoBehaviour
     [Header("Sonido")]
     public AudioSource audio;
 
-    [Header("UI Lista Comandas (nuevo sistema)")]
+    [Header("Configuracion Turno")]
+    public float duracionTurno = 420f;
+    public int comandasIniciales = 3;
+
+    [Header("UI Lista Comandas")]
     public Transform contenedorComandas;
     public GameObject prefabComandaUI;
     public int maxComandas = 4;
     public float separacionY = 90f;
     public float desplazamientoEntrada = 500f;
 
-    private List<ComandaActiva> comandasActivas = new List<ComandaActiva>();
+    private readonly List<ComandaActiva> comandasActivas = new List<ComandaActiva>();
 
-    private void Update()
+    private Coroutine cuentaAtrasCoroutine;
+    private bool finDeDiaAplicado = false;
+
+    private void Awake()
     {
-
+        EnsureLists();
+        SetClosedVisual();
+        UpdateCuentaText(duracionTurno);
     }
+
     public void TurnoStart()
     {
-        //Empezar cuenta atrás
-        CuentaAtras();
+        if (empezado)
+            return;
 
-        //Aparecer comandas
+        EnsureLists();
+
+        if (cuentaAtrasCoroutine != null)
+            StopCoroutine(cuentaAtrasCoroutine);
+
+        PrepararNuevoTurno();
+
         empezado = true;
+        finDeDiaAplicado = false;
 
-        //Cambiamos el cartel a abierto
-        AbCer.sprite = abierto;
+        if (AbCer != null && abierto != null)
+            AbCer.sprite = abierto;
 
-        //Iniciamos el sonido
-        audio.Play();
+        if (audio != null && !audio.isPlaying)
+            audio.Play();
+
+        cuentaAtrasCoroutine = StartCoroutine(CuentAtras());
     }
 
-    private void CuentaAtras()
+    private void PrepararNuevoTurno()
     {
-        StartCoroutine(CuentAtras());
-    }
+        comandasCount = 0;
+        dineroTurno = 0;
+        reputacionTurno = 0;
 
-    IEnumerator CuentAtras()
-    {
-        InteractuarCounter inte = Player.GetComponent<InteractuarCounter>();
-
+        LimpiarComandasUI();
         ElegirComandas();
+        EnsureCantidadComSize();
+        ResetCantidadCom();
+        UpdateCuentaText(duracionTurno);
+    }
 
-        float tiempo = 420f;
-        while (tiempo > 0)
+    private IEnumerator CuentAtras()
+    {
+        float tiempo = Mathf.Max(0f, duracionTurno);
+
+        while (tiempo > 0f && empezado)
         {
-            int minutos = (int)(tiempo / 60f);
-            int segundos = (int)(tiempo % 60f);
-
-            Cuenta.text = $"{minutos:00}:{segundos:00}";
+            UpdateCuentaText(tiempo);
             tiempo -= Time.deltaTime;
-
             yield return null;
         }
 
-        Cuenta.text = "00:00";
-        inte.turnoEmpezado = false;
+        UpdateCuentaText(0f);
+        cuentaAtrasCoroutine = null;
+
+        if (empezado)
+            TerminarTurno();
+    }
+
+    public void TerminarTurno()
+    {
+        if (!empezado && finDeDiaAplicado)
+            return;
+
         empezado = false;
-        AbCer.sprite = cerrado;
-        FinDeDiaVariables();
-    }
 
-    private void ElegirComandas()
-    {
-        NombresComandas.Clear(); //Limpiamos la lista por si acaso
+        InteractuarCounter interactuarCounter = null;
+        if (Player != null)
+            interactuarCounter = Player.GetComponent<InteractuarCounter>();
 
-        List<Sprite> copia = new List<Sprite>(ComandasManager.Instance.NombresComandasTotales); //Creamos una copia para evitar que salgan tres comandas iguales
+        if (interactuarCounter != null)
+            interactuarCounter.turnoEmpezado = false;
 
-        for(int i = 0; i < 3 && copia.Count > 0; i++)
+        if (cuentaAtrasCoroutine != null)
         {
-            int r = Random.Range(0, copia.Count);
-            NombresComandas.Add(copia[r]);
-            copia.RemoveAt(r);
+            StopCoroutine(cuentaAtrasCoroutine);
+            cuentaAtrasCoroutine = null;
         }
+
+        if (audio != null && audio.isPlaying)
+            audio.Stop();
+
+        SetClosedVisual();
+
+        comandasCount = 0;
+        ResetCantidadCom();
+        LimpiarComandasUI();
+
+        AplicarFinDeDiaUnaVez();
     }
 
-    private void FinDeDiaVariables()
+    private void AplicarFinDeDiaUnaVez()
     {
-        //Annado la reputacion y el dinero al singleton
-        ManagerFinDia.Instance.dinero += dineroTurno;
-        ManagerFinDia.Instance.reputacion += reputacionTurno;
+        if (finDeDiaAplicado)
+            return;
 
-        //Reseteo el dinero
+        finDeDiaAplicado = true;
+
+        if (ManagerFinDia.Instance != null)
+        {
+            ManagerFinDia.Instance.AddDayResults(dineroTurno, reputacionTurno);
+        }
+        else
+        {
+            Debug.LogWarning("[EmpezarTurno] No existe ManagerFinDia en la escena.");
+        }
+
         dineroTurno = 0;
         reputacionTurno = 0;
     }
 
-    public void ComandaUI(string nombre)
+    private void ElegirComandas()
     {
-        if (comandasActivas.Count >= maxComandas)
-            return;
+        EnsureLists();
+        NombresComandas.Clear();
 
-        Sprite sprite = null;
+        List<Sprite> comandasDisponibles = GetComandasDisponibles();
+        int cantidadInicial = Mathf.Max(0, comandasIniciales);
 
-        for (int i = 0; i < ListaComandas.Count; i++)
+        for (int i = 0; i < cantidadInicial && comandasDisponibles.Count > 0; i++)
         {
-            if (ListaComandas[i].name == nombre)
+            int randomIndex = Random.Range(0, comandasDisponibles.Count);
+            NombresComandas.Add(comandasDisponibles[randomIndex]);
+            comandasDisponibles.RemoveAt(randomIndex);
+        }
+    }
+
+    private List<Sprite> GetComandasDisponibles()
+    {
+        List<Sprite> resultado = new List<Sprite>();
+
+        if (ComandasManager.Instance != null && ComandasManager.Instance.NombresComandasTotales != null)
+        {
+            for (int i = 0; i < ComandasManager.Instance.NombresComandasTotales.Count; i++)
             {
-                sprite = ListaComandas[i];
-                break;
+                Sprite sprite = ComandasManager.Instance.NombresComandasTotales[i];
+                if (sprite != null && !resultado.Contains(sprite))
+                    resultado.Add(sprite);
             }
         }
 
+        if (resultado.Count == 0 && ListaComandas != null)
+        {
+            for (int i = 0; i < ListaComandas.Count; i++)
+            {
+                Sprite sprite = ListaComandas[i];
+                if (sprite != null && !resultado.Contains(sprite))
+                    resultado.Add(sprite);
+            }
+        }
+
+        return resultado;
+    }
+
+    public bool CanAcceptNewComanda()
+    {
+        return empezado && comandasCount < maxComandas;
+    }
+
+    public void RegistrarComanda(int pedidoIndex)
+    {
+        EnsureCantidadComSize();
+
+        if (pedidoIndex < 0 || pedidoIndex >= cantidadCom.Count)
+            return;
+
+        cantidadCom[pedidoIndex]++;
+        comandasCount = Mathf.Clamp(comandasCount + 1, 0, maxComandas);
+    }
+
+    public void QuitarComanda(int pedidoIndex)
+    {
+        EnsureCantidadComSize();
+
+        if (pedidoIndex < 0 || pedidoIndex >= cantidadCom.Count)
+            return;
+
+        cantidadCom[pedidoIndex] = Mathf.Max(0, cantidadCom[pedidoIndex] - 1);
+        comandasCount = Mathf.Max(0, comandasCount - 1);
+
+        if (NombresComandas != null && pedidoIndex < NombresComandas.Count && NombresComandas[pedidoIndex] != null)
+            EliminarComanda(NombresComandas[pedidoIndex].name);
+    }
+
+    public void ComandaUI(string nombre)
+    {
+        if (string.IsNullOrEmpty(nombre))
+            return;
+
+        if (comandasActivas.Count >= maxComandas)
+            return;
+
+        if (prefabComandaUI == null)
+        {
+            Debug.LogWarning("[EmpezarTurno] Falta prefabComandaUI.");
+            return;
+        }
+
+        if (contenedorComandas == null)
+        {
+            Debug.LogWarning("[EmpezarTurno] Falta contenedorComandas.");
+            return;
+        }
+
+        Sprite sprite = BuscarSpriteComanda(nombre);
+
         if (sprite == null)
         {
-            Debug.LogWarning("No se encontró el sprite de la comanda: " + nombre);
+            Debug.LogWarning("[EmpezarTurno] No se encontró el sprite de la comanda: " + nombre);
             return;
         }
 
@@ -146,7 +271,7 @@ public class EmpezarTurno : MonoBehaviour
         Image img = nueva.GetComponent<Image>();
         if (img == null)
         {
-            Debug.LogError("El prefabComandaUI no tiene componente Image.");
+            Debug.LogError("[EmpezarTurno] El prefabComandaUI no tiene componente Image.");
             Destroy(nueva);
             return;
         }
@@ -154,21 +279,48 @@ public class EmpezarTurno : MonoBehaviour
         img.sprite = sprite;
 
         RectTransform rt = nueva.GetComponent<RectTransform>();
-        float targetY = -comandasActivas.Count * separacionY;
-
-        rt.anchoredPosition = new Vector2(desplazamientoEntrada, targetY);
+        if (rt != null)
+        {
+            float targetY = -comandasActivas.Count * separacionY;
+            rt.anchoredPosition = new Vector2(desplazamientoEntrada, targetY);
+            StartCoroutine(AnimarEntrada(rt, targetY));
+        }
 
         comandasActivas.Add(new ComandaActiva
         {
             objeto = nueva,
             nombre = nombre
         });
-
-        StartCoroutine(AnimarEntrada(rt, targetY));
     }
 
-    IEnumerator AnimarEntrada(RectTransform rt, float targetY)
+    private Sprite BuscarSpriteComanda(string nombre)
     {
+        if (ListaComandas != null)
+        {
+            for (int i = 0; i < ListaComandas.Count; i++)
+            {
+                if (ListaComandas[i] != null && ListaComandas[i].name == nombre)
+                    return ListaComandas[i];
+            }
+        }
+
+        if (NombresComandas != null)
+        {
+            for (int i = 0; i < NombresComandas.Count; i++)
+            {
+                if (NombresComandas[i] != null && NombresComandas[i].name == nombre)
+                    return NombresComandas[i];
+            }
+        }
+
+        return null;
+    }
+
+    private IEnumerator AnimarEntrada(RectTransform rt, float targetY)
+    {
+        if (rt == null)
+            yield break;
+
         Vector2 start = new Vector2(desplazamientoEntrada, targetY);
         Vector2 end = new Vector2(0f, targetY);
 
@@ -185,29 +337,105 @@ public class EmpezarTurno : MonoBehaviour
         rt.anchoredPosition = end;
     }
 
-    void ReordenarComandas()
+    private void ReordenarComandas()
     {
         for (int i = 0; i < comandasActivas.Count; i++)
         {
-            if (comandasActivas[i].objeto == null) continue;
+            if (comandasActivas[i] == null || comandasActivas[i].objeto == null)
+                continue;
 
             RectTransform rt = comandasActivas[i].objeto.GetComponent<RectTransform>();
-            rt.anchoredPosition = new Vector2(0f, -i * separacionY);
+            if (rt != null)
+                rt.anchoredPosition = new Vector2(0f, -i * separacionY);
         }
     }
 
     public void EliminarComanda(string nombre)
     {
+        if (string.IsNullOrEmpty(nombre))
+            return;
+
         for (int i = 0; i < comandasActivas.Count; i++)
         {
-            if (comandasActivas[i].nombre == nombre)
+            if (comandasActivas[i] != null && comandasActivas[i].nombre == nombre)
             {
-                Destroy(comandasActivas[i].objeto);
+                if (comandasActivas[i].objeto != null)
+                    Destroy(comandasActivas[i].objeto);
+
                 comandasActivas.RemoveAt(i);
                 ReordenarComandas();
                 return;
             }
         }
+    }
+
+    private void LimpiarComandasUI()
+    {
+        for (int i = comandasActivas.Count - 1; i >= 0; i--)
+        {
+            if (comandasActivas[i] != null && comandasActivas[i].objeto != null)
+                Destroy(comandasActivas[i].objeto);
+        }
+
+        comandasActivas.Clear();
+
+        if (contenedorComandas != null)
+        {
+            for (int i = contenedorComandas.childCount - 1; i >= 0; i--)
+            {
+                Destroy(contenedorComandas.GetChild(i).gameObject);
+            }
+        }
+    }
+
+    private void EnsureLists()
+    {
+        if (NombresComandas == null)
+            NombresComandas = new List<Sprite>();
+
+        if (cantidadCom == null)
+            cantidadCom = new List<int>();
+
+        if (ListaComandas == null)
+            ListaComandas = new List<Sprite>();
+    }
+
+    private void EnsureCantidadComSize()
+    {
+        EnsureLists();
+
+        while (cantidadCom.Count < NombresComandas.Count)
+            cantidadCom.Add(0);
+
+        while (cantidadCom.Count > NombresComandas.Count)
+            cantidadCom.RemoveAt(cantidadCom.Count - 1);
+    }
+
+    private void ResetCantidadCom()
+    {
+        EnsureCantidadComSize();
+
+        for (int i = 0; i < cantidadCom.Count; i++)
+            cantidadCom[i] = 0;
+    }
+
+    private void SetClosedVisual()
+    {
+        if (AbCer != null && cerrado != null)
+            AbCer.sprite = cerrado;
+    }
+
+    private void UpdateCuentaText(float tiempo)
+    {
+        if (Cuenta == null)
+            return;
+
+        tiempo = Mathf.Max(0f, tiempo);
+
+        int minutos = Mathf.FloorToInt(tiempo / 60f);
+        int segundos = Mathf.FloorToInt(tiempo % 60f);
+
+        Cuenta.text = minutos.ToString("00") + ":" + segundos.ToString("00");
     }
 
     [System.Serializable]
@@ -216,16 +444,4 @@ public class EmpezarTurno : MonoBehaviour
         public GameObject objeto;
         public string nombre;
     }
-
-    /*void FijarPosicionFinal()
-    {
-        RectTransform rt = prefabImagen.rectTransform;
-        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 419);
-    }
-
-    public void PosicionEntregarPlato()
-    {
-        RectTransform rt = prefabImagen.rectTransform;
-        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 752);
-    }*/
 }
