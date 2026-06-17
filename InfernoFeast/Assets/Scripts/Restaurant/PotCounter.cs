@@ -6,252 +6,319 @@ using UnityEngine.UI;
 public class PotCounter : MonoBehaviour
 {
     [Header("Padres")]
-    public GameObject PadrePlayer; //Objeto padre del player que lleva los objetos
-    public GameObject PadrePot; //Objeto padre de la hervidora donde se instancian la comida cuando se deposita
+    public GameObject PadrePlayer;
+    public GameObject PadrePot;
 
-    private int Indice; //Variable de referencia del indice de la lista
-    private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
+    private int Indice;
+    private bool ObjetoEncontrado = false;
 
     [Header("Listas")]
-    public List<TipoIngrediente> hervidos; //Lista de ingredientes ya hervidos
-    public List<TipoIngrediente> ingredientes; //Lista de ingredientes compatibles para hervir
+    public List<TipoIngrediente> hervidos;
+    public List<TipoIngrediente> ingredientes;
 
     [Header("UI")]
-    public Slider slider; //Referencia al slider
-    public float duracion = 7f; //Duracion del objeto hasta que termine el slider
+    public Slider slider;
+    public float duracion = 7f;
 
-    private Coroutine corrutina = null; //Referencia a corrutina
+    private Coroutine corrutina = null;
 
-    public InteractuarCounter counterInt; //Referencia la codigo que usa el player para interactuar con los counter
-    public TipoIngrediente Quemado; //Referencia al objeto quemado
+    public InteractuarCounter counterInt;
+    public TipoIngrediente Quemado;
+    public Image QuemadoImage;
 
-    public Image QuemadoImage; //Imagen de quemado que sale
-
-    public bool quemado = false; //Bool que indica si ya se ha quemado el objeto
+    public bool quemado = false;
 
     [Header("Audios")]
-    private bool haSonado = false, haSonado2 = false; //Bool para saber si ha sonado el sonido de quemado
-    public AudioSource audio; //Referencia al componente audioSource
+    private bool haSonado = false;
+    private bool haSonado2 = false;
+    public AudioSource audio;
     public AudioSource audioQuemado;
+
+    private void Awake()
+    {
+        if (slider != null)
+        {
+            slider.gameObject.SetActive(false);
+            slider.minValue = 0f;
+            slider.maxValue = 1f;
+            slider.value = 0f;
+        }
+
+        if (QuemadoImage != null)
+        {
+            QuemadoImage.enabled = false;
+        }
+    }
+
+    private void Update()
+    {
+        if (!quemado)
+            return;
+
+        if (!Input.GetKeyDown(KeyCode.E))
+            return;
+
+        if (!EstaInteractuandoConEsteCounter())
+            return;
+
+        if (PadrePlayer != null && PadrePlayer.transform.childCount > 0)
+            return;
+
+        OcultarSlider();
+
+        if (QuemadoImage != null)
+            QuemadoImage.enabled = false;
+
+        StopAudioReset();
+        InstanciarQuemado();
+        quemado = false;
+    }
 
     public void Hervir()
     {
-        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
-
-        //Detecto el componente Estado Alimento para saber si dejar que el elemento se pueda freir
-        EstadoAlimento Est = HijoPadre.GetComponent<EstadoAlimento>();
-        if (Est.estado == 3 || Est.estado == 6 || Est.estado == 7)
-        {
+        if (!TieneReferenciasMinimas())
             return;
-        }
 
-        //Con este for recorre la lista entera hasta que encuentra un objeto que se llama igual que el objeto que lleva el jugador. Al encontrar esto, activo el bool y guardo el indice
-        for (int i = 0; i < ingredientes.Count; i++)
-        {
-            if (ingredientes[i].name == HijoPadre.name)
-            {
-                Indice = i;
-                ObjetoEncontrado = true;
-                break;
-            }
-        }
+        if (corrutina != null || quemado)
+            return;
 
-        GameObject objetoPot = Instantiate(HijoPadre, PadrePot.transform.position, HijoPadre.transform.rotation, PadrePot.transform);
-        objetoPot.name = HijoPadre.name;
-        Destroy(HijoPadre);
+        if (PadrePlayer.transform.childCount <= 0)
+            return;
+
+        GameObject hijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
+        if (hijoPadre == null)
+            return;
+
+        EstadoAlimento estadoAlimento = hijoPadre.GetComponent<EstadoAlimento>();
+        if (estadoAlimento != null && (estadoAlimento.estado == 3 || estadoAlimento.estado == 6 || estadoAlimento.estado == 7))
+            return;
+
+        BuscarIngrediente(hijoPadre.name);
+
+        GameObject objetoPot = Instantiate(hijoPadre, PadrePot.transform.position, hijoPadre.transform.rotation, PadrePot.transform);
+        objetoPot.name = hijoPadre.name;
+
+        Destroy(hijoPadre);
 
         corrutina = StartCoroutine(ProcesoHervir(objetoPot));
     }
 
-    private void Instanciar(GameObject HijoPadre)
+    private IEnumerator ProcesoHervir(GameObject objetoPot)
+    {
+        MostrarSlider();
+
+        float tiempoPasado = 0f;
+
+        while (tiempoPasado < duracion)
+        {
+            tiempoPasado += Time.deltaTime;
+            float progreso = duracion <= 0f ? 1f : Mathf.Clamp01(tiempoPasado / duracion);
+
+            if (slider != null)
+                slider.value = progreso;
+
+            ReproducirAudioProceso(progreso);
+
+            if (Input.GetKeyDown(KeyCode.E) && EstaInteractuandoConEsteCounter())
+            {
+                if (PadrePlayer != null && PadrePlayer.transform.childCount <= 0)
+                {
+                    if (progreso >= 0.6f && progreso <= 0.9f)
+                    {
+                        OcultarSlider();
+                        Instanciar(objetoPot);
+                        corrutina = null;
+                        yield break;
+                    }
+
+                    if (progreso >= 0.99f)
+                    {
+                        MarcarQuemado();
+                        corrutina = null;
+                        yield break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        MarcarQuemado();
+        corrutina = null;
+    }
+
+    private void BuscarIngrediente(string nombreIngrediente)
+    {
+        Indice = 0;
+        ObjetoEncontrado = false;
+
+        if (ingredientes == null)
+            return;
+
+        for (int i = 0; i < ingredientes.Count; i++)
+        {
+            if (ingredientes[i] != null && ingredientes[i].name == nombreIngrediente)
+            {
+                Indice = i;
+                ObjetoEncontrado = true;
+                return;
+            }
+        }
+    }
+
+    private void Instanciar(GameObject objetoPot)
     {
         StopAudioReset();
 
-        //Si el bool es true pasa lo siguiente
-        if (ObjetoEncontrado)
+        if (objetoPot == null)
+            return;
+
+        if (ObjetoEncontrado && hervidos != null && Indice >= 0 && Indice < hervidos.Count && hervidos[Indice] != null && hervidos[Indice].prefabIngrediente != null)
         {
-            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
-
-
-            GameObject nuevoObjeto = Instantiate(hervidos[Indice].prefabIngrediente, PadrePlayer.transform.position, hervidos[Indice].prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de hervidos
-            nuevoObjeto.name = hervidos[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
-
-            Indice = 0;
-            ObjetoEncontrado = false;
+            InstanciarEnPlayer(hervidos[Indice].prefabIngrediente);
         }
         else
         {
-            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, HijoPadre.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
-            nuevoObjeto.name = HijoPadre.name; //Me aseguro que el nombre sea el correcto
-
-            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
+            InstanciarEnPlayer(objetoPot);
         }
+
+        Destroy(objetoPot);
+        ResetEstadoIngrediente();
     }
 
     private void InstanciarQuemado()
     {
         StopAudioReset();
 
-        GameObject PadrePot = this.gameObject.transform.GetChild(0).gameObject;
-        Destroy(PadrePot.gameObject.transform.GetChild(0).gameObject); //Destruyo el objeto que llevaba el jugador
+        GameObject objetoActual = ObtenerObjetoDelCounter();
+        if (objetoActual != null)
+        {
+            Destroy(objetoActual);
+        }
 
-        GameObject nuevoObjeto = Instantiate(Quemado.prefabIngrediente, PadrePlayer.transform.position, Quemado.prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
-        nuevoObjeto.name = Quemado.prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
+        if (Quemado != null && Quemado.prefabIngrediente != null)
+        {
+            InstanciarEnPlayer(Quemado.prefabIngrediente);
+        }
 
-        Indice = 0;
+        ResetEstadoIngrediente();
     }
 
-    private IEnumerator ProcesoHervir(GameObject objetoPot)
+    private void InstanciarEnPlayer(GameObject prefab)
     {
-        //Preparamos el slider
+        if (prefab == null || PadrePlayer == null)
+            return;
+
+        GameObject nuevoObjeto = Instantiate(prefab, PadrePlayer.transform.position, prefab.transform.rotation, PadrePlayer.transform);
+        nuevoObjeto.name = prefab.name;
+    }
+
+    private GameObject ObtenerObjetoDelCounter()
+    {
+        if (PadrePot == null || PadrePot.transform.childCount <= 0)
+            return null;
+
+        return PadrePot.transform.GetChild(0).gameObject;
+    }
+
+    private void MarcarQuemado()
+    {
+        quemado = true;
+
+        if (QuemadoImage != null)
+            QuemadoImage.enabled = true;
+
+        StopAudioReset();
+    }
+
+    private void MostrarSlider()
+    {
+        if (slider == null)
+            return;
+
         slider.gameObject.SetActive(true);
         slider.minValue = 0f;
         slider.maxValue = 1f;
         slider.value = 0f;
-
-        yield return null;
-        float tiempoPasado = 0f;
-        while (tiempoPasado < duracion)
-        {
-            tiempoPasado += Time.deltaTime;
-            slider.value = Mathf.Clamp01(tiempoPasado / duracion); //Fija el valor
-
-            if(this.gameObject.name == "Hervir")
-            {
-                if (slider.value >= 0.6 && !haSonado)
-                {
-                    audio.Play();
-                    haSonado = true;
-                }
-
-                if (slider.value >= 0.9 && !haSonado2)
-                {
-                    audio.Stop();
-                    audioQuemado.Play();
-                    haSonado2 = true;
-                }
-
-                if (Input.GetKeyDown(KeyCode.E) && counterInt.Hervir)
-                {
-                    if (PadrePlayer.transform.childCount <= 0)
-                    {
-                        //Se cancela
-
-                        if (slider.value >= 0.6 && slider.value <= 0.9f)
-                        {
-                            slider.gameObject.SetActive(false);
-                            slider.value = 0f;
-                            Instanciar(objetoPot);
-                            yield break;
-                        }
-
-                        if (slider.value >= 0.99f)
-                        {
-                            quemado = true;
-                            QuemadoImage.enabled = true;
-                            StopAudioReset();
-                            yield break;
-                        }
-                    }
-                }
-            }
-
-            if (this.gameObject.name == "Hervir2")
-            {
-
-                if (slider.value >= 0.6 && !haSonado)
-                {
-                    audio.Play();
-                    haSonado = true;
-                }
-
-                if (slider.value >= 0.9 && !haSonado2)
-                {
-                    audio.Stop();
-                    audioQuemado.Play();
-                    haSonado2 = true;
-                }
-
-                if (Input.GetKeyDown(KeyCode.E) && counterInt.Hervir2)
-                {
-                    if (PadrePlayer.transform.childCount <= 0)
-                    {
-                        //Se cancela
-
-                        if (slider.value >= 0.6 && slider.value <= 0.9f)
-                        {
-                            slider.gameObject.SetActive(false);
-                            slider.value = 0f;
-                            Instanciar(objetoPot);
-                            yield break;
-                        }
-
-                        if (slider.value >= 0.99f)
-                        {
-                            quemado = true;
-                            QuemadoImage.enabled = true;
-                            StopAudioReset();
-                            yield break;
-                        }
-                    }
-                }
-            }
-
-
-            yield return null;
-        }
-
-        //Completa el bake
-        quemado = true;
-        QuemadoImage.enabled = true;
-        //audio.loop = true;
-        //audio.Play();
-
-        corrutina = null;
-        yield break;
     }
 
-    private void Update()
+    private void OcultarSlider()
     {
-        if (this.gameObject.name == "Hervir")
+        if (slider == null)
+            return;
+
+        slider.gameObject.SetActive(false);
+        slider.value = 0f;
+    }
+
+    private void ReproducirAudioProceso(float progreso)
+    {
+        if (progreso >= 0.6f && !haSonado)
         {
-            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Hervir)
-            {
-                slider.gameObject.SetActive(false);
-                slider.value = 0f;
-                QuemadoImage.enabled = false;
-                StopAudioReset();
-                InstanciarQuemado();
-                quemado = false;
-                audio.loop = false;
-            }
+            if (audio != null)
+                audio.Play();
+
+            haSonado = true;
         }
 
-        if (this.gameObject.name == "Hervir2")
+        if (progreso >= 0.9f && !haSonado2)
         {
-            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Hervir2)
-            {
-                slider.gameObject.SetActive(false);
-                slider.value = 0f;
-                QuemadoImage.enabled = false;
-                StopAudioReset();
-                InstanciarQuemado();
-                quemado = false;
-                audio.loop = false;
-            }
+            if (audio != null)
+                audio.Stop();
+
+            if (audioQuemado != null)
+                audioQuemado.Play();
+
+            haSonado2 = true;
+        }
+    }
+
+    private bool EstaInteractuandoConEsteCounter()
+    {
+        if (counterInt == null)
+            return false;
+
+        if (gameObject.name == "Hervir")
+            return counterInt.Hervir;
+
+        if (gameObject.name == "Hervir2")
+            return counterInt.Hervir2;
+
+        return counterInt.Hervir || counterInt.Hervir2;
+    }
+
+    private bool TieneReferenciasMinimas()
+    {
+        if (PadrePlayer == null)
+        {
+            Debug.LogWarning("[PotCounter] Falta PadrePlayer en " + gameObject.name);
+            return false;
         }
 
+        if (PadrePot == null)
+        {
+            Debug.LogWarning("[PotCounter] Falta PadrePot en " + gameObject.name);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void ResetEstadoIngrediente()
+    {
+        Indice = 0;
+        ObjetoEncontrado = false;
     }
 
     private void StopAudioReset()
     {
-        if (audioQuemado != null && audioQuemado.isPlaying) audioQuemado.Stop();
+        if (audioQuemado != null && audioQuemado.isPlaying)
+            audioQuemado.Stop();
 
-        if (audio != null && audio.isPlaying && !audio.loop) audio.Stop();
+        if (audio != null && audio.isPlaying)
+            audio.Stop();
 
         haSonado = false;
         haSonado2 = false;
-
-        corrutina = null;
     }
 }

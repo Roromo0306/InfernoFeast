@@ -1,231 +1,144 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FryCounter : MonoBehaviour
 {
     [Header("Padres")]
-    public GameObject PadrePlayer; //Objeto padre del player que lleva los objetos
-    public GameObject PadreFreidora; //Objeto padre de la freidora donde se instancian la comida cuando se deposita
+    public GameObject PadrePlayer;
+    public GameObject PadreFreidora;
 
-    private int Indice; //Variable de referencia del indice de la lista
-    private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
+    private int Indice;
+    private bool ObjetoEncontrado = false;
 
     [Header("Listas")]
-    public List<TipoIngrediente> fritos; //Lista de ingredientes ya freidos
-    public List<TipoIngrediente> ingredientes; //Lista de ingredientes compatibles para freir
+    public List<TipoIngrediente> fritos;
+    public List<TipoIngrediente> ingredientes;
 
     [Header("UI")]
-    public Slider slider; //Referencia al slider
-    public float duracion = 7f; //Duracion del objeto hasta que termine el slider
+    public Slider slider;
+    public float duracion = 7f;
 
-    private Coroutine corrutina = null; //Referencia a corrutina
+    private Coroutine corrutina = null;
 
-    public InteractuarCounter counterInt; //Referencia la codigo que usa el player para interactuar con los counter
-    public TipoIngrediente Quemado; //Referencia al objeto quemado
+    public InteractuarCounter counterInt;
+    public TipoIngrediente Quemado;
+    public Image QuemadoImage;
 
-    public Image QuemadoImage; //Imagen de quemado que sale
-
-    private bool quemado = false; //Bool que indica si ya se ha quemado el objeto
+    private bool quemado = false;
 
     [Header("Audios")]
-    private bool haSonado = false, haSonado2 = false; //Bool para saber si ha sonado el sonido de quemado
-    public AudioSource audio; //Referencia al componente audioSource
+    private bool haSonado = false;
+    private bool haSonado2 = false;
+    public AudioSource audio;
     public AudioSource audioQuemado;
     public AudioSource audioFriendo;
 
+    private void Awake()
+    {
+        if (slider != null)
+        {
+            slider.gameObject.SetActive(false);
+            slider.minValue = 0f;
+            slider.maxValue = 1f;
+            slider.value = 0f;
+        }
+
+        if (QuemadoImage != null)
+        {
+            QuemadoImage.enabled = false;
+        }
+    }
+
+    private void Update()
+    {
+        if (!quemado)
+            return;
+
+        if (!Input.GetKeyDown(KeyCode.E))
+            return;
+
+        if (!EstaInteractuandoConEsteCounter())
+            return;
+
+        if (PadrePlayer != null && PadrePlayer.transform.childCount > 0)
+            return;
+
+        OcultarSlider();
+
+        if (QuemadoImage != null)
+            QuemadoImage.enabled = false;
+
+        StopAudioReset();
+        InstanciarQuemado();
+        quemado = false;
+    }
+
     public void Freir()
     {
-        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
-
-        //Detecto el componente Estado Alimento para saber si dejar que el elemento se pueda freir
-        EstadoAlimento Est = HijoPadre.GetComponent<EstadoAlimento>();
-        if(Est.estado == 2 ||  Est.estado == 6 || Est.estado == 7)
-        {
+        if (!TieneReferenciasMinimas())
             return;
-        }
 
-        //Con este for recorre la lista entera hasta que encuentra un objeto que se llama igual que el objeto que lleva el jugador. Al encontrar esto, activo el bool y guardo el indice
-        for (int i = 0; i < ingredientes.Count; i++)
-        {
-            if (ingredientes[i].name == HijoPadre.name)
-            {
-                Indice = i;
-                ObjetoEncontrado = true;
-                break;
-            }
-        }
+        if (corrutina != null || quemado)
+            return;
 
-        GameObject objetoFreidora = Instantiate(HijoPadre, PadreFreidora.transform.position, HijoPadre.transform.rotation, PadreFreidora.transform); //Instancia el objeto en la freidora
-        objetoFreidora.name = HijoPadre.name; //Le da su mismo nombre
-        Destroy(HijoPadre);
+        if (PadrePlayer.transform.childCount <= 0)
+            return;
 
-        corrutina = StartCoroutine(ProcesoFreir(objetoFreidora)); //Inicia la corrutina
+        GameObject hijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
+        if (hijoPadre == null)
+            return;
 
-        audioFriendo.Play();
+        EstadoAlimento estadoAlimento = hijoPadre.GetComponent<EstadoAlimento>();
+        if (estadoAlimento != null && (estadoAlimento.estado == 2 || estadoAlimento.estado == 6 || estadoAlimento.estado == 7))
+            return;
 
-    }
+        BuscarIngrediente(hijoPadre.name);
 
-    private void Instanciar(GameObject HijoPadre)
-    {
-        StopAudioReset();
+        GameObject objetoFreidora = Instantiate(hijoPadre, PadreFreidora.transform.position, hijoPadre.transform.rotation, PadreFreidora.transform);
+        objetoFreidora.name = hijoPadre.name;
 
-        //Si el bool es true pasa lo siguiente
-        if (ObjetoEncontrado)
-        {
-            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
+        Destroy(hijoPadre);
 
-            GameObject nuevoObjeto = Instantiate(fritos[Indice].prefabIngrediente, PadrePlayer.transform.position, fritos[Indice].prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de fritos
-            nuevoObjeto.name = fritos[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
+        if (audioFriendo != null)
+            audioFriendo.Play();
 
-            Indice = 0;
-            ObjetoEncontrado = false;
-        }
-        else
-        {
-            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, HijoPadre.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
-            nuevoObjeto.name = HijoPadre.name; //Me aseguro que el nombre sea el correcto
-
-            Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
-        }
-    }
-
-    private void InstanciarQuemado()
-    {
-        StopAudioReset();
-
-        GameObject PadrePot = this.gameObject.transform.GetChild(0).gameObject;
-        Destroy(PadrePot.gameObject.transform.GetChild(0).gameObject); //Destruyo el objeto que llevaba el jugador
-
-        GameObject nuevoObjeto = Instantiate(Quemado.prefabIngrediente, PadrePlayer.transform.position, Quemado.prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de horneados
-        nuevoObjeto.name = Quemado.prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
-
-        Indice = 0;
+        corrutina = StartCoroutine(ProcesoFreir(objetoFreidora));
     }
 
     private IEnumerator ProcesoFreir(GameObject objetoFreidora)
     {
-        //Preparamos el slider
-        slider.gameObject.SetActive(true);
-        slider.minValue = 0f;
-        slider.maxValue = 1f;
-        slider.value = 0f;
+        MostrarSlider();
 
-        yield return null;
         float tiempoPasado = 0f;
+
         while (tiempoPasado < duracion)
         {
             tiempoPasado += Time.deltaTime;
-            slider.value = Mathf.Clamp01(tiempoPasado / duracion); //Fija el valor
+            float progreso = duracion <= 0f ? 1f : Mathf.Clamp01(tiempoPasado / duracion);
 
+            if (slider != null)
+                slider.value = progreso;
 
-            if(this.gameObject.name == "Freir")
+            ReproducirAudioProceso(progreso);
+
+            if (Input.GetKeyDown(KeyCode.E) && EstaInteractuandoConEsteCounter())
             {
-                if (slider.value >= 0.6 && !haSonado)
+                if (PadrePlayer != null && PadrePlayer.transform.childCount <= 0)
                 {
-                    audio.Play();
-                    haSonado = true;
-                }
-
-                if (slider.value >= 0.9 && !haSonado2)
-                {
-                    audio.Stop();
-                    audioQuemado.Play();
-                    haSonado2 = true;
-                }
-
-                if (Input.GetKeyDown(KeyCode.E) && counterInt.Freir)
-                {
-                    if (PadrePlayer.transform.childCount <= 0)
+                    if (progreso <= 0.9f)
                     {
-                        //Se cancela
-
-                        if(slider.value <= 0.6)
-                        {
-                            slider.gameObject.SetActive(false);
-                            slider.value = 0f;
-                            Instanciar(objetoFreidora);
-                            yield break;
-
-                        }
-
-                        if (slider.value >= 0.6 && slider.value <= 0.9f)
-                        {
-                            slider.gameObject.SetActive(false);
-                            slider.value = 0f;
-                            Instanciar(objetoFreidora);
-                            yield break;
-                        }
-
-                        if (slider.value >= 0.99f)
-                        {
-                            quemado = true;
-                            QuemadoImage.enabled = true;
-                            StopAudioReset();
-                            yield break;
-                        }
-
-                        StopAudioReset();
-                        slider.gameObject.SetActive(false);
-                        slider.value = 0f;
+                        OcultarSlider();
+                        Instanciar(objetoFreidora);
+                        corrutina = null;
                         yield break;
-
                     }
-                }
-            }
 
-            if (this.gameObject.name == "Freir2")
-            {
-
-                if (slider.value >= 0.6 && !haSonado)
-                {
-                    audio.Play();
-                    haSonado = true;
-                }
-
-                if (slider.value >= 0.9 && !haSonado2)
-                {
-                    audio.Stop();
-                    audioQuemado.Play();
-                    haSonado2 = true;
-                }
-
-                if (Input.GetKeyDown(KeyCode.E) && counterInt.Freir2)
-                {
-                    if (PadrePlayer.transform.childCount <= 0)
+                    if (progreso >= 0.99f)
                     {
-                        //Se cancela
-
-                        if (slider.value <= 0.6)
-                        {
-                            slider.gameObject.SetActive(false);
-                            slider.value = 0f;
-                            Instanciar(objetoFreidora);
-                            yield break;
-
-                        }
-
-                        if (slider.value >= 0.6 && slider.value <= 0.9f)
-                        {
-                            slider.gameObject.SetActive(false);
-                            slider.value = 0f;
-                            Instanciar(objetoFreidora);
-                            yield break;
-                        }
-
-                        if (slider.value >= 0.99f)
-                        {
-                            quemado = true;
-                            QuemadoImage.enabled = true;
-                            StopAudioReset();
-                            yield break;
-                        }
-
-                        StopAudioReset();
-                        slider.gameObject.SetActive(false);
-                        slider.value = 0f;
+                        MarcarQuemado();
+                        corrutina = null;
                         yield break;
                     }
                 }
@@ -234,59 +147,185 @@ public class FryCounter : MonoBehaviour
             yield return null;
         }
 
-        //Completa el bake
-        quemado = true;
-        QuemadoImage.enabled = true;
-        //audio.loop = true;
-        //audio.Play();
-
+        MarcarQuemado();
         corrutina = null;
-        yield break;
     }
 
-    private void Update()
+    private void BuscarIngrediente(string nombreIngrediente)
     {
-        if (this.gameObject.name == "Freir")
-        {
-            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Freir)
-            {
-                slider.gameObject.SetActive(false);
-                slider.value = 0f;
-                QuemadoImage.enabled = false;
-                StopAudioReset();
-                InstanciarQuemado();
-                quemado = false;
-                audio.loop = false;
+        Indice = 0;
+        ObjetoEncontrado = false;
 
+        if (ingredientes == null)
+            return;
+
+        for (int i = 0; i < ingredientes.Count; i++)
+        {
+            if (ingredientes[i] != null && ingredientes[i].name == nombreIngrediente)
+            {
+                Indice = i;
+                ObjetoEncontrado = true;
+                return;
             }
         }
+    }
 
-        if (this.gameObject.name == "Freir2")
+    private void Instanciar(GameObject objetoFreidora)
+    {
+        StopAudioReset();
+
+        if (objetoFreidora == null)
+            return;
+
+        if (ObjetoEncontrado && fritos != null && Indice >= 0 && Indice < fritos.Count && fritos[Indice] != null && fritos[Indice].prefabIngrediente != null)
         {
-            if (quemado && Input.GetKeyDown(KeyCode.E) && counterInt.Freir2)
-            {
-                slider.gameObject.SetActive(false);
-                slider.value = 0f;
-                QuemadoImage.enabled = false;
-                StopAudioReset();
-                InstanciarQuemado();
-                quemado = false;
-                audio.loop = false;
-            }
+            InstanciarEnPlayer(fritos[Indice].prefabIngrediente);
+        }
+        else
+        {
+            InstanciarEnPlayer(objetoFreidora);
         }
 
+        Destroy(objetoFreidora);
+        ResetEstadoIngrediente();
+    }
+
+    private void InstanciarQuemado()
+    {
+        StopAudioReset();
+
+        GameObject objetoActual = ObtenerObjetoDelCounter();
+        if (objetoActual != null)
+        {
+            Destroy(objetoActual);
+        }
+
+        if (Quemado != null && Quemado.prefabIngrediente != null)
+        {
+            InstanciarEnPlayer(Quemado.prefabIngrediente);
+        }
+
+        ResetEstadoIngrediente();
+    }
+
+    private void InstanciarEnPlayer(GameObject prefab)
+    {
+        if (prefab == null || PadrePlayer == null)
+            return;
+
+        GameObject nuevoObjeto = Instantiate(prefab, PadrePlayer.transform.position, prefab.transform.rotation, PadrePlayer.transform);
+        nuevoObjeto.name = prefab.name;
+    }
+
+    private GameObject ObtenerObjetoDelCounter()
+    {
+        if (PadreFreidora == null || PadreFreidora.transform.childCount <= 0)
+            return null;
+
+        return PadreFreidora.transform.GetChild(0).gameObject;
+    }
+
+    private void MarcarQuemado()
+    {
+        quemado = true;
+
+        if (QuemadoImage != null)
+            QuemadoImage.enabled = true;
+
+        StopAudioReset();
+    }
+
+    private void MostrarSlider()
+    {
+        if (slider == null)
+            return;
+
+        slider.gameObject.SetActive(true);
+        slider.minValue = 0f;
+        slider.maxValue = 1f;
+        slider.value = 0f;
+    }
+
+    private void OcultarSlider()
+    {
+        if (slider == null)
+            return;
+
+        slider.gameObject.SetActive(false);
+        slider.value = 0f;
+    }
+
+    private void ReproducirAudioProceso(float progreso)
+    {
+        if (progreso >= 0.6f && !haSonado)
+        {
+            if (audio != null)
+                audio.Play();
+
+            haSonado = true;
+        }
+
+        if (progreso >= 0.9f && !haSonado2)
+        {
+            if (audio != null)
+                audio.Stop();
+
+            if (audioQuemado != null)
+                audioQuemado.Play();
+
+            haSonado2 = true;
+        }
+    }
+
+    private bool EstaInteractuandoConEsteCounter()
+    {
+        if (counterInt == null)
+            return false;
+
+        if (gameObject.name == "Freir")
+            return counterInt.Freir;
+
+        if (gameObject.name == "Freir2")
+            return counterInt.Freir2;
+
+        return counterInt.Freir || counterInt.Freir2;
+    }
+
+    private bool TieneReferenciasMinimas()
+    {
+        if (PadrePlayer == null)
+        {
+            Debug.LogWarning("[FryCounter] Falta PadrePlayer en " + gameObject.name);
+            return false;
+        }
+
+        if (PadreFreidora == null)
+        {
+            Debug.LogWarning("[FryCounter] Falta PadreFreidora en " + gameObject.name);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void ResetEstadoIngrediente()
+    {
+        Indice = 0;
+        ObjetoEncontrado = false;
     }
 
     private void StopAudioReset()
     {
-        if (audioFriendo != null && audioFriendo.isPlaying) audioFriendo.Stop();
-        if (audioQuemado != null && audioQuemado.isPlaying) audioQuemado.Stop();
+        if (audioFriendo != null && audioFriendo.isPlaying)
+            audioFriendo.Stop();
 
-        if (audio != null && audio.isPlaying && !audio.loop) audio.Stop();
+        if (audioQuemado != null && audioQuemado.isPlaying)
+            audioQuemado.Stop();
+
+        if (audio != null && audio.isPlaying)
+            audio.Stop();
 
         haSonado = false;
         haSonado2 = false;
-
-        corrutina = null;
     }
 }
