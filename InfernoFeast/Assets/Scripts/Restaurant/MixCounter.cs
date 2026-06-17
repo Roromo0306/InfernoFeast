@@ -1,45 +1,104 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MixCounter : MonoBehaviour
 {
     [Header("Slider")]
-    public Slider progressBar; //Barra de progreso
-    public float progressIncrement = 1f; //Lo que aumenta por accion
-    public float maxProgress = 100f; //Progreso maximo
+    public Slider progressBar;
+    public float progressIncrement = 1f;
+    public float maxProgress = 100f;
 
     [Header("Sensibilidad de Movimiento")]
-    public float circleThreshold = 0.5f; //Que tan grande debe ser el circulo
-    public float rotationThreshold = 10.8f; //Cuantos grados de rotacion se necesitan para contar el progrso
+    public float circleThreshold = 0.5f;
+    public float rotationThreshold = 10.8f;
 
     [Header("Padres")]
-    public GameObject PadrePlayer; //Objeto padre del player que lleva los objetos
-    public GameObject PadreMix; //Objeto padre de la mezcladora donde se instancian la comida cuando se deposita
+    public GameObject PadrePlayer;
+    public GameObject PadreMix;
+
+    [Header("Listas")]
+    public List<TipoIngrediente> batidos;
+    public List<TipoIngrediente> ingredientes;
 
     private float currentProgress = 0f;
     private bool isInteracting = false;
     private Vector2 lastMouseDir;
     private float accumulatedRotation = 0f;
 
-    private GameObject HijoMix;
+    private GameObject hijoMix;
+    private int indice = 0;
+    private bool objetoEncontrado = false;
 
-    private int Indice; //Variable de referencia del indice de la lista
-    private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
-
-    [Header("Listas")]
-    public List<TipoIngrediente> batidos; //Lista de ingredientes ya batidos
-    public List<TipoIngrediente> ingredientes; //Lista de ingredientes compatibles para batir
-
-    void Update()
+    private void Awake()
     {
-        if (!isInteracting) return;
+        PrepareProgressBar();
+    }
 
-        if (Input.GetMouseButton(0)) // Solo mientras se mantiene presionado el botón izquierdo
+    private void Update()
+    {
+        if (!isInteracting)
+            return;
+
+        HandleMixInput();
+    }
+
+    public void StartMixing()
+    {
+        if (!CanStartInteraction())
+            return;
+
+        GameObject hijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
+        if (hijoPadre == null)
+            return;
+
+        EstadoAlimento estadoAlimento = hijoPadre.GetComponent<EstadoAlimento>();
+        if (estadoAlimento != null && IsBlockedFoodState(estadoAlimento.estado))
+            return;
+
+        BuscarIngrediente(hijoPadre.name);
+
+        hijoMix = hijoPadre;
+        MoveObjectToParent(hijoMix, PadreMix.transform, PadreMix.transform.position, hijoMix.transform.rotation);
+
+        BeginMixingInteraction();
+    }
+
+    private bool CanStartInteraction()
+    {
+        if (isInteracting)
+            return false;
+
+        if (PadrePlayer == null)
         {
-            Vector2 mousePos = Input.mousePosition;
+            Debug.LogWarning("[MixCounter] Falta PadrePlayer en " + gameObject.name);
+            return false;
+        }
+
+        if (PadreMix == null)
+        {
+            Debug.LogWarning("[MixCounter] Falta PadreMix en " + gameObject.name);
+            return false;
+        }
+
+        if (PadrePlayer.transform.childCount <= 0)
+            return false;
+
+        if (PadreMix.transform.childCount > 0)
+            return false;
+
+        return true;
+    }
+
+    private bool IsBlockedFoodState(int estado)
+    {
+        return estado == 5 || estado == 6 || estado == 7;
+    }
+
+    private void HandleMixInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
             Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
             if (mouseDelta.magnitude > circleThreshold)
@@ -68,72 +127,189 @@ public class MixCounter : MonoBehaviour
         }
     }
 
-    private void AddProgress() //Añade progreso al circulo
+    private void AddProgress()
     {
         currentProgress += progressIncrement;
-        progressBar.value = currentProgress / maxProgress;
+        currentProgress = Mathf.Clamp(currentProgress, 0f, Mathf.Max(1f, maxProgress));
 
-        if (currentProgress >= maxProgress) //Si se termina se llama a la siguiente funcion
+        if (progressBar != null)
+            progressBar.value = currentProgress / Mathf.Max(1f, maxProgress);
+
+        if (currentProgress >= maxProgress)
         {
             EndMixing();
         }
     }
 
-    public void StartMixing()
+    private void BuscarIngrediente(string nombreIngrediente)
     {
-        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
+        indice = 0;
+        objetoEncontrado = false;
 
-        //Detecto el componente Estado Alimento para saber si dejar que el elemento se pueda freir
-        EstadoAlimento Est = HijoPadre.GetComponent<EstadoAlimento>();
-        if (Est.estado == 5 || Est.estado == 6 || Est.estado == 7)
-        {
+        if (ingredientes == null)
             return;
-        }
 
-        HijoMix = Instantiate(HijoPadre, PadreMix.transform.position, HijoPadre.transform.rotation, PadreMix.transform);
-        HijoMix.name = HijoPadre.name;
-
-        //Con este for recorre la lista entera hasta que encuentra un objeto que se llama igual que el objeto que lleva el jugador. Al encontrar esto, activo el bool y guardo el indice
         for (int i = 0; i < ingredientes.Count; i++)
         {
-            if (ingredientes[i].name == HijoPadre.name)
+            if (ingredientes[i] != null && ingredientes[i].name == nombreIngrediente)
             {
-                Indice = i;
-                ObjetoEncontrado = true;
-                break;
+                indice = i;
+                objetoEncontrado = true;
+                return;
             }
         }
+    }
 
-        Destroy(HijoPadre); //Destruyo el objeto que llevaba el jugador
-        progressBar.value = 0f;
+    private void BeginMixingInteraction()
+    {
         currentProgress = 0f;
+        accumulatedRotation = 0f;
+        lastMouseDir = Vector2.zero;
         isInteracting = true;
-        progressBar.gameObject.SetActive(true);
+
+        if (progressBar != null)
+        {
+            progressBar.value = 0f;
+            progressBar.gameObject.SetActive(true);
+        }
     }
 
     private void EndMixing()
     {
-        //Si el bool es true pasa lo siguiente
-        if (ObjetoEncontrado)
+        if (hijoMix == null)
         {
-            GameObject nuevoObjeto = Instantiate(batidos[Indice].prefabIngrediente, PadrePlayer.transform.position, batidos[Indice].prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de batidos
-            nuevoObjeto.name = batidos[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
+            ResetInteraction();
+            return;
+        }
 
-            Destroy(HijoMix);
-            HijoMix = null;
+        if (objetoEncontrado)
+        {
+            TipoIngrediente ingredienteBatido = GetProcessedIngredient();
 
-            Indice = 0;
-            ObjetoEncontrado = false;
+            Destroy(hijoMix);
+            hijoMix = null;
+
+            if (ingredienteBatido != null && ingredienteBatido.prefabIngrediente != null)
+            {
+                InstantiateInPlayerHand(ingredienteBatido.prefabIngrediente);
+            }
         }
         else
         {
-            GameObject nuevoObjeto = Instantiate(HijoMix, PadrePlayer.transform.position, HijoMix.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
-            nuevoObjeto.name = HijoMix.name; //Me aseguro que el nombre sea el correcto
-
-            Destroy(HijoMix); //Destruyo el objeto que estaba encima del counter
+            MoveObjectToParent(hijoMix, PadrePlayer.transform, PadrePlayer.transform.position, hijoMix.transform.rotation);
+            hijoMix.transform.localPosition = Vector3.zero;
+            hijoMix = null;
         }
 
-        isInteracting = false;
+        ResetInteraction();
+    }
+
+    private TipoIngrediente GetProcessedIngredient()
+    {
+        if (!objetoEncontrado)
+            return null;
+
+        if (batidos == null)
+            return null;
+
+        if (indice < 0 || indice >= batidos.Count)
+            return null;
+
+        return batidos[indice];
+    }
+
+    private void InstantiateInPlayerHand(GameObject prefab)
+    {
+        if (prefab == null || PadrePlayer == null)
+            return;
+
+        Vector3 prefabWorldScale = prefab.transform.lossyScale;
+
+        GameObject nuevoObjeto = Instantiate(prefab, PadrePlayer.transform.position, prefab.transform.rotation);
+        nuevoObjeto.name = prefab.name;
+
+        nuevoObjeto.transform.SetParent(PadrePlayer.transform, true);
+        SetWorldScale(nuevoObjeto.transform, prefabWorldScale);
+        nuevoObjeto.transform.localPosition = Vector3.zero;
+
+        PrepareRigidbody(nuevoObjeto);
+    }
+
+    private void MoveObjectToParent(GameObject objectToMove, Transform newParent, Vector3 targetWorldPosition, Quaternion targetWorldRotation)
+    {
+        if (objectToMove == null || newParent == null)
+            return;
+
+        Vector3 originalWorldScale = objectToMove.transform.lossyScale;
+
+        objectToMove.transform.SetParent(newParent, true);
+        objectToMove.transform.position = targetWorldPosition;
+        objectToMove.transform.rotation = targetWorldRotation;
+        SetWorldScale(objectToMove.transform, originalWorldScale);
+
+        PrepareRigidbody(objectToMove);
+    }
+
+    private void PrepareRigidbody(GameObject target)
+    {
+        if (target == null)
+            return;
+
+        Rigidbody rb = target.GetComponent<Rigidbody>();
+        if (rb == null)
+            return;
+
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    private void SetWorldScale(Transform target, Vector3 worldScale)
+    {
+        if (target == null)
+            return;
+
+        if (target.parent == null)
+        {
+            target.localScale = worldScale;
+            return;
+        }
+
+        Vector3 parentScale = target.parent.lossyScale;
+
+        target.localScale = new Vector3(
+            parentScale.x != 0f ? worldScale.x / parentScale.x : worldScale.x,
+            parentScale.y != 0f ? worldScale.y / parentScale.y : worldScale.y,
+            parentScale.z != 0f ? worldScale.z / parentScale.z : worldScale.z
+        );
+    }
+
+    private void PrepareProgressBar()
+    {
+        if (progressBar == null)
+            return;
+
+        progressBar.minValue = 0f;
+        progressBar.maxValue = 1f;
+        progressBar.value = 0f;
         progressBar.gameObject.SetActive(false);
+    }
+
+    private void ResetInteraction()
+    {
+        currentProgress = 0f;
+        isInteracting = false;
+        lastMouseDir = Vector2.zero;
+        accumulatedRotation = 0f;
+        indice = 0;
+        objetoEncontrado = false;
+        hijoMix = null;
+
+        if (progressBar != null)
+        {
+            progressBar.value = 0f;
+            progressBar.gameObject.SetActive(false);
+        }
     }
 }

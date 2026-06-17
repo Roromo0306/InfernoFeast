@@ -1,125 +1,297 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CutCounter : MonoBehaviour
 {
-    [Header("Slider")] 
-    public Slider slider; //Slider
-    public KeyCode primeraTecla = KeyCode.Mouse0; //Boton izquierdo del raton
-    public KeyCode segundaTecla = KeyCode.Mouse1; //Boton derecho del raton
-
-    private bool interaccionAcriva = false; //Bool para comprobar si la mecanica se ha activado
-    private bool IzquierdaClick = false; //Bool para comprobar si se ha dado click al boton izquierdo del raton
+    [Header("Slider")]
+    public Slider slider;
+    public KeyCode primeraTecla = KeyCode.Mouse0;
+    public KeyCode segundaTecla = KeyCode.Mouse1;
 
     [Header("Padres")]
-    public GameObject PadrePlayer; //Padre del player
-    public GameObject PadreCortar; //Padre del counter
-
-    private int Indice; //Donde se guardara el indice de la lista para instanciar desde la otra lista
-    private bool ObjetoEncontrado = false; //Con este bool detectare si se ha encontrado un nombre en el if
-    private GameObject HijoCortar; //Donde se guarda el objeto hijo al dejarlo para pasarlo como referencia a la funcion de terminar.
+    public GameObject PadrePlayer;
+    public GameObject PadreCortar;
 
     [Header("Listas")]
-    public List<TipoIngrediente> cortados; //Lista de los objetos cortados
-    public List<TipoIngrediente> ingredientes; //Lista de los ingredientes
+    public List<TipoIngrediente> cortados;
+    public List<TipoIngrediente> ingredientes;
+
+    [Header("Configuracion")]
+    [SerializeField] private float pasosNecesarios = 8f;
+
+    private bool interaccionActiva = false;
+    private bool izquierdaClick = false;
+
+    private int indice = 0;
+    private bool objetoEncontrado = false;
+    private GameObject hijoCortar;
 
     private void Awake()
     {
-        slider.gameObject.SetActive(false); //Activo el slider
-        slider.maxValue = 8; //Establezco en 8 el valor maximo del slider
+        PrepareSlider();
     }
+
     private void Update()
     {
-        if (!interaccionAcriva) return; //Revisa si la esta funionando la mecanica de cortar y si no lo esta para y no continua
+        if (!interaccionActiva)
+            return;
 
-        if (!IzquierdaClick) //Click izquierdo
-        {
-            if(Input.GetKeyDown(primeraTecla))
-            {
-                IzquierdaClick = true;
-                slider.value += 1;
-            }
-        }
-        else //Click derecho
-        {
-            if (Input.GetKeyDown(segundaTecla))
-            {
-                slider.value += 1;
-                IzquierdaClick = false;
-            }
-        }
-
-        if(slider.value >= slider.maxValue) //Pone fin a la iteracion cuando el valor del slider llega a 8
-        {
-            FinInteraccion(HijoCortar);
-        }
+        HandleCutInput();
     }
 
     public void cortar()
     {
-        GameObject HijoPadre = PadrePlayer.transform.GetChild(0).gameObject; //Guardamos el gameobject que carga el player en un gameobject nuevo
-
-        //Detecto el componente Estado Alimento para saber si dejar que el elemento se pueda freir
-        EstadoAlimento Est = HijoPadre.GetComponent<EstadoAlimento>();
-        if (Est.estado == 1 || Est.estado == 6 || Est.estado == 7)
-        {
+        if (!CanStartInteraction())
             return;
-        }
 
-        //Con este for recorre la lista entera hasta que encuentra un objeto que se llama igual que el objeto que lleva el jugador. Al encontrar esto, activo el bool y guardo el indice
-        for (int i = 0; i < ingredientes.Count; i++)
-        {
-            if (ingredientes[i].name == HijoPadre.name)
-            {
-                Indice = i;
-                ObjetoEncontrado = true;
-                break;
-            }
-        }
+        GameObject hijoPadre = PadrePlayer.transform.GetChild(0).gameObject;
+        if (hijoPadre == null)
+            return;
 
-        HijoCortar = Instantiate(HijoPadre, PadreCortar.transform.position, HijoPadre.transform.rotation, PadreCortar.transform); //Intancia el objeto en el counter
-        HijoCortar.name = HijoPadre.name; //Le da al objeto el nombre correcto
-        Destroy(HijoPadre); //Destruye el objeto
+        EstadoAlimento estadoAlimento = hijoPadre.GetComponent<EstadoAlimento>();
+        if (estadoAlimento != null && IsBlockedFoodState(estadoAlimento.estado))
+            return;
+
+        BuscarIngrediente(hijoPadre.name);
+
+        hijoCortar = hijoPadre;
+        MoveObjectToParent(hijoCortar, PadreCortar.transform, PadreCortar.transform.position, hijoCortar.transform.rotation);
 
         Empezar();
-
     }
 
-    //Funcion para empezar la accion con el slider
-    private void Empezar()
+    private bool CanStartInteraction()
     {
-        interaccionAcriva = true;
-        IzquierdaClick = false;
-        slider.value = slider.minValue;
-        slider.gameObject.SetActive(true);
-    }
+        if (interaccionActiva)
+            return false;
 
-    //Funcion para terminar la accion y que instancia el objeto cortado
-    private void FinInteraccion(GameObject HijoPadre)
-    {
-        //Si el bool es true pasa lo siguiente
-        if (ObjetoEncontrado)
+        if (PadrePlayer == null)
         {
-            Destroy(HijoPadre); //Destruyo el objeto que estaba encima del counter
+            Debug.LogWarning("[CutCounter] Falta PadrePlayer en " + gameObject.name);
+            return false;
+        }
 
-            GameObject nuevoObjeto = Instantiate(cortados[Indice].prefabIngrediente, PadrePlayer.transform.position, cortados[Indice].prefabIngrediente.transform.rotation, PadrePlayer.transform); //Instancio el objeto equivalente en la lista de cortados
-            nuevoObjeto.name = cortados[Indice].prefabIngrediente.name; //Me aseguro que el nombre del nuevo objeto instanciado sea el correcto
+        if (PadreCortar == null)
+        {
+            Debug.LogWarning("[CutCounter] Falta PadreCortar en " + gameObject.name);
+            return false;
+        }
 
-            Indice = 0;
-            ObjetoEncontrado = false;
+        if (PadrePlayer.transform.childCount <= 0)
+            return false;
+
+        if (PadreCortar.transform.childCount > 0)
+            return false;
+
+        return true;
+    }
+
+    private bool IsBlockedFoodState(int estado)
+    {
+        return estado == 1 || estado == 6 || estado == 7;
+    }
+
+    private void HandleCutInput()
+    {
+        if (!izquierdaClick)
+        {
+            if (Input.GetKeyDown(primeraTecla))
+            {
+                izquierdaClick = true;
+                AddCutProgress();
+            }
         }
         else
         {
-            GameObject nuevoObjeto = Instantiate(HijoPadre, PadrePlayer.transform.position, HijoPadre.transform.rotation, PadrePlayer.transform); //Instancio el mismo objeto que llevaba el jugador
-            nuevoObjeto.name = HijoPadre.name; //Me aseguro que el nombre sea el correcto
+            if (Input.GetKeyDown(segundaTecla))
+            {
+                izquierdaClick = false;
+                AddCutProgress();
+            }
+        }
+    }
 
-            Destroy(HijoPadre); //Destruyo el objeto que estaba encima del counter
+    private void AddCutProgress()
+    {
+        if (slider == null)
+            return;
+
+        slider.value += 1f;
+
+        if (slider.value >= slider.maxValue)
+        {
+            FinInteraccion();
+        }
+    }
+
+    private void BuscarIngrediente(string nombreIngrediente)
+    {
+        indice = 0;
+        objetoEncontrado = false;
+
+        if (ingredientes == null)
+            return;
+
+        for (int i = 0; i < ingredientes.Count; i++)
+        {
+            if (ingredientes[i] != null && ingredientes[i].name == nombreIngrediente)
+            {
+                indice = i;
+                objetoEncontrado = true;
+                return;
+            }
+        }
+    }
+
+    private void Empezar()
+    {
+        interaccionActiva = true;
+        izquierdaClick = false;
+
+        if (slider != null)
+        {
+            slider.minValue = 0f;
+            slider.maxValue = Mathf.Max(1f, pasosNecesarios);
+            slider.value = 0f;
+            slider.gameObject.SetActive(true);
+        }
+    }
+
+    private void FinInteraccion()
+    {
+        if (hijoCortar == null)
+        {
+            ResetInteraction();
+            return;
         }
 
-        interaccionAcriva = false;
+        if (objetoEncontrado)
+        {
+            TipoIngrediente ingredienteCortado = GetProcessedIngredient();
+
+            Destroy(hijoCortar);
+            hijoCortar = null;
+
+            if (ingredienteCortado != null && ingredienteCortado.prefabIngrediente != null)
+            {
+                InstantiateInPlayerHand(ingredienteCortado.prefabIngrediente);
+            }
+        }
+        else
+        {
+            MoveObjectToParent(hijoCortar, PadrePlayer.transform, PadrePlayer.transform.position, hijoCortar.transform.rotation);
+            hijoCortar.transform.localPosition = Vector3.zero;
+            hijoCortar = null;
+        }
+
+        ResetInteraction();
+    }
+
+    private TipoIngrediente GetProcessedIngredient()
+    {
+        if (!objetoEncontrado)
+            return null;
+
+        if (cortados == null)
+            return null;
+
+        if (indice < 0 || indice >= cortados.Count)
+            return null;
+
+        return cortados[indice];
+    }
+
+    private void InstantiateInPlayerHand(GameObject prefab)
+    {
+        if (prefab == null || PadrePlayer == null)
+            return;
+
+        Vector3 prefabWorldScale = prefab.transform.lossyScale;
+
+        GameObject nuevoObjeto = Instantiate(prefab, PadrePlayer.transform.position, prefab.transform.rotation);
+        nuevoObjeto.name = prefab.name;
+
+        nuevoObjeto.transform.SetParent(PadrePlayer.transform, true);
+        SetWorldScale(nuevoObjeto.transform, prefabWorldScale);
+        nuevoObjeto.transform.localPosition = Vector3.zero;
+
+        PrepareRigidbody(nuevoObjeto);
+    }
+
+    private void MoveObjectToParent(GameObject objectToMove, Transform newParent, Vector3 targetWorldPosition, Quaternion targetWorldRotation)
+    {
+        if (objectToMove == null || newParent == null)
+            return;
+
+        Vector3 originalWorldScale = objectToMove.transform.lossyScale;
+
+        objectToMove.transform.SetParent(newParent, true);
+        objectToMove.transform.position = targetWorldPosition;
+        objectToMove.transform.rotation = targetWorldRotation;
+        SetWorldScale(objectToMove.transform, originalWorldScale);
+
+        PrepareRigidbody(objectToMove);
+    }
+
+    private void PrepareRigidbody(GameObject target)
+    {
+        if (target == null)
+            return;
+
+        Rigidbody rb = target.GetComponent<Rigidbody>();
+        if (rb == null)
+            return;
+
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    private void SetWorldScale(Transform target, Vector3 worldScale)
+    {
+        if (target == null)
+            return;
+
+        if (target.parent == null)
+        {
+            target.localScale = worldScale;
+            return;
+        }
+
+        Vector3 parentScale = target.parent.lossyScale;
+
+        target.localScale = new Vector3(
+            parentScale.x != 0f ? worldScale.x / parentScale.x : worldScale.x,
+            parentScale.y != 0f ? worldScale.y / parentScale.y : worldScale.y,
+            parentScale.z != 0f ? worldScale.z / parentScale.z : worldScale.z
+        );
+    }
+
+    private void PrepareSlider()
+    {
+        if (slider == null)
+            return;
+
+        slider.minValue = 0f;
+        slider.maxValue = Mathf.Max(1f, pasosNecesarios);
+        slider.value = 0f;
         slider.gameObject.SetActive(false);
-        HijoCortar = null;
+    }
+
+    private void ResetInteraction()
+    {
+        interaccionActiva = false;
+        izquierdaClick = false;
+        indice = 0;
+        objetoEncontrado = false;
+        hijoCortar = null;
+
+        if (slider != null)
+        {
+            slider.value = 0f;
+            slider.gameObject.SetActive(false);
+        }
     }
 }
