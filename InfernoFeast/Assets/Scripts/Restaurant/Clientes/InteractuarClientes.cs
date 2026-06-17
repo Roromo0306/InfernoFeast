@@ -55,12 +55,18 @@ public class InteractuarClientes : MonoBehaviour
     [Header("Gameobject plato")]
     public GameObject platoI;
 
+    [Header("Entrega de platos")]
+    [SerializeField] private bool aceptarNombreConClone = true;
+    [SerializeField] private bool moverPlatoEnVezDeClonar = true;
+
     private EmpezarTurno empezarTurno;
     private ClienteManager clienteManagerComponent;
     private GameObject playerInRange;
     private Coroutine cuentaAtrasCoroutine;
     private Coroutine adiosCoroutine;
     private bool marchando = false;
+    private bool pedidoResuelto = false;
+    private bool resultadoAplicado = false;
 
     private void Start()
     {
@@ -211,15 +217,23 @@ public class InteractuarClientes : MonoBehaviour
 
         if (!Elegido)
         {
-            if (empezarTurno.comandasCount >= 4)
+            if (!CanAcceptNewOrder())
                 return;
 
             ElegirComanda();
-            Elegido = true;
             return;
         }
 
         TryDeliverPlate(playerInRange);
+    }
+
+    private bool CanAcceptNewOrder()
+    {
+        if (empezarTurno == null)
+            return false;
+
+        int maxOrders = Mathf.Max(1, empezarTurno.maxComandas);
+        return empezarTurno.empezado && empezarTurno.comandasCount < maxOrders;
     }
 
     private void ElegirComanda()
@@ -236,12 +250,27 @@ public class InteractuarClientes : MonoBehaviour
         pedido = Random.Range(0, empezarTurno.NombresComandas.Count);
         Sprite spritePedido = empezarTurno.NombresComandas[pedido];
 
+        if (spritePedido == null)
+        {
+            Debug.LogWarning("[InteractuarClientes] La comanda elegida no tiene sprite.");
+            pedido = -1;
+            return;
+        }
+
+        EnsureCantidadComSize();
+
         SetComandaSprite(spritePedido);
         empezarTurno.ComandaUI(spritePedido.name);
-        empezarTurno.comandasCount++;
+
+        int maxOrders = Mathf.Max(1, empezarTurno.maxComandas);
+        empezarTurno.comandasCount = Mathf.Clamp(empezarTurno.comandasCount + 1, 0, maxOrders);
 
         if (empezarTurno.cantidadCom != null && pedido >= 0 && pedido < empezarTurno.cantidadCom.Count)
             empezarTurno.cantidadCom[pedido]++;
+
+        Elegido = true;
+        pedidoResuelto = false;
+        resultadoAplicado = false;
 
         Atendido = true;
         AtendidoCuent = true;
@@ -260,7 +289,13 @@ public class InteractuarClientes : MonoBehaviour
 
     private void TryDeliverPlate(GameObject player)
     {
+        if (pedidoResuelto)
+            return;
+
         if (player == null || empezarTurno == null || pedido < 0)
+            return;
+
+        if (empezarTurno.NombresComandas == null || pedido >= empezarTurno.NombresComandas.Count || empezarTurno.NombresComandas[pedido] == null)
             return;
 
         GameObject heldPlate = GetHeldPlate(player);
@@ -271,16 +306,16 @@ public class InteractuarClientes : MonoBehaviour
         usandoCuentaPedido = false;
 
         string expectedName = empezarTurno.NombresComandas[pedido].name;
-        bool correctPlate = heldPlate.name == expectedName;
+        bool correctPlate = PlateNameMatches(heldPlate.name, expectedName);
 
-        InstantiatePlateOnTable(heldPlate);
-        Destroy(heldPlate);
-
+        PutPlateOnTable(heldPlate);
         RemovePendingOrder();
+        pedidoResuelto = true;
+        pedido = -1;
 
         if (correctPlate)
         {
-            if (tiempoPasado < 100f)
+            if (tiempoPasado < tiempoMaxPedido)
             {
                 SetComandaSprite(Feliz);
                 modo = 1;
@@ -301,6 +336,21 @@ public class InteractuarClientes : MonoBehaviour
         BeginLeavingAfterDelay(3f);
     }
 
+    private bool PlateNameMatches(string plateName, string expectedName)
+    {
+        string cleanPlateName = aceptarNombreConClone ? NormalizeName(plateName) : plateName;
+        string cleanExpectedName = aceptarNombreConClone ? NormalizeName(expectedName) : expectedName;
+        return cleanPlateName == cleanExpectedName;
+    }
+
+    private string NormalizeName(string rawName)
+    {
+        if (string.IsNullOrEmpty(rawName))
+            return string.Empty;
+
+        return rawName.Replace("(Clone)", string.Empty).Trim();
+    }
+
     private GameObject GetHeldPlate(GameObject player)
     {
         if (player == null || player.transform.childCount <= 2)
@@ -313,12 +363,77 @@ public class InteractuarClientes : MonoBehaviour
         return holdPoint.GetChild(0).gameObject;
     }
 
-    private void InstantiatePlateOnTable(GameObject plate)
+    private void PutPlateOnTable(GameObject plate)
     {
         if (plate == null || platoI == null)
             return;
 
-        Instantiate(plate, platoI.transform.position, platoI.transform.rotation, platoI.transform);
+        if (moverPlatoEnVezDeClonar)
+        {
+            MoveObjectToParent(plate, platoI.transform, platoI.transform.position, platoI.transform.rotation);
+            plate.transform.localPosition = Vector3.zero;
+            plate.transform.localRotation = Quaternion.identity;
+            return;
+        }
+
+        GameObject plateCopy = Instantiate(plate, platoI.transform.position, platoI.transform.rotation);
+        plateCopy.name = NormalizeName(plate.name);
+        plateCopy.transform.SetParent(platoI.transform, true);
+        plateCopy.transform.localPosition = Vector3.zero;
+        plateCopy.transform.localRotation = Quaternion.identity;
+        PrepareRigidbody(plateCopy);
+
+        Destroy(plate);
+    }
+
+    private void MoveObjectToParent(GameObject objectToMove, Transform newParent, Vector3 targetWorldPosition, Quaternion targetWorldRotation)
+    {
+        if (objectToMove == null || newParent == null)
+            return;
+
+        Vector3 originalWorldScale = objectToMove.transform.lossyScale;
+
+        objectToMove.transform.SetParent(newParent, true);
+        objectToMove.transform.position = targetWorldPosition;
+        objectToMove.transform.rotation = targetWorldRotation;
+        SetWorldScale(objectToMove.transform, originalWorldScale);
+
+        PrepareRigidbody(objectToMove);
+    }
+
+    private void PrepareRigidbody(GameObject target)
+    {
+        if (target == null)
+            return;
+
+        Rigidbody rb = target.GetComponent<Rigidbody>();
+        if (rb == null)
+            return;
+
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    private void SetWorldScale(Transform target, Vector3 worldScale)
+    {
+        if (target == null)
+            return;
+
+        if (target.parent == null)
+        {
+            target.localScale = worldScale;
+            return;
+        }
+
+        Vector3 parentScale = target.parent.lossyScale;
+
+        target.localScale = new Vector3(
+            parentScale.x != 0f ? worldScale.x / parentScale.x : worldScale.x,
+            parentScale.y != 0f ? worldScale.y / parentScale.y : worldScale.y,
+            parentScale.z != 0f ? worldScale.z / parentScale.z : worldScale.z
+        );
     }
 
     private void RemovePendingOrder()
@@ -326,13 +441,32 @@ public class InteractuarClientes : MonoBehaviour
         if (empezarTurno == null || pedido < 0)
             return;
 
-        if (empezarTurno.cantidadCom != null && pedido < empezarTurno.cantidadCom.Count)
-            empezarTurno.cantidadCom[pedido]--;
+        EnsureCantidadComSize();
 
-        if (empezarTurno.NombresComandas != null && pedido < empezarTurno.NombresComandas.Count)
+        if (empezarTurno.cantidadCom != null && pedido < empezarTurno.cantidadCom.Count)
+            empezarTurno.cantidadCom[pedido] = Mathf.Max(0, empezarTurno.cantidadCom[pedido] - 1);
+
+        if (empezarTurno.NombresComandas != null && pedido < empezarTurno.NombresComandas.Count && empezarTurno.NombresComandas[pedido] != null)
             empezarTurno.EliminarComanda(empezarTurno.NombresComandas[pedido].name);
 
         empezarTurno.comandasCount = Mathf.Max(0, empezarTurno.comandasCount - 1);
+    }
+
+    private void EnsureCantidadComSize()
+    {
+        if (empezarTurno == null)
+            return;
+
+        if (empezarTurno.cantidadCom == null)
+            return;
+
+        int targetCount = empezarTurno.NombresComandas != null ? empezarTurno.NombresComandas.Count : 0;
+
+        while (empezarTurno.cantidadCom.Count < targetCount)
+            empezarTurno.cantidadCom.Add(0);
+
+        while (empezarTurno.cantidadCom.Count > targetCount)
+            empezarTurno.cantidadCom.RemoveAt(empezarTurno.cantidadCom.Count - 1);
     }
 
     private IEnumerator InicioCuentaAtras()
@@ -367,7 +501,7 @@ public class InteractuarClientes : MonoBehaviour
             if (Atendido)
                 continue;
 
-            if (pedido >= 0)
+            if (pedido >= 0 && !pedidoResuelto)
                 RemovePendingOrder();
 
             VariablesFinDia();
@@ -382,6 +516,9 @@ public class InteractuarClientes : MonoBehaviour
 
     private void VariablesFinDia()
     {
+        if (resultadoAplicado)
+            return;
+
         if (empezarTurno == null)
             return;
 
@@ -411,6 +548,7 @@ public class InteractuarClientes : MonoBehaviour
         empezarTurno.dineroTurno += dineroCli;
         empezarTurno.reputacionTurno += reputacionCli;
 
+        resultadoAplicado = true;
         modo = 0;
     }
 

@@ -8,11 +8,16 @@ public class Encimera : MonoBehaviour
     public TipoIngrediente mezcla;
     public bool TieneObjeto = false, EncontradoPareja = true;
 
+    [Header("Opciones de recetas")]
+    [SerializeField] private bool permitirRecetasEnCualquierOrden = true;
+
+    private bool procesandoReceta = false;
+
     private void Update()
     {
         UpdateObjectState();
 
-        if (objeto2 != null && objeto1 != null)
+        if (!procesandoReceta && objeto2 != null && objeto1 != null)
         {
             Recetas();
         }
@@ -23,9 +28,18 @@ public class Encimera : MonoBehaviour
         if (secondObject == null)
             return false;
 
+        if (procesandoReceta)
+            return false;
+
         UpdateObjectState();
 
         if (objeto1 == null)
+            return false;
+
+        if (objeto1 == secondObject)
+            return false;
+
+        if (objeto2 != null)
             return false;
 
         objeto2 = secondObject;
@@ -59,50 +73,93 @@ public class Encimera : MonoBehaviour
         if (objeto1 == null || objeto2 == null)
             return;
 
+        procesandoReceta = true;
         EncontradoPareja = false;
 
-        if (recetas != null)
+        RecetasSO recetaEncontrada = BuscarReceta(objeto1, objeto2);
+
+        if (recetaEncontrada != null && recetaEncontrada.Resultado != null && recetaEncontrada.Resultado.prefabIngrediente != null)
         {
-            for (int i = 0; i < recetas.Count; i++)
-            {
-                if (recetas[i] == null)
-                    continue;
+            GameObject resultPrefab = recetaEncontrada.Resultado.prefabIngrediente;
+            Quaternion resultRotation = resultPrefab.transform.rotation;
 
-                if (recetas[i].Ingrediente1 == null || recetas[i].Ingrediente2 == null || recetas[i].Resultado == null)
-                    continue;
-
-                if (recetas[i].Ingrediente1.name == objeto1.name && recetas[i].Ingrediente2.name == objeto2.name)
-                {
-                    GameObject resultPrefab = recetas[i].Resultado.prefabIngrediente;
-                    Quaternion resultRotation = resultPrefab != null ? resultPrefab.transform.rotation : Quaternion.identity;
-
-                    Destroy(objeto1);
-                    Destroy(objeto2);
-
-                    InstantiateResult(resultPrefab, resultRotation);
-
-                    objeto1 = null;
-                    objeto2 = null;
-                    EncontradoPareja = true;
-                    return;
-                }
-            }
-        }
-
-        if (!EncontradoPareja)
-        {
             Destroy(objeto1);
             Destroy(objeto2);
 
-            if (mezcla != null && mezcla.prefabIngrediente != null)
-            {
-                Quaternion mixRotation = PadreEncimera != null ? PadreEncimera.transform.rotation : Quaternion.identity;
-                InstantiateResult(mezcla.prefabIngrediente, mixRotation);
-            }
+            InstantiateResult(resultPrefab, resultRotation);
 
-            objeto1 = null;
-            objeto2 = null;
+            LimpiarEstadoReceta(true);
+            return;
         }
+
+        Destroy(objeto1);
+        Destroy(objeto2);
+
+        if (mezcla != null && mezcla.prefabIngrediente != null)
+        {
+            Quaternion mixRotation = PadreEncimera != null ? PadreEncimera.transform.rotation : Quaternion.identity;
+            InstantiateResult(mezcla.prefabIngrediente, mixRotation);
+        }
+
+        LimpiarEstadoReceta(false);
+    }
+
+    private RecetasSO BuscarReceta(GameObject firstObject, GameObject secondObject)
+    {
+        if (recetas == null)
+            return null;
+
+        for (int i = 0; i < recetas.Count; i++)
+        {
+            RecetasSO receta = recetas[i];
+            if (receta == null)
+                continue;
+
+            if (receta.Ingrediente1 == null || receta.Ingrediente2 == null || receta.Resultado == null)
+                continue;
+
+            bool directMatch = IngredientMatches(receta.Ingrediente1, firstObject) && IngredientMatches(receta.Ingrediente2, secondObject);
+            if (directMatch)
+                return receta;
+
+            if (permitirRecetasEnCualquierOrden)
+            {
+                bool reverseMatch = IngredientMatches(receta.Ingrediente1, secondObject) && IngredientMatches(receta.Ingrediente2, firstObject);
+                if (reverseMatch)
+                    return receta;
+            }
+        }
+
+        return null;
+    }
+
+    private bool IngredientMatches(TipoIngrediente ingredientType, GameObject objectToCheck)
+    {
+        if (ingredientType == null || objectToCheck == null)
+            return false;
+
+        string objectName = NormalizeName(objectToCheck.name);
+        string scriptableName = NormalizeName(ingredientType.name);
+
+        if (objectName == scriptableName)
+            return true;
+
+        if (ingredientType.prefabIngrediente != null)
+        {
+            string prefabName = NormalizeName(ingredientType.prefabIngrediente.name);
+            if (objectName == prefabName)
+                return true;
+        }
+
+        return false;
+    }
+
+    private string NormalizeName(string rawName)
+    {
+        if (string.IsNullOrEmpty(rawName))
+            return string.Empty;
+
+        return rawName.Replace("(Clone)", string.Empty).Trim();
     }
 
     private void InstantiateResult(GameObject prefab, Quaternion rotation)
@@ -153,5 +210,14 @@ public class Encimera : MonoBehaviour
             parentScale.y != 0f ? worldScale.y / parentScale.y : worldScale.y,
             parentScale.z != 0f ? worldScale.z / parentScale.z : worldScale.z
         );
+    }
+
+    private void LimpiarEstadoReceta(bool recetaEncontrada)
+    {
+        objeto1 = null;
+        objeto2 = null;
+        TieneObjeto = PadreEncimera != null && PadreEncimera.transform.childCount > 0;
+        EncontradoPareja = recetaEncontrada;
+        procesandoReceta = false;
     }
 }
