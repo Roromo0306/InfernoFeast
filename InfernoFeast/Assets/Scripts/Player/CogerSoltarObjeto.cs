@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CogerSoltarObjeto : MonoBehaviour
 {
-    public GameObject Padre; //Lo usaremos para verificar si tiene hijos y por tanto si el jugador tiene un objeto
+    public GameObject Padre; // Lo usaremos para verificar si tiene hijos y por tanto si el jugador tiene un objeto
 
     [Header("Sitios donde se puede dejar objetos")]
     public GameObject Encimera1;
@@ -16,119 +14,91 @@ public class CogerSoltarObjeto : MonoBehaviour
     private GameObject EncimeraCounter;
     public Animator animator;
 
-   
     private void Update()
     {
-        Hold = Padre.transform.childCount > 0; //Hold sera true si Padre tiene hijos
-        animator.SetBool("HasObject", Hold);
+        if (Padre == null)
+            return;
+
+        Hold = Padre.transform.childCount > 0;
+
+        if (animator != null)
+            animator.SetBool("HasObject", Hold);
+
         if (EncimeraSoltar && Input.GetKeyDown(KeyCode.E))
         {
             SoltarObjeto(EncimeraCounter);
-            
         }
 
-        if(EncimeraCoger && Input.GetKeyDown(KeyCode.E))
+        if (EncimeraCoger && Input.GetKeyDown(KeyCode.E))
         {
             CogerObjeto(EncimeraCounter);
-            
         }
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
-        if(Hold && collision.gameObject.CompareTag("Encimera"))
+        if (!collision.gameObject.CompareTag("Encimera"))
+            return;
+
+        EncimeraCounter = collision.gameObject;
+
+        if (Hold)
         {
             EncimeraSoltar = true;
-            
-            EncimeraCounter = collision.gameObject;
+            EncimeraCoger = false;
         }
-
-        if(!Hold && collision.gameObject.CompareTag("Encimera"))
+        else
         {
             EncimeraCoger = true;
-            
-            EncimeraCounter = collision.gameObject;
+            EncimeraSoltar = false;
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (!Hold && collision.gameObject.CompareTag("Encimera"))
+        if (!collision.gameObject.CompareTag("Encimera"))
+            return;
+
+        if (EncimeraCounter == collision.gameObject)
         {
             EncimeraSoltar = false;
             EncimeraCoger = false;
             EncimeraCounter = null;
         }
 
-        if (Hold && collision.gameObject.CompareTag("Encimera"))
-        {
-            EncimeraCoger = false;
-            EncimeraSoltar = false;
-            EncimeraCounter = null;
-        }
         StopAllCoroutines();
     }
 
-    //Funcion para soltar el objeto en una encimera
+    // Funcion para soltar el objeto en una encimera
     private void SoltarObjeto(GameObject collision)
     {
         StopAllCoroutines();
-        if (Padre.transform.childCount > 0)
-        {
-            GameObject objeto = Padre.transform.GetChild(0).gameObject;
-            GameObject PadreEncimera = collision.transform.GetChild(0).gameObject;
 
-            if (PadreEncimera.transform.childCount == 0)
-            {
-                
-                GameObject newObj = Instantiate(objeto, PadreEncimera.transform.position, objeto.transform.rotation, PadreEncimera.transform);
-                newObj.name = newObj.name.Replace("(Clone)", "").Trim();
+        if (collision == null || Padre == null)
+            return;
 
-                // asegurar que la fisica quede inactiva cuando est� en la encimera (opcional)
-                Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
-                if (rbNew != null)
-                {
-                    rbNew.isKinematic = true;
-                    rbNew.useGravity = false;
-                }
+        if (Padre.transform.childCount <= 0)
+            return;
 
-                Destroy(objeto);
-                objeto = null;
-                PadreEncimera = null;
-            }
-            else
-            {
-                Encimera enci = collision.GetComponent<Encimera>();
+        if (collision.transform.childCount <= 0)
+            return;
 
-                enci.objeto2 = objeto.gameObject;
-                
-                //Debug.Log("Objeto pasado a objeto2");
-                //Destroy(objeto);
-
-                objeto = null;
-                PadreEncimera = null;
-            }
-
-            StartCoroutine(TempCoger());
-        }
-    }
-
-    private void CogerObjeto(GameObject collision)
-    {
-        StopAllCoroutines();
+        GameObject objeto = Padre.transform.GetChild(0).gameObject;
         GameObject PadreEncimera = collision.transform.GetChild(0).gameObject;
 
-        if (PadreEncimera.transform.childCount > 0)
-        {
-            Debug.Log("Cogido");
-            
-            GameObject objeto = PadreEncimera.transform.GetChild(0).gameObject;
+        if (objeto == null || PadreEncimera == null)
+            return;
 
-            GameObject newObj = Instantiate(objeto, Padre.transform.position, objeto.transform.rotation, Padre.transform);
+        if (PadreEncimera.transform.childCount == 0)
+        {
+            Vector3 originalWorldScale = objeto.transform.lossyScale;
+
+            GameObject newObj = Instantiate(objeto, PadreEncimera.transform.position, objeto.transform.rotation);
             newObj.name = newObj.name.Replace("(Clone)", "").Trim();
 
-            // IMPORTANT: dejar la rigidbody en kinematic mientras esta en la mano
+            newObj.transform.SetParent(PadreEncimera.transform, true);
+            SetWorldScale(newObj.transform, originalWorldScale);
+
             Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
             if (rbNew != null)
             {
@@ -138,16 +108,86 @@ public class CogerSoltarObjeto : MonoBehaviour
                 rbNew.angularVelocity = Vector3.zero;
             }
 
-            // ajustar posicion local en caso de que haga falta
+            Destroy(objeto);
+        }
+        else
+        {
+            Encimera enci = collision.GetComponent<Encimera>();
+
+            if (enci != null)
+            {
+                enci.objeto2 = objeto;
+            }
+        }
+
+        StartCoroutine(TempCoger());
+    }
+
+    private void CogerObjeto(GameObject collision)
+    {
+        StopAllCoroutines();
+
+        if (collision == null || Padre == null)
+            return;
+
+        if (collision.transform.childCount <= 0)
+            return;
+
+        GameObject PadreEncimera = collision.transform.GetChild(0).gameObject;
+
+        if (PadreEncimera == null)
+            return;
+
+        if (PadreEncimera.transform.childCount > 0)
+        {
+            GameObject objeto = PadreEncimera.transform.GetChild(0).gameObject;
+
+            if (objeto == null)
+                return;
+
+            Vector3 originalWorldScale = objeto.transform.lossyScale;
+
+            GameObject newObj = Instantiate(objeto, Padre.transform.position, objeto.transform.rotation);
+            newObj.name = newObj.name.Replace("(Clone)", "").Trim();
+
+            newObj.transform.SetParent(Padre.transform, true);
+            SetWorldScale(newObj.transform, originalWorldScale);
+
+            Rigidbody rbNew = newObj.GetComponent<Rigidbody>();
+            if (rbNew != null)
+            {
+                rbNew.isKinematic = true;
+                rbNew.useGravity = false;
+                rbNew.velocity = Vector3.zero;
+                rbNew.angularVelocity = Vector3.zero;
+            }
+
             newObj.transform.localPosition = Vector3.zero;
-            //newObj.transform.localRotation = Quaternion.identity;
 
             Destroy(objeto);
-
-            objeto = null;
-            PadreEncimera = null;
         }
+
         StartCoroutine(TempSoltar());
+    }
+
+    private void SetWorldScale(Transform target, Vector3 worldScale)
+    {
+        if (target == null)
+            return;
+
+        if (target.parent == null)
+        {
+            target.localScale = worldScale;
+            return;
+        }
+
+        Vector3 parentScale = target.parent.lossyScale;
+
+        target.localScale = new Vector3(
+            parentScale.x != 0f ? worldScale.x / parentScale.x : worldScale.x,
+            parentScale.y != 0f ? worldScale.y / parentScale.y : worldScale.y,
+            parentScale.z != 0f ? worldScale.z / parentScale.z : worldScale.z
+        );
     }
 
     IEnumerator TempCoger()

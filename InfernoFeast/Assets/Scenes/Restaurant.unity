@@ -9047,14 +9047,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PadrePlayer: {fileID: 1935621807}
-  PadrePot: {fileID: 1560757545}
-  hervidos:
-  - {fileID: 11400000, guid: b5d41a44fd1f7924eabf8e493ff9466b, type: 2}
-  - {fileID: 11400000, guid: bb8840b548a189c4d821f2e56b9f18cc, type: 2}
-  - {fileID: 11400000, guid: 64dd7af4b359c474ca39b4171767425b, type: 2}
-  - {fileID: 11400000, guid: ee8112108ae1de9408731f6e12c2aa14, type: 2}
-  - {fileID: 11400000, guid: 989d300f3bc1aaa4a9a59f1afcb143a6, type: 2}
-  - {fileID: 11400000, guid: dd42d8a4b1e9d6e4aab8e9e5af361041, type: 2}
   ingredientes:
   - {fileID: 11400000, guid: de81748997315da47ad739a5fa0152fb, type: 2}
   - {fileID: 11400000, guid: e9eab82c01846ae4ebb9f38e0b7ff9fa, type: 2}
@@ -9067,9 +9059,17 @@ MonoBehaviour:
   counterInt: {fileID: 672688998}
   Quemado: {fileID: 11400000, guid: d891737d80cc78343bb498bc9895c746, type: 2}
   QuemadoImage: {fileID: 1114042147}
-  quemado: 0
   audio: {fileID: 404183792}
   audioQuemado: {fileID: 925979839}
+  quemado: 0
+  PadrePot: {fileID: 1560757545}
+  hervidos:
+  - {fileID: 11400000, guid: b5d41a44fd1f7924eabf8e493ff9466b, type: 2}
+  - {fileID: 11400000, guid: bb8840b548a189c4d821f2e56b9f18cc, type: 2}
+  - {fileID: 11400000, guid: 64dd7af4b359c474ca39b4171767425b, type: 2}
+  - {fileID: 11400000, guid: ee8112108ae1de9408731f6e12c2aa14, type: 2}
+  - {fileID: 11400000, guid: 989d300f3bc1aaa4a9a59f1afcb143a6, type: 2}
+  - {fileID: 11400000, guid: dd42d8a4b1e9d6e4aab8e9e5af361041, type: 2}
 --- !u!23 &404183795
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -27569,9 +27569,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PadrePlayer: {fileID: 1935621807}
-  PadreHorno: {fileID: 1049011403}
-  horneados:
-  - {fileID: 11400000, guid: 32470bdd1164ad64ca639d715431e20e, type: 2}
   ingredientes:
   - {fileID: 11400000, guid: beecd91e72070fd40b0a0d56b7a17904, type: 2}
   slider: {fileID: 503785956}
@@ -27581,6 +27578,10 @@ MonoBehaviour:
   QuemadoImage: {fileID: 1114042147}
   audio: {fileID: 1364073540}
   audioQuemado: {fileID: 1171180232}
+  quemado: 0
+  PadreHorno: {fileID: 1049011403}
+  horneados:
+  - {fileID: 11400000, guid: 32470bdd1164ad64ca639d715431e20e, type: 2}
 --- !u!65 &1364073542
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28726,13 +28727,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PadrePlayer: {fileID: 1935621807}
-  PadreFreidora: {fileID: 1855824898}
-  fritos:
-  - {fileID: 11400000, guid: 638cc9a0e1d9ea24d9b59a7231ba3b94, type: 2}
-  - {fileID: 11400000, guid: 52b88ed4d13a43e439828e89e83bbc08, type: 2}
-  - {fileID: 11400000, guid: e56fd38ba86c80e4abc2242fe12973ac, type: 2}
-  - {fileID: 11400000, guid: 6bb55648848b7f148a728bd18f0cfef3, type: 2}
-  - {fileID: 11400000, guid: 5aa63c33f2bc8294098fed607eff6846, type: 2}
   ingredientes:
   - {fileID: 11400000, guid: 301f3b822577614419d7e3a355a52b27, type: 2}
   - {fileID: 11400000, guid: 33a0f42b557d3c340998f60268cf886b, type: 2}
@@ -28746,6 +28740,14 @@ MonoBehaviour:
   QuemadoImage: {fileID: 1114042147}
   audio: {fileID: 1401909679}
   audioQuemado: {fileID: 1802536483}
+  quemado: 0
+  PadreFreidora: {fileID: 1855824898}
+  fritos:
+  - {fileID: 11400000, guid: 638cc9a0e1d9ea24d9b59a7231ba3b94, type: 2}
+  - {fileID: 11400000, guid: 52b88ed4d13a43e439828e89e83bbc08, type: 2}
+  - {fileID: 11400000, guid: e56fd38ba86c80e4abc2242fe12973ac, type: 2}
+  - {fileID: 11400000, guid: 6bb55648848b7f148a728bd18f0cfef3, type: 2}
+  - {fileID: 11400000, guid: 5aa63c33f2bc8294098fed607eff6846, type: 2}
   audioFriendo: {fileID: 1802504188}
 --- !u!23 &1401909677
 MeshRenderer:
@@ -29771,13 +29773,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PadrePlayer: {fileID: 1935621807}
-  PadreFreidora: {fileID: 1902907476}
-  fritos:
-  - {fileID: 11400000, guid: 638cc9a0e1d9ea24d9b59a7231ba3b94, type: 2}
-  - {fileID: 11400000, guid: 52b88ed4d13a43e439828e89e83bbc08, type: 2}
-  - {fileID: 11400000, guid: e56fd38ba86c80e4abc2242fe12973ac, type: 2}
-  - {fileID: 11400000, guid: 6bb55648848b7f148a728bd18f0cfef3, type: 2}
-  - {fileID: 11400000, guid: 5aa63c33f2bc8294098fed607eff6846, type: 2}
   ingredientes:
   - {fileID: 11400000, guid: 301f3b822577614419d7e3a355a52b27, type: 2}
   - {fileID: 11400000, guid: 33a0f42b557d3c340998f60268cf886b, type: 2}
@@ -29791,6 +29786,14 @@ MonoBehaviour:
   QuemadoImage: {fileID: 1114042147}
   audio: {fileID: 1424909406}
   audioQuemado: {fileID: 2001957546}
+  quemado: 0
+  PadreFreidora: {fileID: 1902907476}
+  fritos:
+  - {fileID: 11400000, guid: 638cc9a0e1d9ea24d9b59a7231ba3b94, type: 2}
+  - {fileID: 11400000, guid: 52b88ed4d13a43e439828e89e83bbc08, type: 2}
+  - {fileID: 11400000, guid: e56fd38ba86c80e4abc2242fe12973ac, type: 2}
+  - {fileID: 11400000, guid: 6bb55648848b7f148a728bd18f0cfef3, type: 2}
+  - {fileID: 11400000, guid: 5aa63c33f2bc8294098fed607eff6846, type: 2}
   audioFriendo: {fileID: 482902753}
 --- !u!4 &1424909403 stripped
 Transform:
@@ -42904,14 +42907,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PadrePlayer: {fileID: 1935621807}
-  PadrePot: {fileID: 685818675}
-  hervidos:
-  - {fileID: 11400000, guid: b5d41a44fd1f7924eabf8e493ff9466b, type: 2}
-  - {fileID: 11400000, guid: bb8840b548a189c4d821f2e56b9f18cc, type: 2}
-  - {fileID: 11400000, guid: 64dd7af4b359c474ca39b4171767425b, type: 2}
-  - {fileID: 11400000, guid: ee8112108ae1de9408731f6e12c2aa14, type: 2}
-  - {fileID: 11400000, guid: 989d300f3bc1aaa4a9a59f1afcb143a6, type: 2}
-  - {fileID: 11400000, guid: dd42d8a4b1e9d6e4aab8e9e5af361041, type: 2}
   ingredientes:
   - {fileID: 11400000, guid: de81748997315da47ad739a5fa0152fb, type: 2}
   - {fileID: 11400000, guid: e9eab82c01846ae4ebb9f38e0b7ff9fa, type: 2}
@@ -42924,9 +42919,17 @@ MonoBehaviour:
   counterInt: {fileID: 672688998}
   Quemado: {fileID: 11400000, guid: d891737d80cc78343bb498bc9895c746, type: 2}
   QuemadoImage: {fileID: 1114042147}
-  quemado: 0
   audio: {fileID: 1981020354}
   audioQuemado: {fileID: 131788304}
+  quemado: 0
+  PadrePot: {fileID: 685818675}
+  hervidos:
+  - {fileID: 11400000, guid: b5d41a44fd1f7924eabf8e493ff9466b, type: 2}
+  - {fileID: 11400000, guid: bb8840b548a189c4d821f2e56b9f18cc, type: 2}
+  - {fileID: 11400000, guid: 64dd7af4b359c474ca39b4171767425b, type: 2}
+  - {fileID: 11400000, guid: ee8112108ae1de9408731f6e12c2aa14, type: 2}
+  - {fileID: 11400000, guid: 989d300f3bc1aaa4a9a59f1afcb143a6, type: 2}
+  - {fileID: 11400000, guid: dd42d8a4b1e9d6e4aab8e9e5af361041, type: 2}
 --- !u!23 &1981020352
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -46076,8 +46079,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0, z: 0.416}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.37037, y: 0.37037, z: 0.37037}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 964666601}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49383,9 +49386,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PadrePlayer: {fileID: 1935621807}
-  PadreHorno: {fileID: 111484887}
-  horneados:
-  - {fileID: 11400000, guid: 32470bdd1164ad64ca639d715431e20e, type: 2}
   ingredientes:
   - {fileID: 11400000, guid: beecd91e72070fd40b0a0d56b7a17904, type: 2}
   slider: {fileID: 1028401696}
@@ -49395,6 +49395,10 @@ MonoBehaviour:
   QuemadoImage: {fileID: 1114042147}
   audio: {fileID: 7862792149707338672}
   audioQuemado: {fileID: 821202454}
+  quemado: 0
+  PadreHorno: {fileID: 111484887}
+  horneados:
+  - {fileID: 11400000, guid: 32470bdd1164ad64ca639d715431e20e, type: 2}
 --- !u!65 &7862792149707338671
 BoxCollider:
   m_ObjectHideFlags: 0
