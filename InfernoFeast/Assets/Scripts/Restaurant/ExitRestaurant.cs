@@ -1,73 +1,105 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ExitRestaurant : MonoBehaviour
 {
-    //Variables que hacen referencia a los paneles del canvas dentro del juego
-    private GameObject mapPanel;
-    private GameObject exitPanel;
+    [Header("Panels")]
+    public GameObject mapPanel;
+    public GameObject exitPanel;
 
-    // Start is called before the first frame update
-    void Start()
+    [Header("Scene Names")]
+    public string marketSceneName = "Market";
+    public string bossSceneName = "Boss 1";
+    public string fishingLakeSceneName = "Fishing Lake";
+    public string farmSceneName = "Farm";
+    public string cedrikRoomSceneName = "CedrikRoom";
+
+    private void Awake()
     {
-        //Buscamos los objetos y los desactivamos
-        mapPanel = GameObject.Find("Map");
-        mapPanel.SetActive(false);
-        
-        exitPanel = GameObject.Find("Exit Restaurant Panel");
-        exitPanel.SetActive(false);
+        if (mapPanel == null)
+            mapPanel = GameObject.Find("Map");
+
+        if (exitPanel == null)
+            exitPanel = GameObject.Find("Exit Restaurant Panel");
     }
 
-
-    public void OnTriggerEnter(Collider collider)
+    private void Start()
     {
-        if(collider.tag == "Player") //Si el player entra en el collider activa el panel
-        {
-            exitPanel.SetActive(true);
-        }
+        SetPanel(mapPanel, false);
+        SetPanel(exitPanel, false);
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+            SetPanel(exitPanel, true);
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+            SetPanel(exitPanel, false);
     }
 
     public void Yes()
     {
-        exitPanel.SetActive(false);
-        mapPanel.SetActive(true);
+        SetPanel(exitPanel, false);
+        SetPanel(mapPanel, true);
     }
 
     public void No()
     {
-        exitPanel.SetActive(false);
+        SetPanel(exitPanel, false);
     }
 
     public void Restaurant()
     {
-        mapPanel.SetActive(false);
-        exitPanel.SetActive(false);
+        SetPanel(mapPanel, false);
+        SetPanel(exitPanel, false);
     }
 
     public void Market()
     {
-        SceneManager.LoadScene("Market");
+        LoadScene(marketSceneName, false);
     }
 
     public void Boss1()
     {
-        SceneFadeManager.Instance.LoadSceneWithFade("Boss 1");
+        LoadScene(bossSceneName, true);
     }
 
     public void FishingLake()
     {
-        SceneManager.LoadScene("Fishing Lake");
+        LoadScene(fishingLakeSceneName, false);
     }
 
     public void Farm()
     {
-        SceneManager.LoadScene("Farm");
+        LoadScene(farmSceneName, false);
     }
 
     public void CedriksRoom()
     {
-        SceneFadeManager.Instance.LoadSceneWithFade("CedrikRoom");
+        LoadScene(cedrikRoomSceneName, true);
+    }
+
+    private void LoadScene(string sceneName, bool preferFade)
+    {
+        if (string.IsNullOrEmpty(sceneName))
+            return;
+
+        SetPanel(mapPanel, false);
+        SetPanel(exitPanel, false);
+
+        if (preferFade && SceneFadeManager.Instance != null)
+            SceneFadeManager.Instance.LoadSceneWithFade(sceneName);
+        else
+            SceneManager.LoadScene(sceneName);
+    }
+
+    private void SetPanel(GameObject panel, bool active)
+    {
+        if (panel != null)
+            panel.SetActive(active);
     }
 }

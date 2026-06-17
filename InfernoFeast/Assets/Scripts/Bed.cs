@@ -1,29 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bed : MonoBehaviour
 {
-
     public GameTimeSystem gameTimeSystem;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-       
+        if (gameTimeSystem == null)
+            gameTimeSystem = FindObjectOfType<GameTimeSystem>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
+        if (!other.CompareTag("Player"))
+            return;
 
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        if (gameTimeSystem == null)
+            gameTimeSystem = FindObjectOfType<GameTimeSystem>();
+
+        if (gameTimeSystem != null)
         {
             gameTimeSystem.Dormir();
+        }
+        else
+        {
+            Debug.LogWarning("[Bed] No se ha encontrado GameTimeSystem en la escena.");
         }
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Basura : MonoBehaviour
@@ -8,6 +6,19 @@ public class Basura : MonoBehaviour
 
     public void Eliminar()
     {
-        Destroy(PadreJugador.transform.GetChild(0).gameObject);
+        if (PadreJugador == null)
+        {
+            Debug.LogWarning("[Basura] Falta PadreJugador en " + gameObject.name);
+            return;
+        }
+
+        if (PadreJugador.transform.childCount <= 0)
+            return;
+
+        GameObject objetoEnMano = PadreJugador.transform.GetChild(0).gameObject;
+        if (objetoEnMano != null)
+        {
+            Destroy(objetoEnMano);
+        }
     }
 }

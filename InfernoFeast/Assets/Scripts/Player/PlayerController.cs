@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("UI - Stamina")]
     public Slider staminaSlider;
+    private Image staminaFillImage;
 
     [Header("Camara")]
     public Transform cameraTransform;
@@ -30,30 +31,41 @@ public class PlayerController : MonoBehaviour
     [Header("Animator")]
     public Animator animator;
 
-    void Start()
+    private void Awake()
     {
-        if (rb == null) rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+
+        if (rb != null)
+            rb.freezeRotation = true;
 
         if (cameraTransform == null && Camera.main != null)
             cameraTransform = Camera.main.transform;
 
-        currentSprintTime = sprintDuration;
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+
+        CacheStaminaFillImage();
+    }
+
+    private void Start()
+    {
+        currentSprintTime = Mathf.Max(0.01f, sprintDuration);
 
         if (staminaSlider != null)
         {
-            staminaSlider.maxValue = sprintDuration;
-            staminaSlider.value = sprintDuration;
+            staminaSlider.maxValue = Mathf.Max(0.01f, sprintDuration);
+            staminaSlider.value = currentSprintTime;
         }
     }
 
-    void Update()
+    private void Update()
     {
-        ReadInput();       
+        ReadInput();
         UpdateStaminaUI();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         HandleSprint();
         MovePlayer();
@@ -62,38 +74,53 @@ public class PlayerController : MonoBehaviour
         UpdateAnimator();
     }
 
-    // 🕹️ Leer inputs
-    void ReadInput()
+    private void ReadInput()
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
     }
 
-    // ⚡ Gestionar sprint y stamina
-    void HandleSprint()
+    private void HandleSprint()
     {
-        // Sprint solo si Shift está pulsado y hay stamina
-        if (currentSprintTime > 0 && Input.GetKey(KeyCode.LeftShift))
+        bool hasMovementInput = Mathf.Abs(horizontalInput) > 0.01f || Mathf.Abs(verticalInput) > 0.01f;
+        bool wantsSprint = Input.GetKey(KeyCode.LeftShift);
+
+        if (hasMovementInput && wantsSprint && currentSprintTime > 0f)
         {
             isSprinting = true;
-            currentSprintTime -= Time.deltaTime;
-            if (currentSprintTime < 0) currentSprintTime = 0;
+            currentSprintTime -= Time.fixedDeltaTime;
+            currentSprintTime = Mathf.Max(0f, currentSprintTime);
         }
         else
         {
             isSprinting = false;
 
-            // Recarga stamina cuando no está sprintando
             if (currentSprintTime < sprintDuration)
-                currentSprintTime += sprintRechargeRate * Time.deltaTime;
+            {
+                currentSprintTime += sprintRechargeRate * Time.fixedDeltaTime;
+                currentSprintTime = Mathf.Min(sprintDuration, currentSprintTime);
+            }
         }
     }
 
-    // 🚶 Movimiento del personaje
-    void MovePlayer()
+    private void MovePlayer()
     {
-        Vector3 forward = cameraTransform.forward;
-        Vector3 right = cameraTransform.right;
+        if (rb == null)
+            return;
+
+        Vector3 forward;
+        Vector3 right;
+
+        if (cameraTransform != null)
+        {
+            forward = cameraTransform.forward;
+            right = cameraTransform.right;
+        }
+        else
+        {
+            forward = transform.forward;
+            right = transform.right;
+        }
 
         forward.y = 0f;
         right.y = 0f;
@@ -102,31 +129,26 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (forward * verticalInput + right * horizontalInput).normalized;
 
-        float finalSpeed = moveSpeed; // velocidad normal
-
-        // Solo aplicar multiplicador si puede sprintar
+        float finalSpeed = moveSpeed;
         if (isSprinting)
-        {
             finalSpeed *= sprintMultiplier;
-        }
 
-        rb.velocity = moveDirection * finalSpeed + new Vector3(0, rb.velocity.y, 0);
+        rb.velocity = moveDirection * finalSpeed + new Vector3(0f, rb.velocity.y, 0f);
     }
 
-    // 🔄 Rotación suave del personaje
-    void RotatePlayer()
+    private void RotatePlayer()
     {
-        if (moveDirection != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(-moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10f * Time.deltaTime);
-        }
+        if (moveDirection == Vector3.zero)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(-moveDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10f * Time.deltaTime);
     }
 
-    // 🎥 Cámara siguiendo al jugador
-    void FollowCamera()
+    private void FollowCamera()
     {
-        if (cameraTransform == null) return;
+        if (cameraTransform == null)
+            return;
 
         Vector3 targetPosition = transform.position + cameraOffset;
         cameraTransform.position = Vector3.Lerp(
@@ -139,24 +161,36 @@ public class PlayerController : MonoBehaviour
             cameraTransform.LookAt(transform.position);
     }
 
-    // 🎬 Actualizar parámetros del Animator
-    void UpdateAnimator()
+    private void UpdateAnimator()
     {
+        if (animator == null || rb == null)
+            return;
+
         animator.SetFloat("Walk", rb.velocity.magnitude);
         animator.SetBool("isRunning", isSprinting && moveDirection.magnitude > 0.1f);
     }
 
-    // 💚 Actualizar barra de stamina
-    void UpdateStaminaUI()
+    private void UpdateStaminaUI()
     {
-        if (staminaSlider != null)
-        {
-            staminaSlider.value = currentSprintTime;
+        if (staminaSlider == null)
+            return;
 
-            // Colores opcionales: rojo = poca stamina, verde = llena
-            Image fill = staminaSlider.fillRect.GetComponent<Image>();
-            float t = currentSprintTime / sprintDuration;
-            fill.color = Color.Lerp(Color.red, Color.green, t);
+        staminaSlider.value = currentSprintTime;
+
+        if (staminaFillImage == null)
+            CacheStaminaFillImage();
+
+        if (staminaFillImage != null)
+        {
+            float safeDuration = Mathf.Max(0.01f, sprintDuration);
+            float t = Mathf.Clamp01(currentSprintTime / safeDuration);
+            staminaFillImage.color = Color.Lerp(Color.red, Color.green, t);
         }
+    }
+
+    private void CacheStaminaFillImage()
+    {
+        if (staminaSlider != null && staminaSlider.fillRect != null)
+            staminaFillImage = staminaSlider.fillRect.GetComponent<Image>();
     }
 }

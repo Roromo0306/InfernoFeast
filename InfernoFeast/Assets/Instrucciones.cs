@@ -1,23 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Instrucciones : MonoBehaviour
 {
     public GameObject instrucciones;
-    void Start()
+
+    private void Start()
     {
-        instrucciones.SetActive(false);
+        SetInstructions(false);
     }
 
     public void Abrir()
     {
-        instrucciones.SetActive(true);
+        SetInstructions(true);
     }
 
     public void Cerrar()
     {
-        instrucciones.SetActive(false);
+        SetInstructions(false);
+    }
+
+    private void SetInstructions(bool active)
+    {
+        if (instrucciones != null)
+        {
+            instrucciones.SetActive(active);
+        }
+        else
+        {
+            Debug.LogWarning("[Instrucciones] Falta asignar el panel de instrucciones.");
+        }
     }
 }
