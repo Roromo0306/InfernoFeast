@@ -7,7 +7,7 @@ public class Bed : MonoBehaviour
     private void Awake()
     {
         if (gameTimeSystem == null)
-            gameTimeSystem = FindObjectOfType<GameTimeSystem>();
+            gameTimeSystem = GameTimeSystem.Instance != null ? GameTimeSystem.Instance : FindObjectOfType<GameTimeSystem>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -16,7 +16,7 @@ public class Bed : MonoBehaviour
             return;
 
         if (gameTimeSystem == null)
-            gameTimeSystem = FindObjectOfType<GameTimeSystem>();
+            gameTimeSystem = GameTimeSystem.Instance != null ? GameTimeSystem.Instance : FindObjectOfType<GameTimeSystem>();
 
         if (gameTimeSystem != null)
         {

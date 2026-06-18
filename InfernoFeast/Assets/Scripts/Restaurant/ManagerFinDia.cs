@@ -18,23 +18,40 @@ public class ManagerFinDia : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
+            Instance.CopySceneReferencesFrom(this);
             Destroy(gameObject);
             return;
         }
 
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        RefreshUI(true);
+    }
+
+    private void Start()
+    {
         RefreshUI(true);
     }
 
     private void Update()
     {
         RefreshUI(false);
+    }
+
+    private void CopySceneReferencesFrom(ManagerFinDia other)
+    {
+        if (other == null)
+            return;
+
+        if (other.din != null)
+            din = other.din;
+
+        if (other.reput != null)
+            reput = other.reput;
+
+        RefreshUI(true);
     }
 
     public void AddDayResults(int dineroTurno, int reputacionTurno)

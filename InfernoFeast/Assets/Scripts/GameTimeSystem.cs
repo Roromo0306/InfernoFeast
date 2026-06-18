@@ -1,17 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class GameTimeSystem : MonoBehaviour
 {
-    [Header("Duración de los días y semana")]
+    public static GameTimeSystem Instance { get; private set; }
+
+    [Header("Duracion de los dias y semana")]
     public float secondsPerGameDay = 480f;
     public string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
-    [Header("Configuración Fade")]
+    [Header("Configuracion Fade")]
     public CanvasGroup fadeCanvasGroup;
     public float fadeDuration = 1.0f;
+    public bool useUnscaledTime = false;
 
     [Header("UI")]
     public GameObject panelFinalDia;
@@ -25,125 +28,407 @@ public class GameTimeSystem : MonoBehaviour
     public GameObject Managerfindia;
     public GameObject Cama;
 
+    [Header("Configuracion nuevo dia")]
+    public string restaurantSceneName = "Restaurant";
+    public float startHour = 6f;
+    public float automaticEndDayHour = 2f;
+
+    private const float SecondsPerRealDay = 24f * 60f * 60f;
+
     private float gameTimeInSeconds = 0f;
     private float lastGameTimeInSeconds = 0f;
     private int currentDayIndex = 0;
     private bool esperandoNuevoDia = false;
+    private bool isTransitioningDay = false;
+    private bool initialized = false;
 
-    void Awake() => DontDestroyOnLoad(this);
-
-    void Start()
+    private void Awake()
     {
-        gameTimeInSeconds = 6 * 3600;
-        lastGameTimeInSeconds = gameTimeInSeconds;
-        panelFinalDia.SetActive(false);
-    }
-
-    void Update()
-    {
-        if (esperandoNuevoDia) return;
-
-        // guarda prev para detectar cruces de 6:00
-        float prev = lastGameTimeInSeconds;
-
-        gameTimeInSeconds += Time.deltaTime * (24f * 60f * 60f / secondsPerGameDay);
-
-        if (gameTimeInSeconds >= 24f * 60f * 60f)
-            gameTimeInSeconds -= 24f * 60f * 60f;
-
-        
-        if (prev < 2f * 3600f && gameTimeInSeconds >= 2f * 3600f)
+        if (Instance != null && Instance != this)
         {
-            ComenzarNuevoDia();
+            Instance.CopySceneReferencesFrom(this);
+            Destroy(gameObject);
+            return;
         }
 
-        if (horaText != null) horaText.text = GetFormattedTime();
-        if (diaText != null) diaText.text = GetCurrentGameDay();
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        EnsureValidDays();
+        InitializeTimeIfNeeded();
+    }
+
+    private void OnEnable()
+    {
+        if (Instance == this)
+            SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        if (Instance == this)
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        CacheSceneReferences();
+        InitializeSceneUI();
+        UpdateClockUI();
+    }
+
+    private void Update()
+    {
+        if (esperandoNuevoDia || isTransitioningDay)
+            return;
+
+        float previousTime = gameTimeInSeconds;
+        AdvanceGameTime();
+
+        if (HasCrossedHour(previousTime, gameTimeInSeconds, automaticEndDayHour))
+        {
+            ComenzarNuevoDia();
+            return;
+        }
 
         lastGameTimeInSeconds = gameTimeInSeconds;
+        UpdateClockUI();
     }
 
-    string GetFormattedTime()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        int totalSeconds = (int)gameTimeInSeconds;
+        if (Instance != this)
+            return;
+
+        CacheSceneReferences();
+
+        if (!esperandoNuevoDia && !isTransitioningDay)
+            InitializeSceneUI();
+
+        UpdateClockUI();
+    }
+
+    private void CopySceneReferencesFrom(GameTimeSystem other)
+    {
+        if (other == null)
+            return;
+
+        if (other.secondsPerGameDay > 0f)
+            secondsPerGameDay = other.secondsPerGameDay;
+
+        if (other.days != null && other.days.Length > 0)
+            days = other.days;
+
+        if (other.fadeCanvasGroup != null)
+            fadeCanvasGroup = other.fadeCanvasGroup;
+
+        if (other.fadeDuration > 0f)
+            fadeDuration = other.fadeDuration;
+
+        if (other.panelFinalDia != null)
+            panelFinalDia = other.panelFinalDia;
+
+        if (other.horaText != null)
+            horaText = other.horaText;
+
+        if (other.diaText != null)
+            diaText = other.diaText;
+
+        if (other.Stats != null)
+            Stats = other.Stats;
+
+        if (other.StatDinero != null)
+            StatDinero = other.StatDinero;
+
+        if (other.StatReputacion != null)
+            StatReputacion = other.StatReputacion;
+
+        if (other.Managerfindia != null)
+            Managerfindia = other.Managerfindia;
+
+        if (other.Cama != null)
+            Cama = other.Cama;
+
+        if (!string.IsNullOrEmpty(other.restaurantSceneName))
+            restaurantSceneName = other.restaurantSceneName;
+
+        if (other.startHour >= 0f && other.startHour < 24f)
+            startHour = other.startHour;
+
+        if (other.automaticEndDayHour >= 0f && other.automaticEndDayHour < 24f)
+            automaticEndDayHour = other.automaticEndDayHour;
+
+        CacheSceneReferences();
+        UpdateClockUI();
+    }
+
+    private void InitializeTimeIfNeeded()
+    {
+        if (initialized)
+            return;
+
+        gameTimeInSeconds = HourToSeconds(startHour);
+        lastGameTimeInSeconds = gameTimeInSeconds;
+        initialized = true;
+    }
+
+    private void AdvanceGameTime()
+    {
+        float safeSecondsPerGameDay = Mathf.Max(1f, secondsPerGameDay);
+        gameTimeInSeconds += Time.deltaTime * (SecondsPerRealDay / safeSecondsPerGameDay);
+
+        while (gameTimeInSeconds >= SecondsPerRealDay)
+            gameTimeInSeconds -= SecondsPerRealDay;
+    }
+
+    private bool HasCrossedHour(float previousTime, float currentTime, float hour)
+    {
+        float targetTime = HourToSeconds(hour);
+
+        if (previousTime <= currentTime)
+            return previousTime < targetTime && currentTime >= targetTime;
+
+        return targetTime > previousTime || targetTime <= currentTime;
+    }
+
+    private float HourToSeconds(float hour)
+    {
+        hour = Mathf.Repeat(hour, 24f);
+        return hour * 3600f;
+    }
+
+    public string GetFormattedTime()
+    {
+        int totalSeconds = Mathf.FloorToInt(gameTimeInSeconds);
         int horas = totalSeconds / 3600;
         int minutos = (totalSeconds % 3600) / 60;
-        return $"{horas:D2}:{minutos:D2}";
+        return horas.ToString("00") + ":" + minutos.ToString("00");
     }
 
-    string GetCurrentGameDay()
+    public string GetCurrentGameDay()
     {
+        EnsureValidDays();
+        currentDayIndex = Mathf.Clamp(currentDayIndex, 0, days.Length - 1);
         return days[currentDayIndex];
     }
 
-    public void ActivarFinDeDia() { if (panelFinalDia != null) panelFinalDia.SetActive(true); }
-    public void Dormir() { ActivarFinDeDia(); }
+    public void ActivarFinDeDia()
+    {
+        if (isTransitioningDay)
+            return;
+
+        esperandoNuevoDia = true;
+        SetPanel(Stats, false);
+        SetPanel(panelFinalDia, true);
+        UpdateClockUI();
+    }
+
+    public void Dormir()
+    {
+        ActivarFinDeDia();
+    }
 
     public void StartNewDayAutomatic()
     {
+        if (isTransitioningDay)
+            return;
+
         StartCoroutine(SequenceStartNewDay());
     }
 
     private IEnumerator SequenceStartNewDay()
     {
-        Stats.gameObject.SetActive(false);
+        isTransitioningDay = true;
+        esperandoNuevoDia = true;
 
-        // Hacemos el fade hacia transparente (esclarecer)
+        SetPanel(panelFinalDia, false);
+        SetPanel(Stats, false);
+
+        yield return StartCoroutine(DoFade(1f));
+
+        AdvanceToNextDay();
+        ResetBedState();
+
+        if (!string.IsNullOrEmpty(restaurantSceneName) && SceneManager.GetActiveScene().name != restaurantSceneName)
+        {
+            SceneManager.LoadScene(restaurantSceneName);
+            yield return null;
+        }
+
+        CacheSceneReferences();
+        InitializeSceneUI();
+        UpdateClockUI();
+
         yield return StartCoroutine(DoFade(0f));
 
-        Dormir don = Cama.GetComponent<Dormir>();
-        currentDayIndex = (currentDayIndex + 1) % 7;
-        gameTimeInSeconds = 6 * 3600;
-        lastGameTimeInSeconds = gameTimeInSeconds;
-        don.nuevoDia = false;
-        SceneManager.LoadScene("Restaurant");
-        if (panelFinalDia != null) panelFinalDia.SetActive(false);
-
-       
+        esperandoNuevoDia = false;
+        isTransitioningDay = false;
     }
 
-    // llamado por el botón (mantiene compatibilidad con tu UI)
     public void ComenzarNuevoDia()
     {
+        if (esperandoNuevoDia || isTransitioningDay)
+            return;
+
         StartCoroutine(SequenceComenzarNuevoDia());
     }
 
     private IEnumerator SequenceComenzarNuevoDia()
     {
-        // 1. Primero oscurecemos el fondo
+        isTransitioningDay = true;
+        esperandoNuevoDia = true;
+
         yield return StartCoroutine(DoFade(1f));
 
-        // 2. Luego mostramos las estadísticas
-        ManagerFinDia man = Managerfindia.GetComponent<ManagerFinDia>();
-        StatDinero.text = man.dinero.ToString("F2");
-        StatReputacion.text = man.reputacion.ToString("F2");
+        UpdateStatsTexts();
+        SetPanel(panelFinalDia, false);
+        SetPanel(Stats, true);
 
-        panelFinalDia.SetActive(false);
-        Stats.gameObject.SetActive(true);
-        esperandoNuevoDia = false;
+        isTransitioningDay = false;
     }
 
-    // Función auxiliar para el fade
     private IEnumerator DoFade(float targetAlpha)
     {
+        if (fadeCanvasGroup == null)
+            yield break;
+
         float startAlpha = fadeCanvasGroup.alpha;
-        float timer = 0;
+        float timer = 0f;
+        float safeDuration = Mathf.Max(0.01f, fadeDuration);
 
-        // Si vamos a oscurecer, bloqueamos raycasts para que no se pulse nada por error
-        if (targetAlpha > 0) fadeCanvasGroup.blocksRaycasts = true;
+        fadeCanvasGroup.blocksRaycasts = true;
 
-        while (timer < fadeDuration)
+        while (timer < safeDuration)
         {
-            timer += Time.deltaTime;
-            fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / fadeDuration);
+            timer += useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+            fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / safeDuration);
             yield return null;
         }
 
         fadeCanvasGroup.alpha = targetAlpha;
-
-        // Si terminamos de aclarar, dejamos de bloquear raycasts
-        if (targetAlpha <= 0) fadeCanvasGroup.blocksRaycasts = false;
+        fadeCanvasGroup.blocksRaycasts = targetAlpha > 0f;
     }
 
-    public void CerrarPanel() { panelFinalDia.SetActive(false); }
+    public void CerrarPanel()
+    {
+        SetPanel(panelFinalDia, false);
+
+        if (!isTransitioningDay)
+            esperandoNuevoDia = false;
+    }
+
+    private void AdvanceToNextDay()
+    {
+        EnsureValidDays();
+        currentDayIndex = (currentDayIndex + 1) % days.Length;
+        gameTimeInSeconds = HourToSeconds(startHour);
+        lastGameTimeInSeconds = gameTimeInSeconds;
+    }
+
+    private void ResetBedState()
+    {
+        Dormir[] dormirScripts = FindObjectsOfType<Dormir>();
+        for (int i = 0; i < dormirScripts.Length; i++)
+        {
+            if (dormirScripts[i] != null)
+                dormirScripts[i].nuevoDia = false;
+        }
+
+        if (Cama != null)
+        {
+            Dormir dormir = Cama.GetComponent<Dormir>();
+            if (dormir != null)
+                dormir.nuevoDia = false;
+        }
+    }
+
+    private void CacheSceneReferences()
+    {
+        if (ManagerFinDia.Instance != null)
+            Managerfindia = ManagerFinDia.Instance.gameObject;
+        else if (Managerfindia == null)
+        {
+            ManagerFinDia manager = FindObjectOfType<ManagerFinDia>();
+            if (manager != null)
+                Managerfindia = manager.gameObject;
+        }
+
+        if (Cama == null)
+        {
+            Dormir dormir = FindObjectOfType<Dormir>();
+            if (dormir != null)
+                Cama = dormir.gameObject;
+        }
+
+        if (fadeCanvasGroup == null)
+            fadeCanvasGroup = GetComponentInChildren<CanvasGroup>(true);
+    }
+
+    private void InitializeSceneUI()
+    {
+        SetPanel(panelFinalDia, false);
+        SetPanel(Stats, false);
+
+        if (fadeCanvasGroup != null && !isTransitioningDay)
+        {
+            fadeCanvasGroup.alpha = 0f;
+            fadeCanvasGroup.blocksRaycasts = false;
+        }
+    }
+
+    private void UpdateClockUI()
+    {
+        if (horaText != null)
+            horaText.text = GetFormattedTime();
+
+        if (diaText != null)
+            diaText.text = GetCurrentGameDay();
+    }
+
+    private void UpdateStatsTexts()
+    {
+        ManagerFinDia manager = GetManagerFinDia();
+
+        int dinero = manager != null ? manager.dinero : 0;
+        int reputacion = manager != null ? manager.reputacion : 0;
+
+        if (StatDinero != null)
+            StatDinero.text = dinero.ToString("F0");
+
+        if (StatReputacion != null)
+            StatReputacion.text = reputacion.ToString("F0");
+    }
+
+    private ManagerFinDia GetManagerFinDia()
+    {
+        if (ManagerFinDia.Instance != null)
+            return ManagerFinDia.Instance;
+
+        if (Managerfindia != null)
+            return Managerfindia.GetComponent<ManagerFinDia>();
+
+        ManagerFinDia manager = FindObjectOfType<ManagerFinDia>();
+        if (manager != null)
+            Managerfindia = manager.gameObject;
+
+        return manager;
+    }
+
+    private void SetPanel(GameObject panel, bool active)
+    {
+        if (panel != null)
+            panel.SetActive(active);
+    }
+
+    private void EnsureValidDays()
+    {
+        if (days == null || days.Length == 0)
+            days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
 }
