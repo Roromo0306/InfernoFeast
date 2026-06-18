@@ -2713,6 +2713,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2340dc82b59694c43bf8965bc031010d, type: 2}
   - {fileID: 11400000, guid: 8df4f91f20cdb2f479d68f7f5c36b049, type: 2}
   - {fileID: 11400000, guid: dd42d8a4b1e9d6e4aab8e9e5af361041, type: 2}
+  pasosNecesarios: 8
 --- !u!23 &85428868
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2979,6 +2980,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &95070115
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3640,6 +3642,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &123305697
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6770,6 +6773,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &283181219
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7095,6 +7099,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &291406714
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7573,6 +7578,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &303744080
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10224,6 +10230,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2340dc82b59694c43bf8965bc031010d, type: 2}
   - {fileID: 11400000, guid: 8df4f91f20cdb2f479d68f7f5c36b049, type: 2}
   - {fileID: 11400000, guid: dd42d8a4b1e9d6e4aab8e9e5af361041, type: 2}
+  pasosNecesarios: 8
 --- !u!4 &454026067 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2093772787462966335, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
@@ -10345,6 +10352,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 85afe02369722694aa37577f8baff237, type: 3}
   - {fileID: 21300000, guid: d90e595c8c790784bbc564e50b24021f, type: 3}
   - {fileID: 21300000, guid: b24af91eecc8cca45a8196b912818d88, type: 3}
+  permitirDuplicados: 0
 --- !u!4 &458179549
 Transform:
   m_ObjectHideFlags: 0
@@ -10952,6 +10960,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &473934446
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11590,6 +11599,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &494961609
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12113,6 +12123,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &524261898
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13509,6 +13520,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &629603190
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14191,6 +14203,7 @@ MonoBehaviour:
   EncimeraSoltar: 0
   EncimeraCoger: 0
   animator: {fileID: 700384440}
+  interactionCooldown: 0.1
 --- !u!114 &672688998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14694,6 +14707,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &716012856
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -17337,6 +17351,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7366484bc93f05f4bbc4a76a6b4ed543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapPanel: {fileID: 0}
+  exitPanel: {fileID: 0}
+  marketSceneName: Market
+  bossSceneName: Boss 1
+  fishingLakeSceneName: Fishing Lake
+  farmSceneName: Farm
+  cedrikRoomSceneName: CedrikRoom
 --- !u!1 &853009925
 GameObject:
   m_ObjectHideFlags: 0
@@ -20212,6 +20233,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!65 &964666603
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23697,6 +23719,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1152160136
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -24949,6 +24972,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1248985718
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -25399,6 +25423,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1262164056
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -25621,6 +25646,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1271566587
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -25983,6 +26009,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1275859996
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -26367,6 +26394,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!4 &1309255579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4088688947297397964, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
@@ -27051,6 +27079,8 @@ MonoBehaviour:
   dineroTurno: 0
   reputacionTurno: 0
   audio: {fileID: 1337703136}
+  duracionTurno: 420
+  comandasIniciales: 3
   contenedorComandas: {fileID: 95052956}
   prefabComandaUI: {fileID: 489889328083706656, guid: d5168e30bc5440a45b2ecce414bfca4d, type: 3}
   maxComandas: 4
@@ -29068,6 +29098,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1404425976
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -31916,6 +31947,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1532069761
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -32063,6 +32095,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1541018281
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -32689,6 +32722,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1558683877
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -33205,6 +33239,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1576880392
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -33688,6 +33723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EndDayPannel: {fileID: 1442706502}
+  gameTimeSystem: {fileID: 0}
   EnContacto: 0
   nuevoDia: 0
 --- !u!1 &1591334520
@@ -35875,6 +35911,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1661402350
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -37679,6 +37716,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1748605575
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -37897,6 +37935,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!4 &1768079059 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8912189966947192040, guid: 2228cfea64895d94eb7200fc54e37f52, type: 3}
@@ -38000,6 +38039,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1768306318
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -38381,6 +38421,7 @@ MonoBehaviour:
   - Sunday
   fadeCanvasGroup: {fileID: 2132754041}
   fadeDuration: 1
+  useUnscaledTime: 0
   panelFinalDia: {fileID: 1442706502}
   horaText: {fileID: 1689850906}
   diaText: {fileID: 1459946078}
@@ -38389,6 +38430,9 @@ MonoBehaviour:
   StatReputacion: {fileID: 1564604493}
   Managerfindia: {fileID: 863543987}
   Cama: {fileID: 1589649183}
+  restaurantSceneName: Restaurant
+  startHour: 6
+  automaticEndDayHour: 2
 --- !u!4 &1780801711
 Transform:
   m_ObjectHideFlags: 0
@@ -39035,6 +39079,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1814720928
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -40184,6 +40229,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1875868325
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -41088,6 +41134,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1904017341
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -41828,6 +41875,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &1929502682
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -44825,6 +44873,7 @@ MonoBehaviour:
   mezcla: {fileID: 11400000, guid: f22fa2b41b76f9742846ba68cfb19a2c, type: 2}
   TieneObjeto: 0
   EncontradoPareja: 1
+  permitirRecetasEnCualquierOrden: 1
 --- !u!23 &2094691560
 MeshRenderer:
   m_ObjectHideFlags: 0
